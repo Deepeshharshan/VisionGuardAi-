@@ -150,7 +150,7 @@ export const ArchitectureSection: React.FC = () => (
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-9 h-9 rounded-xl flex items-center justify-center"
                     style={{ background: 'rgba(255,255,255,0.06)' }}>
-                    <Icon className="w-4.5 h-4.5" style={{ color: 'rgba(255,255,255,0.55)' }} />
+                    <Icon className="w-4.5 h-4.5 text-white/55" />
                   </div>
                   <div>
                     <span className="tabular-nums text-[10px] font-bold mr-2"

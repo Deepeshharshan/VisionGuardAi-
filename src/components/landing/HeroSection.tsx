@@ -2,7 +2,7 @@
 // HeroSection — 45/55 split layout, full 1440px container
 // ============================================================
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, type Transition } from 'framer-motion';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
 import { DashboardMockup } from './DashboardMockup';
 import { TrustedMarquee } from '../ui/TrustedMarquee';
@@ -10,7 +10,7 @@ import { TrustedMarquee } from '../ui/TrustedMarquee';
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.55, delay, ease: [0.16, 1, 0.3, 1] },
+  transition: { duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] } as Transition,
 });
 
 const checks = [
@@ -93,7 +93,7 @@ export const HeroSection: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, x: 32, scale: 0.97 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
-            transition={{ duration: 0.75, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.75, delay: 0.2, ease: [0.22, 1, 0.36, 1] as any }}
             className="relative lg:block hidden"
           >
             {/* Soft ambient glow */}

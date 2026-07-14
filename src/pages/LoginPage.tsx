@@ -59,24 +59,33 @@ const LoginPage: React.FC = () => {
              <Spline scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode" />
            </div>
 
-           {/* Bottom Quote */}
-           <div className="relative z-20 mt-auto max-w-[500px]">
-             <blockquote className="space-y-6">
-               <p className="text-[19px] font-medium text-slate-200 leading-[1.6] tracking-tight">
-                 This platform has completely transformed our manufacturing pipeline, giving us unprecedented real-time visibility into the factory floor.
+           {/* Centered Overlay Text — floated over the scene */}
+           <div className="absolute inset-0 z-20 flex flex-col items-center justify-end pb-12 px-10 pointer-events-none">
+             <div className="text-center max-w-[460px]">
+               <p
+                 style={{
+                   fontFamily: 'Inter, system-ui, sans-serif',
+                   letterSpacing: '-0.02em',
+                   textShadow: '0 2px 24px rgba(0,0,0,0.6)',
+                 }}
+                 className="text-[22px] font-[450] text-white leading-[1.55] mb-3"
+               >
+                 See every flaw. Predict every failure.<br />Before the line ever stops.
                </p>
-               <footer className="flex items-center gap-4">
-                 <div className="w-11 h-11 rounded-full bg-white/10 flex items-center justify-center shrink-0 border border-white/5">
-                   <span className="text-[14px] font-medium text-white/80 tracking-widest">SD</span>
-                 </div>
-                 <div>
-                   <div className="text-[15px] font-medium text-slate-200">Sofia Davis</div>
-                   <div className="text-[13.5px] text-slate-400 font-normal">Plant Manager</div>
-                 </div>
-               </footer>
-             </blockquote>
+               <p
+                 style={{
+                   fontFamily: 'Inter, system-ui, sans-serif',
+                   letterSpacing: '0.01em',
+                   textShadow: '0 1px 12px rgba(0,0,0,0.5)',
+                 }}
+                 className="text-[13px] font-normal text-white/40"
+               >
+                 VisionGuard AI — Industrial intelligence for the factory floor.
+               </p>
+             </div>
            </div>
         </div>
+
 
         {/* Right Side: Form */}
         <div className="relative flex w-full lg:w-1/2 flex-col p-8 sm:p-12 bg-white">
