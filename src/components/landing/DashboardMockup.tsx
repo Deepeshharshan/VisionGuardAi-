@@ -1,11 +1,5 @@
-// ============================================================
-// DashboardMockup — Light Editorial Monitoring Preview
-// ============================================================
 import React, { useState, useEffect } from 'react';
-import {
-  Activity, AlertTriangle, Camera, CheckCircle2,
-  Clock, TrendingUp, Zap, BarChart2, Shield
-} from 'lucide-react';
+import { Camera, Shield, Search, Bell, Settings } from 'lucide-react';
 
 interface MachineCardProps {
   name: string;
@@ -15,212 +9,176 @@ interface MachineCardProps {
 }
 
 const MachineCard: React.FC<MachineCardProps> = ({ name, status, score, location }) => {
-  const statusConfig = {
-    healthy: { color: '#10B981', bg: 'rgba(16,185,129,0.06)', text: 'Healthy', badge: 'text-emerald-600 bg-emerald-50' },
-    warning: { color: '#F59E0B', bg: 'rgba(245,158,11,0.06)', text: 'Warning', badge: 'text-amber-600 bg-amber-50' },
-    critical: { color: '#EF4444', bg: 'rgba(239,68,68,0.06)', text: 'Critical', badge: 'text-red-600 bg-red-50' },
-  };
-  const cfg = statusConfig[status];
-
+  const isDanger = status === 'critical';
+  const isWarn = status === 'warning';
+  
+  const statusColor = isDanger ? 'bg-[var(--red)]' : isWarn ? 'bg-[var(--amber)]' : 'bg-[var(--green)]';
+  
   return (
-    <div
-      className="rounded-lg p-2.5 border flex items-center gap-3"
-      style={{ background: cfg.bg, borderColor: `${cfg.color}20` }}
-    >
-      <div className="flex-1 min-w-0">
-        <div className="text-[11px] font-semibold text-black/80 truncate">{name}</div>
-        <div className="text-[10px] text-black/40 mt-0.5">{location}</div>
+    <div className="flex items-center justify-between p-3 border-b border-[var(--border)] hover:bg-[var(--bg-2)] transition-colors last:border-b-0 cursor-pointer">
+      <div className="flex items-center gap-3">
+        <div className={`w-2 h-2 rounded-full ${statusColor}`} />
+        <div>
+          <div className="text-[13px] font-medium text-[var(--text-1)]">{name}</div>
+          <div className="text-[11px] text-[var(--text-3)]">{location}</div>
+        </div>
       </div>
-      <div className="text-right flex-shrink-0">
-        <div className="text-[11px] font-bold tabular-nums" style={{ color: cfg.color }}>{score}%</div>
-        <span className={`text-[8px] font-semibold px-1.5 py-0.5 rounded-full ${cfg.badge}`}>{cfg.text}</span>
+      <div className="flex items-center gap-4">
+        <div className="w-16 h-1.5 bg-[var(--border)] rounded-full overflow-hidden">
+          <div 
+            className={`h-full ${statusColor}`} 
+            style={{ width: `${score}%` }} 
+          />
+        </div>
+        <span className="mono text-[12px] font-medium text-[var(--text-1)] w-8 text-right">{score}%</span>
       </div>
-    </div>
-  );
-};
-
-interface AlertItemProps {
-  type: 'critical' | 'warning' | 'info';
-  message: string;
-  time: string;
-}
-
-const AlertItem: React.FC<AlertItemProps> = ({ type, message, time }) => {
-  const cfg = {
-    critical: { color: '#EF4444', Icon: AlertTriangle },
-    warning: { color: '#F59E0B', Icon: AlertTriangle },
-    info: { color: '#3B82F6', Icon: CheckCircle2 },
-  };
-  const { color, Icon } = cfg[type];
-
-  return (
-    <div className="flex items-start gap-2.5 py-2 border-b border-black/[0.04] last:border-0">
-      <Icon className="w-3 h-3 flex-shrink-0 mt-0.5" style={{ color }} />
-      <div className="flex-1 min-w-0">
-        <p className="text-[10px] text-black/70 leading-tight">{message}</p>
-        <span className="text-[9px] text-black/30 mt-0.5 block">{time}</span>
-      </div>
-    </div>
-  );
-};
-
-const MiniBarChart: React.FC<{ data: number[] }> = ({ data }) => {
-  const max = Math.max(...data);
-  return (
-    <div className="flex items-end gap-0.5 h-10">
-      {data.map((val, i) => (
-        <div
-          key={i}
-          className="flex-1 rounded-sm"
-          style={{
-            height: `${(val / max) * 100}%`,
-            background: i === data.length - 1 ? '#000' : `rgba(0,0,0,${0.08 + (val / max) * 0.25})`,
-          }}
-        />
-      ))}
     </div>
   );
 };
 
 export const DashboardMockup: React.FC = () => {
-  const [liveDetections, setLiveDetections] = useState(247);
-  const [fps, setFps] = useState(28);
-  const chartData = [42, 58, 45, 72, 65, 80, 55, 73, 68, 91, 75, 88];
-
+  const [activeTab, setActiveTab] = useState<'overview' | 'cameras' | 'settings'>('overview');
+  const [frameRate, setFrameRate] = useState(27);
+  
   useEffect(() => {
     const interval = setInterval(() => {
-      setLiveDetections((v) => v + Math.floor(Math.random() * 3));
-      setFps(26 + Math.floor(Math.random() * 6));
-    }, 1800);
+      setFrameRate(prev => prev === 27 ? 28 : prev === 28 ? 26 : 27);
+    }, 2000);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div
-      className="relative rounded-xl overflow-hidden"
-      style={{
-        background: '#FFFFFF',
-        boxShadow: 'none',
-      }}
-    >
-      {/* Top Bar */}
-      <div className="flex items-center justify-between px-4 py-2.5 border-b border-black/[0.06] bg-[#fafafa]">
-        <div className="flex items-center gap-2">
-          <Shield className="w-3.5 h-3.5 text-black/40" />
-          <span className="text-[11px] font-semibold text-black/70 tracking-tight">VisionGuard AI — Live Monitor</span>
-        </div>
+    <div className="vg-panel bg-white/90 backdrop-blur-md border-[var(--border)] shadow-2xl rounded-2xl overflow-hidden flex flex-col w-full h-[600px]">
+      
+      {/* Top Header Area */}
+      <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--border)] bg-white/50">
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5">
-            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[9px] text-emerald-600 font-semibold tracking-wider">LIVE</span>
+          <div className="w-8 h-8 rounded-lg bg-[var(--bg-2)] flex items-center justify-center">
+            <Shield className="w-4 h-4 text-[var(--text-1)]" />
           </div>
-          <div className="flex gap-1">
-            <div className="w-2.5 h-2.5 rounded-full bg-black/10" />
-            <div className="w-2.5 h-2.5 rounded-full bg-black/10" />
-            <div className="w-2.5 h-2.5 rounded-full bg-black/10" />
+          <div>
+            <h3 className="font-semibold text-[15px] text-[var(--text-1)]">VisionGuard Workspace</h3>
+            <p className="text-[12px] text-[var(--text-3)]">Factory A • 12 Active Cameras</p>
+          </div>
+        </div>
+        
+        {/* Mock Search Bar */}
+        <div className="hidden md:flex items-center gap-2 bg-[var(--bg-2)] border border-[var(--border)] rounded-full px-4 py-2 w-64">
+          <Search className="w-4 h-4 text-[var(--text-3)]" />
+          <span className="text-[12px] text-[var(--text-3)]">Search cameras...</span>
+          <span className="ml-auto text-[10px] text-[var(--text-3)] border border-[var(--border-strong)] rounded px-1.5 py-0.5 font-medium">⌘ K</span>
+        </div>
+        
+        <div className="flex items-center gap-3">
+          <button className="p-2 text-[var(--text-3)] hover:text-[var(--text-1)] transition-colors">
+            <Bell className="w-4 h-4" />
+          </button>
+          <div className="w-8 h-8 rounded-full bg-[var(--signal)] text-white flex items-center justify-center text-[12px] font-semibold">
+            JS
           </div>
         </div>
       </div>
 
-      <div className="p-4 space-y-4">
-        {/* System Stats Row */}
-        <div className="grid grid-cols-4 gap-2">
-          {[
-            { label: 'Detections', value: liveDetections.toLocaleString(), icon: TrendingUp, color: '#111' },
-            { label: 'Frame Rate', value: `${fps} fps`, icon: Zap, color: '#10B981' },
-            { label: 'Cameras', value: '12/12', icon: Camera, color: '#3B82F6' },
-            { label: 'Accuracy', value: '99.2%', icon: Activity, color: '#8B5CF6' },
-          ].map(({ label, value, icon: Icon, color }) => (
-            <div
-              key={label}
-              className="rounded-lg p-2.5 border border-black/[0.06] bg-[#fafafa]"
+      {/* Main Content Area */}
+      <div className="flex flex-1 overflow-hidden">
+        
+        {/* Left Sidebar */}
+        <div className="w-56 border-r border-[var(--border)] bg-[var(--bg-2)]/30 p-4 flex flex-col gap-1 hidden md:flex">
+          <div className="text-[11px] font-semibold text-[var(--text-3)] uppercase tracking-wider mb-2 px-2">Menu</div>
+          
+          <button 
+            onClick={() => setActiveTab('overview')}
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-[13px] font-medium transition-colors ${
+              activeTab === 'overview' ? 'bg-white shadow-sm text-[var(--signal)]' : 'text-[var(--text-2)] hover:bg-[var(--bg-2)] hover:text-[var(--text-1)]'
+            }`}
+          >
+            <Shield className="w-4 h-4" /> Overview
+          </button>
+          <button 
+            onClick={() => setActiveTab('cameras')}
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-[13px] font-medium transition-colors ${
+              activeTab === 'cameras' ? 'bg-white shadow-sm text-[var(--signal)]' : 'text-[var(--text-2)] hover:bg-[var(--bg-2)] hover:text-[var(--text-1)]'
+            }`}
+          >
+            <Camera className="w-4 h-4" /> Cameras
+          </button>
+          
+          <div className="mt-auto">
+            <button 
+              onClick={() => setActiveTab('settings')}
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg text-[13px] font-medium transition-colors w-full ${
+                activeTab === 'settings' ? 'bg-white shadow-sm text-[var(--signal)]' : 'text-[var(--text-2)] hover:bg-[var(--bg-2)] hover:text-[var(--text-1)]'
+              }`}
             >
-              <Icon className="w-3 h-3 mb-1.5" style={{ color }} />
-              <div className="text-[11px] font-bold tabular-nums text-black/80">{value}</div>
-              <div className="text-[9px] text-black/35 mt-0.5">{label}</div>
-            </div>
-          ))}
+              <Settings className="w-4 h-4" /> Settings
+            </button>
+          </div>
         </div>
 
-        {/* Camera Feed Preview */}
-        <div
-          className="relative rounded-lg overflow-hidden border border-black/[0.06]"
-          style={{ aspectRatio: '16/7', background: '#F8F9FA' }}
-        >
-          <div className="absolute inset-0 grid grid-cols-2 gap-px bg-black/[0.03]">
-            {[
-              { zone: 'Assembly Line A — Zone 1', status: 'normal' },
-              { zone: 'Quality Check Station', status: 'alert' },
-              { zone: 'Packaging Unit B', status: 'normal' },
-              { zone: 'Weld Inspection Bay', status: 'normal' },
-            ].map(({ zone, status }) => (
-              <div
-                key={zone}
-                className="relative flex items-end p-2"
-                style={{ background: status === 'alert' ? 'rgba(239,68,68,0.04)' : '#F8F9FA' }}
-              >
-                <div className="absolute top-1.5 left-1.5 w-3 h-3 border-t border-l border-black/15" />
-                <div className="absolute top-1.5 right-1.5 w-3 h-3 border-t border-r border-black/15" />
-                <div className="absolute bottom-6 left-1.5 w-3 h-3 border-b border-l border-black/15" />
-                <div className="absolute bottom-6 right-1.5 w-3 h-3 border-b border-r border-black/15" />
+        {/* Dashboard Workspace */}
+        <div className="flex-1 p-6 bg-white overflow-y-auto">
+          
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-[20px] font-semibold text-[var(--text-1)]">Live Monitoring</h2>
+            <div className="flex items-center gap-2">
+              <span className="flex items-center gap-1.5 text-[12px] font-medium text-[var(--green)] bg-[var(--green-dim)] px-2.5 py-1 rounded-full">
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--green)] animate-pulse" /> Live
+              </span>
+            </div>
+          </div>
 
-                {status === 'alert' && (
-                  <div className="absolute inset-0 border border-red-400/25 animate-pulse" />
-                )}
-                {status === 'alert' && (
-                  <div className="absolute border-2 border-red-500 rounded-sm" style={{ top: '25%', left: '30%', width: '35%', height: '40%' }}>
-                    <div className="absolute -top-4 left-0 bg-red-500 text-[7px] px-1.5 py-0.5 font-bold text-white rounded-sm whitespace-nowrap">
-                      DEFECT 94.3%
-                    </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            {/* KPI Cards */}
+            <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-white border border-[var(--border)] rounded-xl p-4 shadow-sm">
+                <div className="text-[12px] font-medium text-[var(--text-2)] mb-1">Total Detections</div>
+                <div className="mono text-[24px] font-semibold text-[var(--text-1)]">1,254</div>
+              </div>
+              <div className="bg-white border border-[var(--border)] rounded-xl p-4 shadow-sm">
+                <div className="text-[12px] font-medium text-[var(--text-2)] mb-1">Average FPS</div>
+                <div className="mono text-[24px] font-semibold text-[var(--text-1)]">{frameRate} <span className="text-[14px] text-[var(--text-3)] font-normal">fps</span></div>
+              </div>
+              <div className="bg-white border border-[var(--border)] rounded-xl p-4 shadow-sm">
+                <div className="text-[12px] font-medium text-[var(--text-2)] mb-1">System Accuracy</div>
+                <div className="mono text-[24px] font-semibold text-[var(--text-1)]">99.2%</div>
+              </div>
+            </div>
+
+            {/* Video Feed Placeholder */}
+            <div className="lg:col-span-2">
+              <div className="bg-white border border-[var(--border)] rounded-xl shadow-sm overflow-hidden flex flex-col h-full min-h-[300px]">
+                <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border)]">
+                  <div className="flex items-center gap-2">
+                    <Camera className="w-4 h-4 text-[var(--text-2)]" />
+                    <span className="text-[13px] font-medium text-[var(--text-1)]">Assembly Line A</span>
                   </div>
-                )}
-
-                <div className="relative z-10 flex items-center gap-1.5 bg-white/80 px-1.5 py-0.5 rounded border border-black/[0.06]">
-                  <div className={`w-1.5 h-1.5 rounded-full ${status === 'alert' ? 'bg-red-500 animate-pulse' : 'bg-emerald-500'}`} />
-                  <span className="text-[8px] text-black/50 font-medium truncate">{zone}</span>
+                </div>
+                <div className="flex-1 bg-[var(--bg-2)] relative overflow-hidden flex items-center justify-center border-b border-[var(--border)]">
+                  <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMCwwLDAsMC4wNSkiLz48L3N2Zz4=')] opacity-50" />
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-32 border-2 border-[var(--red)] border-dashed rounded-lg bg-[var(--red-dim)]" />
+                  <div className="absolute top-[calc(50%-16px)] left-[calc(50%-48px)] -translate-y-full bg-[var(--red)] text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm">
+                    DEFECT 94%
+                  </div>
                 </div>
               </div>
-            ))}
-          </div>
-          <div className="absolute top-2 right-2 flex items-center gap-1.5 bg-white/80 backdrop-blur-sm rounded px-2 py-0.5 border border-red-200 z-20">
-            <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-            <span className="text-[8px] text-red-600 font-bold">REC</span>
-          </div>
-        </div>
+            </div>
 
-        {/* Bottom Grid */}
-        <div className="grid grid-cols-5 gap-3">
-          <div className="col-span-2 space-y-1.5">
-            <div className="flex items-center gap-1.5 mb-2">
-              <BarChart2 className="w-3 h-3 text-black/25" />
-              <span className="text-[10px] font-semibold text-black/35 uppercase tracking-wide">Machine Health</span>
+            {/* Machine List */}
+            <div className="lg:col-span-1">
+              <div className="bg-white border border-[var(--border)] rounded-xl shadow-sm overflow-hidden h-full flex flex-col">
+                <div className="px-4 py-3 border-b border-[var(--border)]">
+                  <h3 className="text-[13px] font-semibold text-[var(--text-1)]">Machine Health</h3>
+                </div>
+                <div className="flex-1 overflow-y-auto p-2">
+                  <MachineCard name="CNC Lathe #3" location="Floor A" status="healthy" score={96} />
+                  <MachineCard name="Press Unit #7" location="Floor B" status="warning" score={71} />
+                  <MachineCard name="Conveyor #2" location="Packaging" status="critical" score={42} />
+                  <MachineCard name="Robotic Arm #1" location="Assembly" status="healthy" score={99} />
+                </div>
+              </div>
             </div>
-            <MachineCard name="CNC Lathe #3" status="healthy" score={96} location="Floor A" />
-            <MachineCard name="Press Unit #7" status="warning" score={71} location="Floor B" />
-            <MachineCard name="Conveyor #2" status="critical" score={38} location="Floor C" />
-          </div>
 
-          <div className="col-span-2">
-            <div className="flex items-center gap-1.5 mb-2">
-              <AlertTriangle className="w-3 h-3 text-black/25" />
-              <span className="text-[10px] font-semibold text-black/35 uppercase tracking-wide">Recent Alerts</span>
-            </div>
-            <div className="bg-[#fafafa] rounded-lg border border-black/[0.05] p-2">
-              <AlertItem type="critical" message="Surface crack — Press Unit #7" time="Just now" />
-              <AlertItem type="warning" message="Vibration anomaly — Conveyor #2" time="2m ago" />
-              <AlertItem type="info" message="Quality check passed — Line A" time="5m ago" />
-            </div>
-          </div>
-
-          <div className="col-span-1">
-            <div className="flex items-center gap-1 mb-2">
-              <Clock className="w-3 h-3 text-black/25" />
-              <span className="text-[10px] font-semibold text-black/35 uppercase tracking-wide">Trend</span>
-            </div>
-            <div className="bg-[#fafafa] rounded-lg border border-black/[0.05] p-3 h-[126px] flex flex-col justify-end">
-              <MiniBarChart data={chartData} />
-              <div className="mt-2 text-[9px] text-black/30 text-center border-t border-black/[0.04] pt-2">Last 12h</div>
-            </div>
           </div>
         </div>
       </div>

@@ -18,8 +18,9 @@ export const ChartContainer: React.FC<ChartContainerProps> = ({
     <motion.div
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -4, transition: { duration: 0.25 } }}
       transition={{ delay, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-      className={`bg-white/5 border border-white/10 rounded-2xl flex flex-col overflow-hidden ${className}`}
+      className={`enterprise-card flex flex-col overflow-hidden !p-0 ${className}`}
     >
       <div className="px-6 py-5 border-b border-white/10 flex items-start justify-between bg-black/20 shrink-0">
         <div>

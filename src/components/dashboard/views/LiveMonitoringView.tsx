@@ -1,119 +1,262 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Camera, Maximize2, AlertTriangle, Activity } from 'lucide-react';
+import React, { useState } from 'react';
+import { Camera } from 'lucide-react';
 
 const cameraFeeds = [
-  { id: 'CAM-01', name: 'Assembly Line A', status: 'live', fps: 30, detections: 2, threat: 'low' },
-  { id: 'CAM-02', name: 'CNC Milling Area', status: 'live', fps: 29, detections: 0, threat: 'none' },
-  { id: 'CAM-03', name: 'Conveyor Belt #2', status: 'live', fps: 24, detections: 5, threat: 'high' },
-  { id: 'CAM-04', name: 'Packaging Station', status: 'live', fps: 30, detections: 1, threat: 'low' },
+  { id: 'CAM-01', name: 'Assembly Line A',   location: 'Floor A', fps: 30, detections: 2, hasAnomaly: false, model: 'VG-Vision-v4', objects: 2 },
+  { id: 'CAM-02', name: 'CNC Milling Area',  location: 'Floor A', fps: 29, detections: 0, hasAnomaly: false, model: 'VG-Vision-v4', objects: 0 },
+  { id: 'CAM-03', name: 'Conveyor Belt #2',  location: 'Floor C', fps: 24, detections: 5, hasAnomaly: true,  model: 'VG-Vision-v4', objects: 5 },
+  { id: 'CAM-04', name: 'Packaging Station', location: 'Floor D', fps: 30, detections: 1, hasAnomaly: false, model: 'VG-Vision-v4', objects: 1 },
 ];
 
+type Filter = 'all' | 'anomalies';
+
 export const LiveMonitoringView: React.FC = () => {
+  const [filter, setFilter] = useState<Filter>('all');
+
+  const visible = filter === 'anomalies'
+    ? cameraFeeds.filter((f) => f.hasAnomaly)
+    : cameraFeeds;
+
   return (
-    <div className="space-y-6 pb-20">
-      
-      {/* ─── PAGE HEADER & CONTROLS ─── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+
+      {/* ─── PAGE HEADER ─── */}
+      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
         <div>
-          <h2 className="text-xl font-semibold text-white tracking-tight">Live AI Monitoring</h2>
-          <p className="text-[13px] text-white/50 mt-1">Real-time computer vision analysis across 4 active streams</p>
+          <h1 className="text-page-title">Live Monitoring</h1>
+          <p style={{ marginTop: 4, fontSize: 13, color: 'var(--text-3)' }}>
+            Real-time computer vision across {cameraFeeds.length} active streams
+          </p>
         </div>
-        
-        <div className="flex items-center gap-3">
-          <button className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-[13px] text-white/80 hover:bg-white/10 hover:text-white transition-colors outline-none">
-            <Camera className="w-4 h-4" />
-            Add Camera
+        <button className="vg-btn vg-btn-ghost" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <Camera size={13} />
+          Add camera
+        </button>
+      </div>
+
+      {/* ─── FILTER TOOLBAR ─── */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 8,
+          padding: '10px 16px',
+          background: 'var(--bg-1)',
+          border: '1px solid var(--border)',
+          borderRadius: 4,
+        }}
+      >
+        <span style={{ fontSize: 12, color: 'var(--text-3)', marginRight: 4 }}>Show:</span>
+        {(['all', 'anomalies'] as Filter[]).map((f) => (
+          <button
+            key={f}
+            onClick={() => setFilter(f)}
+            style={{
+              height: 26,
+              padding: '0 12px',
+              borderRadius: 4,
+              border: '1px solid',
+              borderColor: filter === f ? 'var(--signal)' : 'var(--border-strong)',
+              background: filter === f ? 'var(--signal-dim)' : 'transparent',
+              color: filter === f ? 'var(--signal)' : 'var(--text-2)',
+              fontSize: 12,
+              fontFamily: "'Inter', sans-serif",
+              fontWeight: 500,
+              cursor: 'pointer',
+              transition: 'all 100ms',
+              textTransform: 'capitalize',
+            }}
+          >
+            {f === 'all' ? 'All cameras' : 'Anomalies only'}
           </button>
+        ))}
+
+        <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span
+            style={{
+              width: 6,
+              height: 6,
+              borderRadius: '50%',
+              background: 'var(--red)',
+              animation: 'pulse 2s infinite',
+            }}
+          />
+          <span className="mono" style={{ fontSize: 11, color: 'var(--text-3)' }}>
+            {cameraFeeds.filter((f) => f.hasAnomaly).length} anomalies active
+          </span>
         </div>
       </div>
 
       {/* ─── CAMERA GRID ─── */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {cameraFeeds.map((feed, idx) => (
-          <motion.div
-            key={feed.id}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: idx * 0.1, duration: 0.4 }}
-            className={`bg-[#0A0A0A] border rounded-2xl overflow-hidden relative group ${
-              feed.threat === 'high' ? 'border-red-500/50 shadow-[0_0_20px_rgba(239,68,68,0.15)]' : 'border-white/10'
-            }`}
-          >
-            
-            {/* Overlay UI */}
-            <div className="absolute inset-0 z-10 pointer-events-none p-4 flex flex-col justify-between">
-              <div className="flex items-start justify-between">
-                <div className="flex flex-col gap-2">
-                  <div className="bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10 inline-flex items-center gap-2 w-max">
-                    <span className="flex h-2 w-2 relative">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
-                    </span>
-                    <span className="text-[11px] font-bold tracking-wider text-white uppercase">{feed.id} • {feed.name}</span>
-                  </div>
-                  {feed.threat === 'high' && (
-                    <div className="bg-red-500/20 backdrop-blur-md px-3 py-1.5 rounded-lg border border-red-500/30 inline-flex items-center gap-2 w-max animate-pulse">
-                      <AlertTriangle className="w-3.5 h-3.5 text-red-400" />
-                      <span className="text-[11px] font-bold tracking-wider text-red-400 uppercase">Anomaly Detected</span>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, 1fr)',
+          gap: 1,
+          background: 'var(--border)',
+          border: '1px solid var(--border)',
+          borderRadius: 4,
+          overflow: 'hidden',
+        }}
+      >
+        {visible.map((feed) => (
+          <div key={feed.id} style={{ background: 'var(--bg-1)', display: 'flex', flexDirection: 'column' }}>
+
+            {/* Header strip */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '8px 14px',
+                borderBottom: '1px solid var(--border)',
+                background: 'var(--bg-1)',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                {/* Live dot */}
+                <span
+                  style={{
+                    width: 6,
+                    height: 6,
+                    borderRadius: '50%',
+                    background: feed.hasAnomaly ? 'var(--red)' : 'var(--green)',
+                    flexShrink: 0,
+                  }}
+                />
+                <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-1)' }}>{feed.name}</span>
+                <span style={{ fontSize: 12, color: 'var(--text-3)' }}>{feed.location}</span>
+              </div>
+              <span className="mono" style={{ fontSize: 11, color: 'var(--text-3)' }}>
+                {feed.fps} fps
+              </span>
+            </div>
+
+            {/* Video area */}
+            <div
+              style={{
+                position: 'relative',
+                aspectRatio: '16/9',
+                background: '#0c0e10',
+                overflow: 'hidden',
+              }}
+            >
+              {/* Grid scanline effect */}
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)',
+                  backgroundSize: '40px 40px',
+                  pointerEvents: 'none',
+                }}
+              />
+
+              {/* Detection label tags — thin bordered, not thick boxes */}
+              {feed.hasAnomaly && (
+                <div style={{ position: 'absolute', top: '28%', left: '30%', pointerEvents: 'none' }}>
+                  {/* Thin bounding box */}
+                  <div
+                    style={{
+                      width: 140,
+                      height: 90,
+                      border: '1px solid var(--red)',
+                      position: 'relative',
+                    }}
+                  >
+                    {/* Label tag */}
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: -1,
+                        left: -1,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 4,
+                        padding: '2px 6px',
+                        background: 'var(--red)',
+                        borderRadius: 0,
+                      }}
+                    >
+                      <span className="mono" style={{ fontSize: 10, color: '#fff' }}>Misalignment</span>
+                      <span className="mono" style={{ fontSize: 10, color: 'rgba(255,255,255,0.8)' }}>94%</span>
                     </div>
-                  )}
-                </div>
-                
-                <div className="flex flex-col items-end gap-2">
-                  <div className="bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10 inline-flex items-center gap-2 text-[11px] font-mono text-white/80">
-                    <Activity className="w-3 h-3 text-emerald-400" />
-                    {feed.fps} FPS
-                  </div>
-                  <button className="p-2 bg-black/60 backdrop-blur-md border border-white/10 rounded-lg text-white/60 hover:text-white pointer-events-auto transition-colors">
-                    <Maximize2 className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Bounding Box Mockup for High Threat */}
-              {feed.threat === 'high' && (
-                <div className="absolute top-1/4 left-1/3 w-48 h-32 border-2 border-red-500 bg-red-500/10 flex items-start justify-start p-1 pointer-events-none">
-                  <div className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-sm">
-                    Misalignment 94%
-                  </div>
-                </div>
-              )}
-              {feed.threat === 'low' && (
-                <div className="absolute top-1/2 left-1/2 w-32 h-32 border-2 border-blue-500 bg-blue-500/10 flex items-start justify-start p-1 pointer-events-none">
-                  <div className="bg-blue-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-sm">
-                    Worker 99%
                   </div>
                 </div>
               )}
 
-              {/* Bottom Metrics */}
-              <div className="bg-black/60 backdrop-blur-md p-3 rounded-xl border border-white/10 flex items-center justify-between w-full pointer-events-auto">
-                <div className="flex items-center gap-4">
-                  <div className="text-[11px] uppercase tracking-wider text-white/50 font-semibold">Active Model</div>
-                  <div className="text-[12px] font-mono text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded border border-emerald-400/20">VG-Vision-v4</div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="text-[12px] text-white/70">
-                    <span className="font-semibold text-white">{feed.detections}</span> objects
+              {!feed.hasAnomaly && feed.objects > 0 && (
+                <div style={{ position: 'absolute', top: '40%', left: '45%', pointerEvents: 'none' }}>
+                  <div
+                    style={{
+                      width: 80,
+                      height: 60,
+                      border: '1px solid var(--signal)',
+                      position: 'relative',
+                    }}
+                  >
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: -1,
+                        left: -1,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 4,
+                        padding: '2px 6px',
+                        background: 'var(--signal)',
+                      }}
+                    >
+                      <span className="mono" style={{ fontSize: 10, color: '#fff' }}>Worker</span>
+                      <span className="mono" style={{ fontSize: 10, color: 'rgba(255,255,255,0.8)' }}>99%</span>
+                    </div>
                   </div>
-                  <button className="text-[12px] text-blue-400 hover:text-blue-300 font-medium">View Logs</button>
                 </div>
-              </div>
+              )}
             </div>
 
-            {/* Video Placeholder Background */}
-            <div className="aspect-video bg-[#111] w-full relative overflow-hidden">
-               <div className="absolute inset-0 opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay"></div>
-               {/* Animated grid lines for "AI scanning" effect */}
-               <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none"></div>
-               
-               {feed.threat === 'high' && (
-                 <div className="absolute inset-0 bg-red-500/5 mix-blend-overlay animate-pulse"></div>
-               )}
+            {/* Footer strip */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '8px 14px',
+                borderTop: '1px solid var(--border)',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span
+                  style={{
+                    fontSize: 11,
+                    color: 'var(--text-3)',
+                    background: 'var(--bg-2)',
+                    border: '1px solid var(--border)',
+                    borderRadius: 2,
+                    padding: '1px 6px',
+                    fontFamily: "'JetBrains Mono', monospace",
+                  }}
+                >
+                  {feed.model}
+                </span>
+                <span className="mono" style={{ fontSize: 12, color: 'var(--text-2)' }}>
+                  {feed.objects} obj
+                </span>
+              </div>
+              <button
+                style={{
+                  fontSize: 12,
+                  color: 'var(--signal)',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontFamily: "'Inter', sans-serif",
+                }}
+              >
+                View logs
+              </button>
             </div>
-            
-          </motion.div>
+          </div>
         ))}
       </div>
     </div>

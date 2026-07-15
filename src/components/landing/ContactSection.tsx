@@ -1,140 +1,175 @@
-// ============================================================
-// ContactSection — Full-width 2-col: big CTA left, form right
-// ============================================================
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Mail, MapPin } from 'lucide-react';
+import { Mail, MapPin, ArrowRight } from 'lucide-react';
 
 export const ContactSection: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
-  const [form, setForm] = useState({ name: '', email: '', company: '', message: '' });
+  const [loading, setLoading] = useState(false);
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-    setForm(p => ({ ...p, [e.target.name]: e.target.value }));
-
-  const onSubmit = (e: React.FormEvent) => { e.preventDefault(); setSubmitted(true); };
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setSubmitted(true);
+    }, 1000);
+  };
 
   return (
-    <section id="contact" className="bg-[#F9FAFB] border-t border-black/[0.06]" aria-labelledby="contact-heading">
-      <div className="section-container section-py">
-        <div className="grid lg:grid-cols-2 gap-16 items-start">
+    <section id="contact" className="py-24 bg-[var(--bg-0)] relative" aria-labelledby="contact-heading">
+      
+      {/* Background glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-[400px] bg-mesh-gradient opacity-30 rounded-full blur-3xl -z-10" />
 
-          {/* LEFT — CTA copy */}
+      <div className="enterprise-container">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center max-w-6xl mx-auto">
+          
+          {/* Left: Text */}
           <div>
-            <motion.p initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }} className="t-label text-black/40 mb-5 eyebrow">
-              Get in Touch
-            </motion.p>
-            <motion.h2 id="contact-heading"
-              initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }} transition={{ delay: 0.07 }}
-              className="mb-6" style={{
-                fontFamily: 'Inter, system-ui, sans-serif',
-                fontSize: 'clamp(2.5rem, 5vw, 4rem)',
-                fontWeight: 500,
-                lineHeight: 1.06,
-                letterSpacing: '-0.025em',
-                color: '#0A0A0A',
-              }}>
+            <span className="text-[12px] font-semibold text-[var(--text-3)] tracking-wider uppercase mb-3 block">
+              Get in touch
+            </span>
+            <h2 id="contact-heading" className="text-[40px] font-bold text-[var(--text-1)] mb-6 leading-tight tracking-tight">
               Ready to build?
-            </motion.h2>
-            <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
-              viewport={{ once: true }} transition={{ delay: 0.14 }}
-              className="t-body-lg max-w-md mb-10">
-              Schedule a 30-minute live demonstration tailored to your industry and camera setup.
-              Our engineers will walk you through real-world scenarios using your actual equipment.
-            </motion.p>
-
-            <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
-              viewport={{ once: true }} transition={{ delay: 0.2 }}
-              className="flex flex-wrap gap-3 mb-12">
-              <button onClick={() => document.getElementById('form-name')?.focus()}
-                className="btn btn-primary btn-lg group">
-                Book a Demo
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
-              <a href="mailto:sales@visionguard.ai" className="btn btn-secondary btn-lg">
-                Contact Sales
-              </a>
-            </motion.div>
-
-            <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
-              viewport={{ once: true }} transition={{ delay: 0.26 }}
-              className="space-y-3.5">
-              {[
-                { icon: Mail,    text: 'sales@visionguard.ai',        href: 'mailto:sales@visionguard.ai' },
-                { icon: MapPin,  text: 'Bengaluru · Mumbai · Chennai', href: undefined },
-              ].map(({ icon: Icon, text, href }) => (
-                <div key={text} className="flex items-center gap-2.5">
-                  <Icon className="w-4 h-4 text-black/30 shrink-0" />
-                  {href
-                    ? <a href={href} className="text-[13px] text-black/50 hover:text-black transition-colors">{text}</a>
-                    : <span className="text-[13px] text-black/40">{text}</span>
-                  }
+            </h2>
+            <p className="text-[16px] text-[var(--text-2)] mb-10 leading-relaxed max-w-md">
+              Schedule a 30-minute live demonstration tailored to your industry and camera setup. Our engineers will walk you through real-world scenarios using your actual equipment.
+            </p>
+            
+            <div className="space-y-6">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-full bg-[var(--bg-2)] flex items-center justify-center shrink-0">
+                  <Mail className="w-4 h-4 text-[var(--text-2)]" />
                 </div>
-              ))}
+                <div>
+                  <div className="text-[14px] font-medium text-[var(--text-1)]">sales@visionguard.ai</div>
+                  <div className="text-[13px] text-[var(--text-3)]">We usually reply within 1-2 hours</div>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-full bg-[var(--bg-2)] flex items-center justify-center shrink-0">
+                  <MapPin className="w-4 h-4 text-[var(--text-2)]" />
+                </div>
+                <div>
+                  <div className="text-[14px] font-medium text-[var(--text-1)]">Global HQ</div>
+                  <div className="text-[13px] text-[var(--text-3)]">Bengaluru • Mumbai • Chennai</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Right: Form */}
+          <div>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              className="bg-white border border-[var(--border)] shadow-[0_8px_30px_-4px_rgba(0,0,0,0.06)] rounded-[24px] p-8 md:p-10"
+            >
+              <h3 className="text-[20px] font-semibold text-[var(--text-1)] mb-2">Request a Live Demo</h3>
+              <p className="text-[14px] text-[var(--text-3)] mb-8">We'll respond within one business day.</p>
+              
+              {submitted ? (
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="py-12 text-center"
+                >
+                  <div className="w-16 h-16 rounded-full bg-[var(--green-dim)] flex items-center justify-center mx-auto mb-6">
+                    <svg className="w-8 h-8 text-[var(--green)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <h4 className="text-[18px] font-semibold text-[var(--text-1)] mb-2">Request Received</h4>
+                  <p className="text-[14px] text-[var(--text-2)] mb-6">
+                    Our technical sales team will contact you shortly to schedule your demo.
+                  </p>
+                  <button 
+                    onClick={() => setSubmitted(false)}
+                    className="vg-btn vg-btn-ghost w-full"
+                  >
+                    Submit another request
+                  </button>
+                </motion.div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div>
+                    <label htmlFor="name" className="block text-[12px] font-semibold text-[var(--text-2)] uppercase tracking-wider mb-2">
+                      Full Name *
+                    </label>
+                    <input 
+                      type="text" 
+                      id="name" 
+                      required
+                      className="enterprise-input w-full"
+                      placeholder="e.g. Rajesh Sharma"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="email" className="block text-[12px] font-semibold text-[var(--text-2)] uppercase tracking-wider mb-2">
+                      Work Email *
+                    </label>
+                    <input 
+                      type="email" 
+                      id="email" 
+                      required
+                      className="enterprise-input w-full"
+                      placeholder="e.g. rajesh@company.com"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="company" className="block text-[12px] font-semibold text-[var(--text-2)] uppercase tracking-wider mb-2">
+                      Company *
+                    </label>
+                    <input 
+                      type="text" 
+                      id="company" 
+                      required
+                      className="enterprise-input w-full"
+                      placeholder="e.g. Sharma Industries Pvt Ltd"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="message" className="block text-[12px] font-semibold text-[var(--text-2)] uppercase tracking-wider mb-2">
+                      Message (Optional)
+                    </label>
+                    <textarea 
+                      id="message" 
+                      rows={3}
+                      className="enterprise-input w-full h-auto py-3 resize-none"
+                      placeholder="Tell us about your factory and camera setup..."
+                    />
+                  </div>
+                  
+                  <button 
+                    type="submit" 
+                    disabled={loading}
+                    className="w-full bg-[var(--signal)] hover:bg-[var(--signal-hover)] text-white font-medium text-[14px] py-3 rounded-full transition-colors flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed mt-2"
+                  >
+                    {loading ? (
+                      <span className="flex items-center gap-2">
+                        <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        Processing...
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-2">
+                        Send Request <ArrowRight className="w-4 h-4" />
+                      </span>
+                    )}
+                  </button>
+                  
+                  <p className="text-[11px] text-[var(--text-3)] text-center mt-4">
+                    No spam, ever. Privacy Policy applies.
+                  </p>
+                </form>
+              )}
             </motion.div>
           </div>
-
-          {/* RIGHT — Contact form */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.15 }}>
-            {submitted ? (
-              <div className="card bg-white text-center py-16 px-8">
-                <div className="w-12 h-12 rounded-full border border-black/[0.08] flex items-center justify-center mx-auto mb-5">
-                  <ArrowRight className="w-5 h-5 text-black/40" />
-                </div>
-                <h3 className="text-[16px] font-semibold text-black mb-2">Request received</h3>
-                <p className="text-[13.5px] text-black/50 font-light">
-                  Our team will reach out within 1 business day to schedule your demo.
-                </p>
-              </div>
-            ) : (
-              <form onSubmit={onSubmit} aria-label="Contact form"
-                className="card bg-white flex flex-col gap-5">
-                <div>
-                  <h3 className="text-[15px] font-semibold text-black">Request a Live Demo</h3>
-                  <p className="text-[12.5px] text-black/40 mt-1">We'll respond within one business day.</p>
-                </div>
-
-                {[
-                  { id: 'form-name',    name: 'name',    label: 'Full Name',    type: 'text',  ph: 'Rajesh Sharma',            req: true  },
-                  { id: 'form-email',   name: 'email',   label: 'Work Email',   type: 'email', ph: 'rajesh@company.com',       req: true  },
-                  { id: 'form-company', name: 'company', label: 'Company',      type: 'text',  ph: 'Sharma Industries Pvt Ltd', req: false },
-                ].map(f => (
-                  <div key={f.id}>
-                    <label htmlFor={f.id}
-                      className="block t-label text-black/40 mb-2">
-                      {f.label}{f.req && <span className="text-black ml-0.5">*</span>}
-                    </label>
-                    <input id={f.id} name={f.name} type={f.type} required={f.req}
-                      value={(form as any)[f.name]} onChange={onChange} placeholder={f.ph}
-                      className="w-full h-11 px-4 bg-[#F9FAFB] border border-black/[0.09] rounded-xl
-                                 text-[13.5px] text-black placeholder:text-black/25
-                                 focus:outline-none focus:border-black/30 focus:bg-white transition-all" />
-                  </div>
-                ))}
-
-                <div>
-                  <label htmlFor="form-message" className="block t-label text-black/40 mb-2">Message</label>
-                  <textarea id="form-message" name="message" rows={3}
-                    value={form.message} onChange={onChange}
-                    placeholder="Tell us about your factory and camera setup..."
-                    className="w-full px-4 py-3 bg-[#F9FAFB] border border-black/[0.09] rounded-xl
-                               text-[13.5px] text-black placeholder:text-black/25 resize-none
-                               focus:outline-none focus:border-black/30 focus:bg-white transition-all" />
-                </div>
-
-                <button type="submit" className="btn btn-primary w-full" style={{ justifyContent: 'center' }}>
-                  Send Request
-                </button>
-                <p className="text-[11px] text-black/30 text-center font-light -mt-1">
-                  No spam, ever. Privacy Policy applies.
-                </p>
-              </form>
-            )}
-          </motion.div>
+          
         </div>
       </div>
     </section>

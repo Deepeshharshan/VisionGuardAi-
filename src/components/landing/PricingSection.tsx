@@ -7,141 +7,87 @@ function cn(...classes: (string | boolean | undefined)[]) {
   return classes.filter(Boolean).join(' ');
 }
 
-interface PricingCardProps {
-  plan: typeof PRICING_PLANS[number];
-  index: number;
-}
-
-const PricingCard: React.FC<PricingCardProps> = ({ plan, index }) => {
-  const isFeatured = plan.highlight;
-  
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.1, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className={cn(
-        "flex flex-col w-full lg:w-[360px] p-8 md:p-10 rounded-[32px] transition-all duration-300 ease-out",
-        isFeatured 
-          ? "bg-[#18181B] text-white shadow-[0_16px_32px_-12px_rgba(0,0,0,0.15)] hover:shadow-[0_24px_48px_-12px_rgba(0,0,0,0.25)] motion-safe:hover:-translate-y-1 lg:scale-[1.02]" 
-          : "bg-white border border-[#E4E4E7] text-[#09090B] shadow-sm hover:shadow-md motion-safe:hover:-translate-y-1"
-      )}
-    >
-      {/* Featured Badge Placeholder to maintain identical alignment across cards */}
-      <div className="h-8 mb-6">
-        {isFeatured && (
-          <span className="inline-flex items-center justify-center px-4 py-1.5 bg-white/10 text-white text-[12px] font-medium tracking-wide rounded-full">
-            Most Popular
-          </span>
-        )}
-      </div>
-
-      <h3 className={cn("text-[20px] font-medium mb-3 tracking-tight", isFeatured ? "text-white" : "text-[#09090B]")}>
-        {plan.name}
-      </h3>
-      
-      <p className={cn("text-[14px] leading-relaxed mb-8", isFeatured ? "text-[#A1A1AA]" : "text-[#71717A]")}>
-        {plan.description}
-      </p>
-
-      <div className="flex items-baseline gap-1.5 mb-8">
-        <span className={cn("text-[40px] font-medium tracking-tight leading-none", isFeatured ? "text-white" : "text-[#09090B]")} style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-          {plan.price}
-        </span>
-        {plan.period && (
-          <span className={cn("text-[15px]", isFeatured ? "text-[#A1A1AA]" : "text-[#71717A]")}>
-            {plan.period}
-          </span>
-        )}
-      </div>
-
-      <div className={cn("h-[1px] w-full mb-8", isFeatured ? "bg-white/10" : "bg-[#F4F4F5]")} />
-
-      <ul className="flex-1 space-y-4 mb-10">
-        {plan.features.map(feat => (
-          <li key={feat} className="flex items-start gap-3">
-            <Check className={cn("w-5 h-5 shrink-0 mt-0.5", isFeatured ? "text-white" : "text-[#09090B]")} strokeWidth={2} />
-            <span className={cn("text-[14px] font-medium leading-relaxed", isFeatured ? "text-[#D4D4D8]" : "text-[#3F3F46]")}>
-              {feat}
-            </span>
-          </li>
-        ))}
-      </ul>
-
-      <button
-        onClick={() => {
-           const el = document.querySelector('#contact');
-           if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' });
-        }}
-        className={cn(
-          "w-full h-14 rounded-2xl text-[15px] font-medium flex items-center justify-center transition-all duration-300 ease-out motion-safe:hover:-translate-y-0.5",
-          isFeatured
-            ? "bg-white text-[#09090B] hover:bg-[#F4F4F5] shadow-sm"
-            : "bg-[#09090B] text-white hover:bg-[#27272A] shadow-sm"
-        )}
-      >
-        {plan.cta}
-      </button>
-    </motion.div>
-  );
-};
-
 export const PricingSection: React.FC = () => {
   return (
-    <section id="pricing" className="bg-white border-t border-black/[0.04]" aria-labelledby="pricing-heading">
-      <div className="mx-auto max-w-[1280px] px-6 md:px-12 lg:px-20 py-24 lg:py-32">
+    <section id="pricing" className="py-24 bg-[var(--bg-0)]" aria-labelledby="pricing-heading">
+      <div className="enterprise-container">
         
-        {/* HEADER */}
-        <div className="flex flex-col items-center text-center mb-20">
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }} 
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <motion.h2 
+            initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-[#71717A] font-medium text-[12px] uppercase tracking-[0.2em] mb-6"
+            viewport={{ once: true, margin: "-100px" }}
+            id="pricing-heading"
+            className="text-section-title mb-4"
           >
-            Pricing
-          </motion.div>
-
-          <motion.h2 id="pricing-heading"
-            initial={{ opacity: 0, y: 12 }} 
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ delay: 0.1 }}
-            className="text-[32px] md:text-[40px] leading-[1.15] text-[#09090B] font-medium tracking-tight max-w-[700px] mb-6"
-            style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
-          >
-            Transparent, scalable pricing
+            Simple, transparent pricing
           </motion.h2>
-
           <motion.p 
-            initial={{ opacity: 0 }} 
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }} transition={{ delay: 0.2 }}
-            className="text-[16px] md:text-[18px] text-[#71717A] max-w-[620px] font-normal leading-relaxed"
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ delay: 0.1 }}
+            className="text-[16px] text-[var(--text-2)]"
           >
-            Start small, scale as you grow. No hidden fees, no per-detection billing.
+            Start with our pilot program, then scale across your entire manufacturing footprint.
           </motion.p>
         </div>
 
-        {/* PRICING CARDS */}
-        <div className="flex flex-col lg:flex-row justify-center items-stretch gap-6 lg:gap-8">
-          {PRICING_PLANS.map((plan, index) => (
-            <PricingCard key={plan.name} plan={plan} index={index} />
-          ))}
-        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          {PRICING_PLANS.map((plan, i) => {
+            const isPopular = plan.highlight;
+            return (
+              <motion.div
+                key={plan.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.4, delay: i * 0.1 }}
+                className={cn(
+                  "relative p-8 rounded-2xl border transition-all duration-300",
+                  isPopular 
+                    ? "bg-white border-[var(--signal)] shadow-[0_8px_30px_-4px_rgba(37,99,235,0.12)] scale-105 z-10" 
+                    : "bg-white border-[var(--border)] shadow-sm hover:shadow-md"
+                )}
+              >
+                {isPopular && (
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[var(--signal)] text-white text-[11px] font-semibold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">
+                    Most Popular
+                  </div>
+                )}
+                
+                <div className="mb-8">
+                  <h3 className="text-[18px] font-semibold text-[var(--text-1)] mb-2">{plan.name}</h3>
+                  <div className="flex items-baseline gap-2 mb-2">
+                    <span className="text-[32px] font-bold text-[var(--text-1)]">{plan.price}</span>
+                    {plan.price !== 'Custom' && <span className="text-[14px] text-[var(--text-3)]">/mo</span>}
+                  </div>
+                  <p className="text-[14px] text-[var(--text-2)]">{plan.description}</p>
+                </div>
 
-        {/* FOOTNOTE */}
-        <motion.div
-          initial={{ opacity: 0 }} 
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }} transition={{ delay: 0.4 }}
-          className="mt-20 text-center"
-        >
-          <p className="text-[14px] text-[#71717A] font-medium max-w-[600px] mx-auto leading-relaxed">
-            All prices are exclusive of GST. Annual billing available with 15% discount.<br className="hidden sm:block" />
-            Custom enterprise agreements available for multi-plant deployments.
-          </p>
-        </motion.div>
+                <button className={cn(
+                  "w-full py-3 px-4 rounded-full font-medium text-[14px] transition-colors mb-8",
+                  isPopular
+                    ? "bg-[var(--black-btn)] text-white hover:bg-[var(--black-btn-hover)]"
+                    : "bg-[var(--bg-2)] text-[var(--text-1)] hover:bg-[var(--border)]"
+                )}>
+                  {plan.cta}
+                </button>
+
+                <div className="space-y-4">
+                  {plan.features.map(feature => (
+                    <div key={feature} className="flex items-start gap-3">
+                      <div className="mt-0.5 w-5 h-5 rounded-full bg-[var(--signal-dim)] flex items-center justify-center shrink-0">
+                        <Check className="w-3 h-3 text-[var(--signal)]" />
+                      </div>
+                      <span className="text-[14px] text-[var(--text-2)] leading-tight">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
       </div>
     </section>
   );

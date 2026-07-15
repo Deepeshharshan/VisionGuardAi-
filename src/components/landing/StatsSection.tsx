@@ -1,64 +1,67 @@
-// ============================================================
-// StatsSection — Full-width 4-column stat bar
-// ============================================================
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { STATS } from '@/constants';
 
 const Counter: React.FC<{ target: number; decimals: number; suffix: string; duration?: number }> = ({
-  target, decimals, suffix, duration = 1600,
+  target, decimals, suffix, duration = 2000
 }) => {
-  const [v, setV] = useState(0);
-  const startRef = useRef<number | null>(null);
-  const rafRef = useRef<number | null>(null);
+  const [count, setCount] = useState(0);
+  const nodeRef = useRef<HTMLSpanElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const tick = (ts: number) => {
-      if (!startRef.current) startRef.current = ts;
-      const p = Math.min((ts - startRef.current) / duration, 1);
-      setV(parseFloat(((1 - Math.pow(1 - p, 3)) * target).toFixed(decimals)));
-      if (p < 1) rafRef.current = requestAnimationFrame(tick);
-    };
-    rafRef.current = requestAnimationFrame(tick);
-    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
-  }, [target, decimals, duration]);
-
-  return <span className="tabular-nums">{v.toFixed(decimals)}{suffix}</span>;
-};
-
-const StatItem: React.FC<{ value: number; suffix: string; label: string; decimals: number; index: number }> = ({
-  value, suffix, label, decimals, index,
-}) => {
-  const [visible, setVisible] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } }, { threshold: 0.4 });
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
+    const observer = new IntersectionObserver(
+      (entries) => { if (entries[0].isIntersecting) setIsVisible(true); },
+      { threshold: 0.1 }
+    );
+    if (nodeRef.current) observer.observe(nodeRef.current);
+    return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    if (!isVisible) return;
+    let startTimestamp: number;
+    const step = (timestamp: number) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+      // easeOutExpo
+      const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+      setCount(ease * target);
+      if (progress < 1) window.requestAnimationFrame(step);
+    };
+    window.requestAnimationFrame(step);
+  }, [target, duration, isVisible]);
+
   return (
-    <motion.div ref={ref}
-      initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }} transition={{ delay: index * 0.08 }}
-      className="flex flex-col items-center text-center py-10 px-6 border-r border-black/[0.06] last:border-0">
-      <div className="stat-number mb-3">
-        {visible ? <Counter target={value} decimals={decimals} suffix={suffix} /> : `${value.toFixed(decimals)}${suffix}`}
-      </div>
-      <p className="t-label text-black/35">{label}</p>
-    </motion.div>
+    <span ref={nodeRef} className="mono font-semibold">
+      {count.toFixed(decimals)}
+      {suffix}
+    </span>
   );
 };
 
-export const StatsSection: React.FC = () => (
-  <section className="bg-white border-y border-black/[0.06]" aria-label="Key metrics">
-    <div className="section-container">
-      <div className="grid grid-cols-2 lg:grid-cols-4 divide-y lg:divide-y-0 divide-x-0 lg:divide-x divide-black/[0.06]">
-        {STATS.map((s, i) => (
-          <StatItem key={s.label} value={s.value} suffix={s.suffix} label={s.label} decimals={s.decimals} index={i} />
-        ))}
+export const StatsSection: React.FC = () => {
+  return (
+    <section className="py-20 bg-[var(--bg-0)]" aria-label="Key metrics">
+      <div className="enterprise-container">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 divide-x divide-[var(--border)]">
+          {STATS.map((stat, i) => (
+            <motion.div 
+              key={stat.label}
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+              className="flex flex-col items-center text-center px-4"
+            >
+              <div className="text-[32px] md:text-[40px] text-[var(--text-1)] mb-2 tracking-tight">
+                <Counter target={stat.value} decimals={stat.decimals} suffix={stat.suffix} />
+              </div>
+              <div className="text-[14px] font-medium text-[var(--text-2)]">{stat.label}</div>
+            </motion.div>
+          ))}
+        </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};

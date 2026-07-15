@@ -1,84 +1,90 @@
-// ============================================================
-// FAQSection — Full-width 2-col FAQ: left heading, right accordion
-// ============================================================
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Minus } from 'lucide-react';
 import { FAQ_ITEMS } from '@/constants';
 
 const FAQItem: React.FC<{
-  question: string; answer: string; isOpen: boolean;
-  onToggle: () => void; index: number;
-}> = ({ question, answer, isOpen, onToggle, index }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }} transition={{ delay: index * 0.04 }}
-    className="border-b border-black/[0.06] last:border-0">
-    <button onClick={onToggle}
-      className="flex items-start justify-between w-full text-left py-5 gap-6 cursor-pointer group"
-      aria-expanded={isOpen} id={`faq-${index}`} aria-controls={`faq-panel-${index}`}>
-      <span className={`text-[14.5px] font-medium leading-snug transition-colors ${
-        isOpen ? 'text-black' : 'text-black/65 group-hover:text-black'
-      }`}>
-        {question}
-      </span>
-      <span className="w-6 h-6 rounded-full border border-black/[0.1] flex items-center justify-center shrink-0 mt-0.5 group-hover:border-black/25 transition-colors">
-        {isOpen ? <Minus className="w-3 h-3 text-black/55" /> : <Plus className="w-3 h-3 text-black/35" />}
-      </span>
-    </button>
-    <AnimatePresence initial={false}>
-      {isOpen && (
-        <motion.div id={`faq-panel-${index}`} role="region" aria-labelledby={`faq-${index}`}
-          initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
-          exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.22, ease: 'easeInOut' }}>
-          <p className="pb-5 pr-10 text-[13.5px] text-black/50 leading-relaxed font-light">{answer}</p>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  </motion.div>
-);
+  question: string; answer: string; isOpen: boolean; onClick: () => void;
+}> = ({ question, answer, isOpen, onClick }) => {
+  return (
+    <div className="border-b border-[var(--border)] last:border-b-0">
+      <button
+        onClick={onClick}
+        className="w-full flex items-center justify-between py-6 text-left focus:outline-none group"
+        aria-expanded={isOpen}
+      >
+        <span className="text-[16px] font-medium text-[var(--text-1)] pr-8 group-hover:text-[var(--signal)] transition-colors">
+          {question}
+        </span>
+        <span className="flex-shrink-0 w-8 h-8 rounded-full bg-[var(--bg-2)] flex items-center justify-center group-hover:bg-[var(--signal-dim)] transition-colors">
+          {isOpen ? (
+            <Minus className="w-4 h-4 text-[var(--signal)]" />
+          ) : (
+            <Plus className="w-4 h-4 text-[var(--text-2)] group-hover:text-[var(--signal)]" />
+          )}
+        </span>
+      </button>
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="overflow-hidden"
+          >
+            <div className="pb-6 pr-12 text-[15px] text-[var(--text-2)] leading-relaxed">
+              {answer}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
 
 export const FAQSection: React.FC = () => {
-  const [open, setOpen] = useState<number | null>(0);
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="bg-white border-t border-black/[0.06]" aria-labelledby="faq-heading">
-      <div className="section-container section-py">
-
-        {/* 2-col layout: left sticky heading, right accordion */}
-        <div className="grid lg:grid-cols-12 gap-16">
-          {/* Left: heading — sticky on desktop */}
-          <div className="lg:col-span-4 lg:sticky lg:top-28 lg:self-start">
-            <motion.p initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }} className="t-label text-black/40 mb-4 eyebrow">
-              FAQ
-            </motion.p>
-            <motion.h2 id="faq-heading"
-              initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }} transition={{ delay: 0.07 }}
-              className="t-headline text-black mb-5"
-              style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-              Common questions
-            </motion.h2>
-            <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
-              viewport={{ once: true }} transition={{ delay: 0.14 }}
-              className="t-body mb-8">
-              Everything you need to know before deploying VisionGuard AI in your facility.
-            </motion.p>
-            <a href="mailto:support@visionguard.ai"
-              className="text-[13px] text-black underline underline-offset-2 hover:text-black/60 transition-colors">
-              Contact support →
-            </a>
+    <section id="faq" className="py-24 bg-[var(--bg-0)]" aria-labelledby="faq-heading">
+      <div className="enterprise-container">
+        
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8">
+          
+          <div className="lg:col-span-5 lg:pr-12">
+            <div className="sticky top-24">
+              <span className="text-[12px] font-semibold text-[var(--signal)] tracking-wider uppercase mb-3 block">
+                FAQ
+              </span>
+              <h2 id="faq-heading" className="text-section-title mb-4">
+                Common questions
+              </h2>
+              <p className="text-[16px] text-[var(--text-2)] mb-8">
+                Everything you need to know before deploying VisionGuard AI in your facility.
+              </p>
+              <a href="#contact" className="inline-flex items-center text-[14px] font-medium text-[var(--signal)] hover:text-[var(--signal-hover)] transition-colors">
+                Contact support →
+              </a>
+            </div>
           </div>
-
-          {/* Right: accordion — 8 cols */}
-          <div className="lg:col-span-8">
-            {FAQ_ITEMS.map((item, i) => (
-              <FAQItem key={i} question={item.question} answer={item.answer}
-                isOpen={open === i} onToggle={() => setOpen(p => p === i ? null : i)} index={i} />
-            ))}
+          
+          <div className="lg:col-span-7">
+            <div className="bg-white border border-[var(--border)] rounded-2xl p-2 md:p-6 shadow-sm">
+              {FAQ_ITEMS.map((item, index) => (
+                <FAQItem
+                  key={index}
+                  question={item.question}
+                  answer={item.answer}
+                  isOpen={openIndex === index}
+                  onClick={() => setOpenIndex(openIndex === index ? null : index)}
+                />
+              ))}
+            </div>
           </div>
+          
         </div>
+        
       </div>
     </section>
   );

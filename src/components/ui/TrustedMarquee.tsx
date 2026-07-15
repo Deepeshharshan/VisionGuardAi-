@@ -13,19 +13,19 @@ const COMPANIES = [
 
 export const TrustedMarquee: React.FC = () => {
   return (
-    <div className="w-full overflow-hidden flex flex-col items-center pt-16 pb-[56px] border-t border-black/[0.05]">
+    <div className="w-full overflow-hidden flex flex-col items-center pt-12 pb-14">
       <motion.p
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="text-[11px] font-medium text-black/30 tracking-[0.15em] uppercase shrink-0 mb-[18px]"
+        className="mono text-[var(--text-3)] text-[10px] tracking-[0.15em] uppercase mb-5"
       >
         Trusted by Leading Manufacturers
       </motion.p>
       
-      {/* Marquee Container with CSS Mask for smooth edge fading */}
+      {/* Marquee Container */}
       <div 
-        className="w-full relative overflow-hidden flex items-center h-16"
+        className="w-full relative overflow-hidden flex items-center h-12"
         style={{
           WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
           maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)'

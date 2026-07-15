@@ -22,16 +22,15 @@ const queryClient = new QueryClient({
   },
 });
 
-// Loading fallback — minimal spinner that matches the light theme
 const PageLoader: React.FC = () => (
   <div
-    className="min-h-screen flex items-center justify-center bg-white"
+    style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-0)' }}
     role="status"
     aria-label="Loading..."
   >
-    <div className="flex flex-col items-center gap-4">
-      <div className="w-8 h-8 border-2 border-slate-200 border-t-blue-500 rounded-full animate-spin" />
-      <span className="text-xs text-slate-500 font-medium">Loading…</span>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
+      <div style={{ width: 28, height: 28, border: '1.5px solid var(--border-strong)', borderTopColor: 'var(--signal)', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+      <span style={{ fontSize: 11, color: 'var(--text-3)', fontFamily: 'JetBrains Mono, monospace', textTransform: 'uppercase', letterSpacing: '0.07em' }}>Loading…</span>
     </div>
   </div>
 );

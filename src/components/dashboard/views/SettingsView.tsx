@@ -1,83 +1,106 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import {
-  User, Building2, Bell, Key, Plug, Shield, Palette, Lock,
-  ChevronRight, Check, Copy, Eye, EyeOff, Trash2, Plus
-} from 'lucide-react';
+import { Check, Copy, Eye, EyeOff, Trash2, Plus } from 'lucide-react';
 
-type SettingsSection = 'profile' | 'organization' | 'notifications' | 'api' | 'integrations' | 'roles' | 'theme' | 'security';
+type SettingsSection =
+  | 'profile' | 'organization' | 'notifications' | 'api'
+  | 'integrations' | 'roles' | 'appearance' | 'security';
 
-const settingsSections: { id: SettingsSection; label: string; icon: any; description: string }[] = [
-  { id: 'profile',       label: 'Profile',          icon: User,      description: 'Personal information and preferences' },
-  { id: 'organization',  label: 'Organization',     icon: Building2, description: 'Company details and billing' },
-  { id: 'notifications', label: 'Notifications',    icon: Bell,      description: 'Alert preferences and delivery' },
-  { id: 'api',           label: 'API Keys',         icon: Key,       description: 'Manage access tokens' },
-  { id: 'integrations',  label: 'Integrations',     icon: Plug,      description: 'Connect third-party services' },
-  { id: 'roles',         label: 'Roles & Access',   icon: Shield,    description: 'Team permissions and access control' },
-  { id: 'theme',         label: 'Appearance',       icon: Palette,   description: 'Theme and display preferences' },
-  { id: 'security',      label: 'Security',         icon: Lock,      description: '2FA, sessions, and audit log' },
+const settingsSections: { id: SettingsSection; label: string }[] = [
+  { id: 'profile',       label: 'Profile'        },
+  { id: 'organization',  label: 'Organization'   },
+  { id: 'notifications', label: 'Notifications'  },
+  { id: 'api',           label: 'API Keys'        },
+  { id: 'integrations',  label: 'Integrations'   },
+  { id: 'roles',         label: 'Roles & Access'  },
+  { id: 'appearance',    label: 'Appearance'      },
+  { id: 'security',      label: 'Security'        },
 ];
 
 const integrations = [
-  { id: 'slack', name: 'Slack', desc: 'Send alerts to channels', logo: '💬', connected: true },
-  { id: 'pagerduty', name: 'PagerDuty', desc: 'On-call escalation', logo: '📟', connected: true },
-  { id: 'jira', name: 'Jira', desc: 'Auto-create work orders', logo: '🔵', connected: false },
-  { id: 'sap', name: 'SAP ERP', desc: 'Sync maintenance records', logo: '🏭', connected: false },
-  { id: 'teams', name: 'Microsoft Teams', desc: 'Push notifications to Teams', logo: '🟣', connected: false },
-  { id: 'webhook', name: 'Webhook', desc: 'Custom HTTP callbacks', logo: '🪝', connected: true },
+  { id: 'slack',     name: 'Slack',           desc: 'Send alerts to channels',      connected: true  },
+  { id: 'pagerduty', name: 'PagerDuty',       desc: 'On-call escalation',           connected: true  },
+  { id: 'jira',      name: 'Jira',            desc: 'Auto-create work orders',      connected: false },
+  { id: 'sap',       name: 'SAP ERP',         desc: 'Sync maintenance records',     connected: false },
+  { id: 'teams',     name: 'Microsoft Teams', desc: 'Push notifications to Teams',  connected: false },
+  { id: 'webhook',   name: 'Webhook',         desc: 'Custom HTTP callbacks',        connected: true  },
 ];
 
 const apiKeys = [
-  { id: 'k1', name: 'Production API', key: 'vg_prod_••••••••••••3f7a', created: 'Jul 1, 2026', lastUsed: '2 min ago', scope: 'Read/Write' },
-  { id: 'k2', name: 'Analytics Token', key: 'vg_anl_••••••••••••9b2c', created: 'Jun 15, 2026', lastUsed: '1 day ago', scope: 'Read Only' },
+  { id: 'k1', name: 'Production API',   key: 'vg_prod_••••••••3f7a', created: '2026-07-01', lastUsed: '2m ago',  scope: 'Read/Write' },
+  { id: 'k2', name: 'Analytics Token',  key: 'vg_anl_•••••••9b2c',  created: '2026-06-15', lastUsed: '1d ago',  scope: 'Read Only'  },
 ];
 
-const Toggle: React.FC<{ enabled: boolean; onChange: () => void }> = ({ enabled, onChange }) => (
-  <button
-    onClick={onChange}
-    className={`relative w-10 h-5.5 rounded-full transition-colors duration-300 focus:outline-none ${enabled ? 'bg-blue-600' : 'bg-white/15'}`}
-    style={{ width: 40, height: 22 }}
-    role="switch"
-    aria-checked={enabled}
-  >
-    <span
-      className={`absolute top-0.5 left-0.5 w-[18px] h-[18px] rounded-full bg-white shadow transition-transform duration-300 ${enabled ? 'translate-x-[18px]' : 'translate-x-0'}`}
-    />
-  </button>
-);
-
-const SectionCard: React.FC<{ title: string; description?: string; children: React.ReactNode }> = ({ title, description, children }) => (
-  <div className="bg-white/[0.03] border border-white/[0.08] rounded-2xl overflow-hidden">
-    <div className="px-6 py-5 border-b border-white/[0.06]">
-      <h3 className="text-[15px] font-semibold text-white">{title}</h3>
-      {description && <p className="text-[13px] text-white/50 mt-0.5">{description}</p>}
-    </div>
-    <div className="p-6">{children}</div>
-  </div>
-);
-
-const InputField: React.FC<{ label: string; defaultValue?: string; type?: string; placeholder?: string }> = ({
-  label, defaultValue, type = 'text', placeholder
+/* ─── Reusable: Label + flat input ──────────────── */
+const Field: React.FC<{ label: string; defaultValue?: string; type?: string; placeholder?: string }> = ({
+  label, defaultValue, type = 'text', placeholder,
 }) => (
   <div>
-    <label className="block text-[12px] font-semibold uppercase tracking-widest text-white/50 mb-2">{label}</label>
+    <label
+      className="mono"
+      style={{
+        display: 'block',
+        fontSize: 10,
+        fontWeight: 500,
+        color: 'var(--text-3)',
+        textTransform: 'uppercase',
+        letterSpacing: '0.07em',
+        marginBottom: 6,
+      }}
+    >
+      {label}
+    </label>
     <input
       type={type}
       defaultValue={defaultValue}
       placeholder={placeholder}
-      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-[14px] text-white placeholder:text-white/30 focus:outline-none focus:border-blue-500/50 focus:bg-white/[0.07] transition-all"
+      className="enterprise-input"
+      style={{ width: '100%' }}
     />
   </div>
 );
 
+/* ─── Toggle switch ──────────────────────────────── */
+const Toggle: React.FC<{ enabled: boolean; onChange: () => void }> = ({ enabled, onChange }) => (
+  <button
+    onClick={onChange}
+    role="switch"
+    aria-checked={enabled}
+    style={{
+      width: 36,
+      height: 20,
+      borderRadius: 10,
+      background: enabled ? 'var(--signal)' : 'var(--border-strong)',
+      border: 'none',
+      cursor: 'pointer',
+      position: 'relative',
+      flexShrink: 0,
+      transition: 'background 200ms',
+    }}
+  >
+    <span
+      style={{
+        position: 'absolute',
+        top: 2,
+        left: 2,
+        width: 16,
+        height: 16,
+        borderRadius: '50%',
+        background: '#fff',
+        transition: 'transform 200ms',
+        transform: enabled ? 'translateX(16px)' : 'translateX(0)',
+      }}
+    />
+  </button>
+);
+
 export const SettingsView: React.FC = () => {
   const [section, setSection] = useState<SettingsSection>('profile');
+  const [saved, setSaved] = useState(false);
   const [notifications, setNotifications] = useState({
     criticalAlerts: true, warningAlerts: true, maintenanceReminders: true,
     weeklyDigest: false, productUpdates: false, soundAlerts: true,
   });
   const [showApiKey, setShowApiKey] = useState<string | null>(null);
-  const [saved, setSaved] = useState(false);
 
   const handleSave = () => {
     setSaved(true);
@@ -88,226 +111,331 @@ export const SettingsView: React.FC = () => {
     switch (section) {
       case 'profile':
         return (
-          <div className="space-y-6">
-            <SectionCard title="Personal Information" description="Update your name, email, and avatar">
-              <div className="flex items-start gap-6 mb-6">
-                <div className="w-16 h-16 rounded-2xl bg-blue-600 flex items-center justify-center text-white text-xl font-bold shrink-0">SD</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+            {/* Panel: Personal Information */}
+            <div style={{ padding: '0 0 24px' }}>
+              <div className="mono" style={{ fontSize: 10, color: 'var(--text-3)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 20 }}>
+                Personal information
+              </div>
+              {/* Avatar */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 24 }}>
+                <div
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: 4,
+                    background: 'var(--signal)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: 13,
+                    fontWeight: 600,
+                    color: '#fff',
+                    flexShrink: 0,
+                  }}
+                >
+                  SD
+                </div>
                 <div>
-                  <button className="text-[13px] font-medium text-blue-400 hover:text-blue-300 transition-colors">Change avatar</button>
-                  <p className="text-[12px] text-white/40 mt-1">JPG, GIF or PNG. Max 2MB.</p>
+                  <button style={{ fontSize: 13, color: 'var(--signal)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Inter', sans-serif", padding: 0 }}>
+                    Change avatar
+                  </button>
+                  <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 2 }}>JPG, GIF or PNG. Max 2MB.</div>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <InputField label="First Name" defaultValue="Sofia" />
-                <InputField label="Last Name" defaultValue="Davis" />
-                <InputField label="Email" defaultValue="sofia@visionguard.ai" type="email" />
-                <InputField label="Role" defaultValue="Plant Manager" />
-                <div className="col-span-2">
-                  <InputField label="Phone" defaultValue="+91 98765 43210" type="tel" />
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                <Field label="First name" defaultValue="Sofia" />
+                <Field label="Last name" defaultValue="Davis" />
+                <Field label="Email" defaultValue="sofia@visionguard.ai" type="email" />
+                <Field label="Role" defaultValue="Plant Manager" />
+                <div style={{ gridColumn: '1 / -1' }}>
+                  <Field label="Phone" defaultValue="+91 98765 43210" type="tel" />
                 </div>
               </div>
-            </SectionCard>
-            <SectionCard title="Password" description="Change your account password">
-              <div className="grid gap-4 max-w-sm">
-                <InputField label="Current Password" type="password" placeholder="••••••••" />
-                <InputField label="New Password" type="password" placeholder="••••••••" />
-                <InputField label="Confirm Password" type="password" placeholder="••••••••" />
+            </div>
+
+            <div style={{ borderTop: '1px solid var(--border)', paddingTop: 24 }}>
+              <div className="mono" style={{ fontSize: 10, color: 'var(--text-3)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 20 }}>
+                Password
               </div>
-            </SectionCard>
+              <div style={{ display: 'grid', gap: 16, maxWidth: 320 }}>
+                <Field label="Current password" type="password" placeholder="••••••••" />
+                <Field label="New password" type="password" placeholder="••••••••" />
+                <Field label="Confirm password" type="password" placeholder="••••••••" />
+              </div>
+            </div>
           </div>
         );
 
       case 'notifications':
         return (
-          <div className="space-y-6">
-            <SectionCard title="Alert Preferences" description="Control which alerts trigger notifications">
-              {([
-                { key: 'criticalAlerts', label: 'Critical Machine Alerts', desc: 'Immediate notifications for critical failures' },
-                { key: 'warningAlerts', label: 'Warning Alerts', desc: 'Alerts for machines in warning state' },
-                { key: 'maintenanceReminders', label: 'Maintenance Reminders', desc: 'Scheduled maintenance notifications' },
-                { key: 'soundAlerts', label: 'Sound Notifications', desc: 'Audio alert for critical events' },
-              ] as const).map(({ key, label, desc }) => (
-                <div key={key} className="flex items-center justify-between py-4 border-b border-white/[0.05] last:border-0">
-                  <div>
-                    <div className="text-[14px] font-medium text-white">{label}</div>
-                    <div className="text-[12px] text-white/50 mt-0.5">{desc}</div>
-                  </div>
-                  <Toggle enabled={notifications[key as keyof typeof notifications]} onChange={() => setNotifications(n => ({ ...n, [key]: !n[key as keyof typeof n] }))} />
+          <div>
+            <div className="mono" style={{ fontSize: 10, color: 'var(--text-3)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 16 }}>
+              Alert preferences
+            </div>
+            {([ 
+              { key: 'criticalAlerts',        label: 'Critical machine alerts',    desc: 'Immediate notifications for critical failures' },
+              { key: 'warningAlerts',          label: 'Warning alerts',             desc: 'Alerts for machines in warning state' },
+              { key: 'maintenanceReminders',   label: 'Maintenance reminders',      desc: 'Scheduled maintenance notifications' },
+              { key: 'soundAlerts',            label: 'Sound notifications',        desc: 'Audio alert for critical events' },
+              { key: 'weeklyDigest',           label: 'Weekly performance digest',  desc: 'Summary email every Monday at 9 AM' },
+              { key: 'productUpdates',         label: 'Product updates',            desc: 'New features and release notes' },
+            ] as const).map(({ key, label, desc }, i, arr) => (
+              <div
+                key={key}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '12px 0',
+                  borderBottom: i < arr.length - 1 ? '1px solid var(--border)' : undefined,
+                  gap: 16,
+                }}
+              >
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-1)' }}>{label}</div>
+                  <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 2 }}>{desc}</div>
                 </div>
-              ))}
-            </SectionCard>
-            <SectionCard title="Digest & Updates" description="Periodic summary emails">
-              {([
-                { key: 'weeklyDigest', label: 'Weekly Performance Digest', desc: 'Summary email every Monday at 9 AM' },
-                { key: 'productUpdates', label: 'Product Updates', desc: 'New features and release notes' },
-              ] as const).map(({ key, label, desc }) => (
-                <div key={key} className="flex items-center justify-between py-4 border-b border-white/[0.05] last:border-0">
-                  <div>
-                    <div className="text-[14px] font-medium text-white">{label}</div>
-                    <div className="text-[12px] text-white/50 mt-0.5">{desc}</div>
-                  </div>
-                  <Toggle enabled={notifications[key as keyof typeof notifications]} onChange={() => setNotifications(n => ({ ...n, [key]: !n[key as keyof typeof n] }))} />
-                </div>
-              ))}
-            </SectionCard>
+                <Toggle
+                  enabled={notifications[key]}
+                  onChange={() => setNotifications((n) => ({ ...n, [key]: !n[key] }))}
+                />
+              </div>
+            ))}
           </div>
         );
 
       case 'api':
         return (
-          <div className="space-y-6">
-            <SectionCard title="API Keys" description="Manage tokens for programmatic access">
-              <div className="space-y-3 mb-4">
-                {apiKeys.map(key => (
-                  <div key={key.id} className="flex items-center gap-4 p-4 bg-white/[0.03] border border-white/[0.06] rounded-xl">
-                    <Key className="w-4 h-4 text-white/40 shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <div className="text-[13px] font-semibold text-white">{key.name}</div>
-                      <div className="flex items-center gap-3 mt-0.5">
-                        <code className="text-[12px] font-mono text-white/50">
-                          {showApiKey === key.id ? 'vg_prod_sk_realKeyHere3f7a' : key.key}
-                        </code>
-                        <span className="text-[11px] text-white/30">· {key.scope}</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2 shrink-0">
-                      <span className="text-[11px] text-white/30 hidden md:block">Last: {key.lastUsed}</span>
-                      <button onClick={() => setShowApiKey(showApiKey === key.id ? null : key.id)} className="p-1.5 rounded-lg hover:bg-white/10 text-white/40 hover:text-white transition-colors">
-                        {showApiKey === key.id ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                      </button>
-                      <button className="p-1.5 rounded-lg hover:bg-white/10 text-white/40 hover:text-white transition-colors">
-                        <Copy className="w-3.5 h-3.5" />
-                      </button>
-                      <button className="p-1.5 rounded-lg hover:bg-red-500/10 text-white/40 hover:text-red-400 transition-colors">
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
+          <div>
+            <div className="mono" style={{ fontSize: 10, color: 'var(--text-3)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 16 }}>
+              API keys
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 1, background: 'var(--border)', border: '1px solid var(--border)', borderRadius: 2, overflow: 'hidden', marginBottom: 16 }}>
+              {apiKeys.map((k) => (
+                <div
+                  key={k.id}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 12,
+                    padding: '12px 16px',
+                    background: 'var(--bg-1)',
+                  }}
+                >
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-1)' }}>{k.name}</div>
+                    <div style={{ display: 'flex', gap: 8, marginTop: 2 }}>
+                      <code className="mono" style={{ fontSize: 11, color: 'var(--text-3)' }}>
+                        {showApiKey === k.id ? 'vg_prod_sk_realKeyHere' : k.key}
+                      </code>
+                      <span className="mono" style={{ fontSize: 11, color: 'var(--text-3)' }}>· {k.scope}</span>
                     </div>
                   </div>
-                ))}
-              </div>
-              <button className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-[13px] font-semibold rounded-xl transition-colors">
-                <Plus className="w-4 h-4" />Generate New Key
-              </button>
-            </SectionCard>
+                  <span className="mono" style={{ fontSize: 11, color: 'var(--text-3)' }}>Last used: {k.lastUsed}</span>
+                  <div style={{ display: 'flex', gap: 4 }}>
+                    <button onClick={() => setShowApiKey(showApiKey === k.id ? null : k.id)}
+                      style={{ padding: 5, background: 'none', border: 'none', color: 'var(--text-3)', cursor: 'pointer', borderRadius: 2 }}>
+                      {showApiKey === k.id ? <EyeOff size={13} /> : <Eye size={13} />}
+                    </button>
+                    <button style={{ padding: 5, background: 'none', border: 'none', color: 'var(--text-3)', cursor: 'pointer', borderRadius: 2 }}>
+                      <Copy size={13} />
+                    </button>
+                    <button style={{ padding: 5, background: 'none', border: 'none', color: 'var(--red)', cursor: 'pointer', borderRadius: 2 }}>
+                      <Trash2 size={13} />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button className="vg-btn vg-btn-primary" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+              <Plus size={13} />
+              Generate new key
+            </button>
           </div>
         );
 
       case 'integrations':
         return (
-          <div className="space-y-6">
-            <SectionCard title="Connected Services" description="Integrate with your existing enterprise tools">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {integrations.map(integration => (
-                  <div key={integration.id} className={`flex items-center gap-4 p-4 rounded-xl border transition-colors ${integration.connected ? 'bg-emerald-500/5 border-emerald-500/20' : 'bg-white/[0.02] border-white/[0.08] hover:border-white/15'}`}>
-                    <span className="text-2xl shrink-0">{integration.logo}</span>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-[14px] font-semibold text-white">{integration.name}</div>
-                      <div className="text-[12px] text-white/50">{integration.desc}</div>
-                    </div>
-                    <button className={`px-3 py-1.5 rounded-lg text-[12px] font-semibold border transition-colors shrink-0 ${integration.connected ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20' : 'bg-white/5 text-white/70 border-white/10 hover:bg-white/10 hover:text-white'}`}>
-                      {integration.connected ? 'Connected' : 'Connect'}
-                    </button>
+          <div>
+            <div className="mono" style={{ fontSize: 10, color: 'var(--text-3)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 16 }}>
+              Connected services
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 1, background: 'var(--border)', border: '1px solid var(--border)', borderRadius: 2, overflow: 'hidden' }}>
+              {integrations.map((integ) => (
+                <div
+                  key={integ.id}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 14,
+                    padding: '12px 16px',
+                    background: 'var(--bg-1)',
+                  }}
+                >
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-1)' }}>{integ.name}</div>
+                    <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 1 }}>{integ.desc}</div>
                   </div>
-                ))}
-              </div>
-            </SectionCard>
+                  {integ.connected && (
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12, color: 'var(--green)' }}>
+                      <span style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--green)' }} />
+                      Connected
+                    </span>
+                  )}
+                  <button
+                    className={`vg-btn ${integ.connected ? 'vg-btn-danger' : 'vg-btn-ghost'}`}
+                    style={{ fontSize: 12, height: 28, padding: '0 12px' }}
+                  >
+                    {integ.connected ? 'Disconnect' : 'Connect'}
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
         );
 
       case 'security':
         return (
-          <div className="space-y-6">
-            <SectionCard title="Two-Factor Authentication" description="Add an extra layer of security to your account">
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-[14px] font-medium text-white">Authenticator App</div>
-                  <div className="text-[12px] text-white/50 mt-0.5">Use Google Authenticator or Authy</div>
-                </div>
-                <span className="px-3 py-1 bg-emerald-500/10 text-emerald-400 text-[12px] font-semibold rounded-lg border border-emerald-500/20">Enabled</span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+            <div>
+              <div className="mono" style={{ fontSize: 10, color: 'var(--text-3)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 16 }}>
+                Two-factor authentication
               </div>
-            </SectionCard>
-            <SectionCard title="Active Sessions" description="Devices currently signed in to your account">
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-1)' }}>Authenticator app</div>
+                  <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 2 }}>Use Google Authenticator or Authy</div>
+                </div>
+                <span className="mono" style={{ fontSize: 11, color: 'var(--green)', display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                  <span style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--green)' }} />
+                  Enabled
+                </span>
+              </div>
+            </div>
+            <div style={{ borderTop: '1px solid var(--border)', paddingTop: 24 }}>
+              <div className="mono" style={{ fontSize: 10, color: 'var(--text-3)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 16 }}>
+                Active sessions
+              </div>
               {[
                 { device: 'MacBook Pro (Chrome)', location: 'Mumbai, IN', time: 'Active now', current: true },
-                { device: 'iPhone 15 Pro (Safari)', location: 'Mumbai, IN', time: '2 hours ago', current: false },
-                { device: 'Windows PC (Edge)', location: 'Pune, IN', time: '3 days ago', current: false },
-              ].map((session, i) => (
-                <div key={i} className="flex items-center justify-between py-4 border-b border-white/[0.05] last:border-0">
+                { device: 'iPhone 15 Pro (Safari)', location: 'Mumbai, IN', time: '2h ago', current: false },
+                { device: 'Windows PC (Edge)', location: 'Pune, IN', time: '3d ago', current: false },
+              ].map((session, i, arr) => (
+                <div
+                  key={i}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '10px 0',
+                    borderBottom: i < arr.length - 1 ? '1px solid var(--border)' : undefined,
+                  }}
+                >
                   <div>
-                    <div className="text-[13px] font-medium text-white flex items-center gap-2">
+                    <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-1)', display: 'flex', alignItems: 'center', gap: 8 }}>
                       {session.device}
-                      {session.current && <span className="px-1.5 py-0.5 bg-blue-500/10 text-blue-400 text-[10px] font-bold rounded border border-blue-500/20">Current</span>}
+                      {session.current && (
+                        <span className="mono" style={{ fontSize: 10, color: 'var(--signal)', background: 'var(--signal-dim)', padding: '1px 5px', borderRadius: 2 }}>
+                          Current
+                        </span>
+                      )}
                     </div>
-                    <div className="text-[12px] text-white/40 mt-0.5">{session.location} · {session.time}</div>
+                    <div className="mono" style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 2 }}>
+                      {session.location} · {session.time}
+                    </div>
                   </div>
                   {!session.current && (
-                    <button className="text-[12px] font-medium text-red-400 hover:text-red-300 transition-colors">Revoke</button>
+                    <button style={{ fontSize: 12, color: 'var(--red)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Inter', sans-serif" }}>
+                      Revoke
+                    </button>
                   )}
                 </div>
               ))}
-            </SectionCard>
+            </div>
           </div>
         );
 
       default:
         return (
-          <div className="flex flex-col items-center justify-center py-24 text-center">
-            <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-4">
-              {React.createElement(settingsSections.find(s => s.id === section)?.icon ?? User, { className: 'w-7 h-7 text-white/40' })}
-            </div>
-            <h3 className="text-[16px] font-semibold text-white">{settingsSections.find(s => s.id === section)?.label}</h3>
-            <p className="text-[13px] text-white/50 mt-2">Configuration for this section coming soon.</p>
+          <div style={{ padding: '48px 0', textAlign: 'center', color: 'var(--text-3)', fontSize: 13 }}>
+            Configuration for <strong style={{ color: 'var(--text-2)' }}>{settingsSections.find((s) => s.id === section)?.label}</strong> coming soon.
           </div>
         );
     }
   };
 
   return (
-    <div className="pb-20">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+
+      {/* ─── PAGE HEADER ─── */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
-          <h2 className="text-[20px] font-semibold text-white tracking-tight">Settings</h2>
-          <p className="text-[13px] text-white/50 mt-1">Manage your account, preferences, and integrations</p>
+          <h1 className="text-page-title">Settings</h1>
+          <p style={{ marginTop: 4, fontSize: 13, color: 'var(--text-3)' }}>
+            Manage your account, preferences, and integrations
+          </p>
         </div>
+        {/* Single primary Save — top-right of panel, never inline per-field */}
         <button
           onClick={handleSave}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-[13px] font-semibold transition-all ${saved ? 'bg-emerald-600 text-white' : 'bg-blue-600 hover:bg-blue-500 text-white'}`}
+          className="vg-btn vg-btn-primary"
+          style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13 }}
         >
-          {saved ? <><Check className="w-4 h-4" />Saved!</> : 'Save Changes'}
+          {saved ? <><Check size={13} /> Saved</> : 'Save changes'}
         </button>
       </div>
 
-      <div className="flex gap-8">
-        {/* Left Nav */}
-        <nav className="w-56 shrink-0 space-y-1">
-          {settingsSections.map(({ id, label, icon: Icon, description }) => {
-            const isActive = section === id;
+      <div style={{ display: 'flex', gap: 24, alignItems: 'flex-start' }}>
+
+        {/* ─── LEFT NAV — same active-item treatment as sidebar ─── */}
+        <nav style={{ width: 180, flexShrink: 0, border: '1px solid var(--border)', borderRadius: 4, overflow: 'hidden' }}>
+          {settingsSections.map((s) => {
+            const isActive = section === s.id;
             return (
               <button
-                key={id}
-                onClick={() => setSection(id)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all ${
-                  isActive ? 'bg-white/10 text-white border border-white/10' : 'text-white/50 hover:bg-white/5 hover:text-white border border-transparent'
-                }`}
+                key={s.id}
+                onClick={() => setSection(s.id)}
+                style={{
+                  width: '100%',
+                  display: 'block',
+                  padding: '8px 0',
+                  paddingLeft: isActive ? 14 : 16,
+                  paddingRight: 16,
+                  background: isActive ? 'var(--bg-2)' : 'var(--bg-1)',
+                  borderLeft: isActive ? '2px solid var(--signal)' : '2px solid transparent',
+                  border: 'none',
+                  borderBottom: '1px solid var(--border)',
+                  borderRadius: 0,
+                  cursor: 'pointer',
+                  textAlign: 'left',
+                  fontSize: 13,
+                  fontFamily: "'Inter', sans-serif",
+                  fontWeight: isActive ? 500 : 400,
+                  color: isActive ? 'var(--text-1)' : 'var(--text-2)',
+                  transition: 'background 100ms',
+                }}
+                onMouseEnter={(e) => { if (!isActive) (e.currentTarget as HTMLButtonElement).style.background = 'var(--bg-2)'; }}
+                onMouseLeave={(e) => { if (!isActive) (e.currentTarget as HTMLButtonElement).style.background = 'var(--bg-1)'; }}
               >
-                <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-blue-400' : 'text-white/35'}`} />
-                <span className="text-[13px] font-medium">{label}</span>
-                {isActive && <ChevronRight className="w-3.5 h-3.5 ml-auto text-white/40" />}
+                {s.label}
               </button>
             );
           })}
         </nav>
 
-        {/* Content */}
-        <div className="flex-1 min-w-0">
-          <motion.div
-            key={section}
-            initial={{ opacity: 0, x: 10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            {renderContent()}
-          </motion.div>
+        {/* ─── FORM PANEL ─── */}
+        <div
+          style={{
+            flex: 1,
+            minWidth: 0,
+            background: 'var(--bg-1)',
+            border: '1px solid var(--border)',
+            borderRadius: 4,
+            padding: '24px',
+          }}
+        >
+          {renderContent()}
         </div>
       </div>
     </div>
