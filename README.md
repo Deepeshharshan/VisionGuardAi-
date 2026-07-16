@@ -1,33 +1,32 @@
-# React + TypeScript + Vite
+# VisionGuard AI
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+VisionGuard AI is a premium enterprise SaaS platform built for modern manufacturing, providing edge-first computer vision for predictive maintenance and quality control.
 
-Currently, two official plugins are available:
+## Overview
+By leveraging existing camera infrastructure, VisionGuard AI deploys lightweight agents on local IPCs (edge nodes) to process frames in milliseconds without internet dependency. Only metadata and critical alerts sync to the central cloud for fleet management.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tech Stack
+- **Frontend Framework**: React 18 + TypeScript + Vite
+- **Styling**: Tailwind CSS with custom CSS variables (`index.css`) for a design-system-first approach
+- **Animations**: Framer Motion
+- **Icons**: Lucide React
+- **Routing**: React Router DOM
 
-## React Compiler
+## Getting Started
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Prerequisites
+- Node.js 18+
 
-## Expanding the Oxlint configuration
+### Installation & Running Locally
+```bash
+# Install dependencies
+npm install
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+# Start the development server
+npm run dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
-# VisionGuardAi-
+## Architecture highlights
+- **Edge Layer:** Local model deployment (TensorRT pipeline) handling raw video feeds.
+- **Neural Engine:** Frames processed locally; no massive bandwidth usage.
+- **Central Cloud:** Monitor thousands of edge devices, deploy new AI models OTA via REST/GraphQL APIs.
