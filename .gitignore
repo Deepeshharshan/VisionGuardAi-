@@ -25,3 +25,6 @@ dist-ssr
 
 # Temporary scripts
 update_styles.js
+# Generated design JSON files
+component_*.json
+search_*.json

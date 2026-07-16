@@ -1,26 +1,29 @@
 // ============================================================
-// LandingPage — Editorial Landing Page (Professional Layout)
+// LandingPage — Enterprise SaaS Landing Page
 // ============================================================
-import React, { Suspense } from 'react';
+import React from 'react';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { HeroSection } from '@/components/landing/HeroSection';
+import { DashboardMockupSection } from '@/components/landing/DashboardMockupSection';
 import { TrustedSection } from '@/components/landing/TrustedSection';
-import { FeaturesSection } from '@/components/landing/FeaturesSection';
+import { KeyBenefitsSection } from '@/components/landing/KeyBenefitsSection';
 import { HowItWorksSection } from '@/components/landing/HowItWorksSection';
-import { IndustriesSection } from '@/components/landing/IndustriesSection';
 import { ArchitectureSection } from '@/components/landing/ArchitectureSection';
-import { StatsSection } from '@/components/landing/StatsSection';
+import { IndustrySolutionsSection } from '@/components/landing/IndustriesSection';
+import { EcosystemSection } from '@/components/landing/EcosystemSection';
+import { TestimonialsSection } from '@/components/landing/TestimonialsSection';
+import { SecurityComplianceSection } from '@/components/landing/SecurityComplianceSection';
+import { ROISection } from '@/components/landing/ROISection';
 import { PricingSection } from '@/components/landing/PricingSection';
 import { FAQSection } from '@/components/landing/FAQSection';
-import { ContactSection } from '@/components/landing/ContactSection';
+import { CTASection } from '@/components/landing/CTASection';
 
 const LandingPage: React.FC = () => {
   return (
     <>
-      {/* Skip to content for accessibility */}
       <a
-        href="#features"
+        href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50
                    focus:px-4 focus:py-2 focus:bg-black focus:text-white focus:rounded-full focus:text-sm focus:font-medium"
       >
@@ -30,39 +33,50 @@ const LandingPage: React.FC = () => {
       <Navbar />
 
       <main id="main-content">
-        {/* 1. Hero — large centered serif heading + dashboard mockup */}
+        {/* 1. Hero */}
         <HeroSection />
 
-        {/* 2. Stats — key numbers strip */}
-        <StatsSection />
+        {/* 2. Dashboard Mockup (Animated) */}
+        <DashboardMockupSection />
 
-        {/* 3. Features — sticky-left editorial layout */}
-        <FeaturesSection />
-
-        {/* 4. How It Works — numbered steps, sticky left */}
-        <HowItWorksSection />
-
-        {/* 5. Industries — sticky left, card grid */}
-        <IndustriesSection />
-
-        {/* 6. Architecture — dark API / code block */}
-        <Suspense fallback={null}>
-          <ArchitectureSection />
-        </Suspense>
-
-        {/* 7. Trusted / Safety features */}
+        {/* 3. Customer Logos */}
         <TrustedSection />
 
-        {/* 8. Pricing */}
+        {/* 4. Key Benefits (50/50 splits) */}
+        <KeyBenefitsSection />
+        
+        {/* 5. Integration Ecosystem */}
+        <EcosystemSection />
+
+        {/* 6. How It Works (Timeline) */}
+        <HowItWorksSection />
+
+        {/* 7. Architecture (Schematic) */}
+        <ArchitectureSection />
+
+        {/* 8. Industry Solutions */}
+        <IndustrySolutionsSection />
+
+        {/* 9. Security & Compliance */}
+        <SecurityComplianceSection />
+
+        {/* 10. ROI & Metrics */}
+        <ROISection />
+        
+        {/* 11. Testimonials / Success Stories */}
+        <TestimonialsSection />
+
+        {/* 12. Pricing */}
         <PricingSection />
 
-        {/* 9. FAQ */}
+        {/* 13. FAQ */}
         <FAQSection />
 
-        {/* 10. Contact / "Ready to build?" CTA */}
-        <ContactSection />
+        {/* 14. Enterprise CTA */}
+        <CTASection />
       </main>
 
+      {/* 13. Footer */}
       <Footer />
     </>
   );

@@ -33,15 +33,15 @@ export const Navbar: React.FC = () => {
     <header 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled 
-          ? 'bg-[var(--bg-1)]/80 backdrop-blur-md border-b border-[var(--border)] shadow-sm' 
-          : 'bg-transparent'
+          ? 'glass-panel border-b border-white/20' 
+          : 'bg-transparent border-b border-transparent'
       }`}
     >
       <div className="enterprise-container h-16 flex items-center justify-between">
         
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 group">
-          <div className="w-8 h-8 rounded-full bg-[var(--black-btn)] flex items-center justify-center group-hover:scale-105 transition-transform">
+          <div className="w-8 h-8 rounded-full bg-[var(--text-1)] flex items-center justify-center hover-lift">
             <ScanSearch className="w-4 h-4 text-white" />
           </div>
           <span className="font-semibold text-[var(--text-1)] text-[15px] tracking-tight">VisionGuard</span>

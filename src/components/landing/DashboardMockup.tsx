@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Camera, Shield, Search, Bell, Settings } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface MachineCardProps {
   name: string;
@@ -145,20 +146,59 @@ export const DashboardMockup: React.FC = () => {
               </div>
             </div>
 
-            {/* Video Feed Placeholder */}
+            {/* Video Feed & Analytics Placeholder */}
             <div className="lg:col-span-2">
-              <div className="bg-white border border-[var(--border)] rounded-xl shadow-sm overflow-hidden flex flex-col h-full min-h-[300px]">
-                <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border)]">
+              <div className="bg-white border border-[var(--border)] rounded-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] overflow-hidden flex flex-col h-full min-h-[300px]">
+                <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border)] bg-[var(--bg-1)]">
                   <div className="flex items-center gap-2">
                     <Camera className="w-4 h-4 text-[var(--text-2)]" />
-                    <span className="text-[13px] font-medium text-[var(--text-1)]">Assembly Line A</span>
+                    <span className="text-[13px] font-semibold text-[var(--text-1)]">Assembly Line A</span>
+                  </div>
+                  <div className="flex gap-1">
+                    <span className="w-2 h-2 rounded-full bg-[var(--border-strong)]"></span>
+                    <span className="w-2 h-2 rounded-full bg-[var(--border-strong)]"></span>
+                    <span className="w-2 h-2 rounded-full bg-[var(--border-strong)]"></span>
                   </div>
                 </div>
-                <div className="flex-1 bg-[var(--bg-2)] relative overflow-hidden flex items-center justify-center border-b border-[var(--border)]">
-                  <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMCwwLDAsMC4wNSkiLz48L3N2Zz4=')] opacity-50" />
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-32 border-2 border-[var(--red)] border-dashed rounded-lg bg-[var(--red-dim)]" />
-                  <div className="absolute top-[calc(50%-16px)] left-[calc(50%-48px)] -translate-y-full bg-[var(--red)] text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm">
-                    DEFECT 94%
+                <div className="flex-1 bg-[var(--bg-0)] relative overflow-hidden flex flex-col">
+                  {/* Subtle Grid Background */}
+                  <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTQwIDBIMFY0MGg0MFYweiIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0wIDAuNWg0MCIgc3Ryb2tlPSJyZ2JhKDAsMCwwLDAuMDQpIi8+PHBhdGggZD0iTTAuNSAwdi00MCIgc3Ryb2tlPSJyZ2JhKDAsMCwwLDAuMDQpIi8+PC9zdmc+')] opacity-50" />
+                  
+                  {/* Live Feed Simulator */}
+                  <div className="flex-1 m-4 border border-[var(--border)] rounded-lg bg-[var(--bg-1)] relative overflow-hidden shadow-inner">
+                    <motion.div 
+                      animate={{ 
+                        x: [0, -10, 5, 0],
+                        y: [0, 5, -5, 0]
+                      }}
+                      transition={{ 
+                        duration: 8,
+                        repeat: Infinity,
+                        ease: "linear"
+                      }}
+                      className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-20 mix-blend-luminosity" 
+                    />
+                    
+                    {/* Bounding Box Animation */}
+                    <motion.div 
+                      animate={{ 
+                        x: ['0%', '20%', '-10%', '0%'],
+                        y: ['0%', '10%', '-5%', '0%'],
+                        scale: [1, 1.05, 0.95, 1]
+                      }}
+                      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-32 border-[1.5px] border-emerald-500 rounded-md bg-emerald-500/10 backdrop-blur-[1px]" 
+                    >
+                      <div className="absolute top-0 left-0 -translate-y-[calc(100%+4px)] bg-emerald-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded shadow-sm flex items-center gap-1">
+                        PART_OK <span className="font-mono text-[9px] opacity-80">99.8%</span>
+                      </div>
+                      
+                      {/* Corner Accents */}
+                      <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-emerald-500"></div>
+                      <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-emerald-500"></div>
+                      <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-emerald-500"></div>
+                      <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-emerald-500"></div>
+                    </motion.div>
                   </div>
                 </div>
               </div>

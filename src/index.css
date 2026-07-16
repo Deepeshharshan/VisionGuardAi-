@@ -1,242 +1,209 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
 /* ============================================================
-   VisionGuard AI — Light SaaS Design System (Lumen aesthetic)
+   VisionGuard AI — Enterprise Design System Master
    ============================================================ */
 
 :root {
-  /* Color tokens - Light Mode */
-  --bg-0:           #FAFAFA;   /* page background */
-  --bg-1:           #FFFFFF;   /* panel / card */
-  --bg-2:           #F3F4F6;   /* hover state / subtle backgrounds */
-  --border:         #E5E7EB;   /* hairline divider 1px */
-  --border-strong:  #D1D5DB;   /* emphasized divider */
+  /* Colors - Enterprise / SaaS */
+  --bg-0:           #FFFFFF;
+  --bg-1:           #FAFAFA;
+  --bg-2:           #F4F4F5;
   
-  --text-1:         #111827;   /* primary text (dark) */
-  --text-2:         #4B5563;   /* secondary / label */
-  --text-3:         #9CA3AF;   /* muted / caption */
+  --border:         #E5E7EB;
+  --border-strong:  #D1D5DB;
   
-  --signal:         #2563EB;   /* brand accent — blue */
-  --signal-dim:     rgba(37, 99, 235, 0.1);
-  --signal-hover:   #1D4ED8;
+  --text-1:         #09090B;
+  --text-2:         #52525B;
+  --text-3:         #A1A1AA;
   
-  --black-btn:      #030712;   /* black primary button */
-  --black-btn-hover:#1F2937;
+  --signal:         #09090B;
+  --signal-dim:     rgba(9, 9, 11, 0.05);
   
-  --amber:          #F59E0B;   /* warning status only */
-  --amber-dim:      rgba(245, 158, 11, 0.12);
-  --red:            #EF4444;   /* critical status only */
-  --red-dim:        rgba(239, 68, 68, 0.12);
-  --green:          #10B981;   /* healthy / success only */
-  --green-dim:      rgba(16, 185, 129, 0.12);
+  --color-primary:  #7C3AED;
+  --color-secondary:#6366F1;
+  --color-accent:   #EC4899;
   
-  /* Layout */
-  --radius-sm:      8px;
+  /* Layout & Spacing */
+  --radius-sm:      6px;
   --radius-md:      12px;
-  --radius-lg:      20px;
+  --radius-lg:      16px;
   --radius-xl:      24px;
 }
 
-/* ─── Reset ─────────────────────────────────────── */
+/* ─── Reset & Base ─────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; font-size: 16px; -webkit-text-size-adjust: 100%; background: var(--bg-0); }
+html { 
+  scroll-behavior: smooth; 
+  font-size: 16px; 
+  -webkit-text-size-adjust: 100%; 
+  background: var(--bg-0); 
+}
 
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   background: var(--bg-0) !important;
   color: var(--text-1);
-  line-height: 1.5;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-/* ─── Force light background on all landing sections ── */
-section {
-  background-color: transparent;
+section { 
+  background-color: transparent; 
+  padding-top: 96px;
+  padding-bottom: 96px;
+}
+@media (min-width: 1024px) {
+  section {
+    padding-top: 128px;
+    padding-bottom: 128px;
+  }
 }
 
 img, video, svg { display: block; max-width: 100%; }
-a { text-decoration: none; color: inherit; }
+a { text-decoration: none; color: inherit; transition: color 0.2s ease; }
 button { cursor: pointer; font-family: inherit; }
 
-/* ─── Mono utility ──────────────────────────────── */
+/* ─── Typography Helpers ───────────────────────────────── */
+.text-page-title {
+  font-size: 56px;
+  font-weight: 800;
+  color: var(--text-1);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+}
+@media (min-width: 768px) { .text-page-title { font-size: 88px; } }
+
+.text-section-title {
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--text-1);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+@media (min-width: 768px) { .text-section-title { font-size: 56px; } }
+
+.text-desc {
+  font-size: 18px;
+  color: var(--text-2);
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+}
+@media (min-width: 768px) { .text-desc { font-size: 20px; } }
+
+.text-caption {
+  font-size: 14px;
+  color: var(--text-3);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
 .mono {
-  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-feature-settings: 'tnum' 1;
 }
 
-/* ─── Container ─────────────────────────────────── */
+/* ─── Layout Containers ────────────────────────────────── */
 .enterprise-container {
-  max-width: 1400px; /* slightly narrower for the SaaS feel */
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 24px;
-  padding-right: 24px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
-@media (min-width: 768px) {
-  .enterprise-container { padding-left: 40px; padding-right: 40px; }
-}
-@media (min-width: 1280px) {
-  .enterprise-container { padding-left: 64px; padding-right: 64px; }
+@media (min-width: 768px) { .enterprise-container { padding: 0 64px; } }
+@media (min-width: 1440px) { .enterprise-container { max-width: 1440px; } }
+
+/* ─── Premium UI Elements ──────────────────────────────── */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-/* ─── Bento Box / Panel (main content block) ────── */
 .vg-panel {
-  background: var(--bg-1);
+  background: var(--bg-0);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   overflow: hidden;
-  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.04), 0 2px 8px -2px rgba(0, 0, 0, 0.02);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.vg-panel:hover {
-  box-shadow: 0 8px 30px -4px rgba(0, 0, 0, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-.vg-panel-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 24px;
-  border-bottom: 1px solid var(--border);
-}
-
-.vg-panel-title {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text-1);
-  letter-spacing: -0.01em;
-}
-
-.vg-panel-body {
-  padding: 24px;
-}
-
-/* ─── Buttons ────────────────────────────────────── */
+/* ─── Buttons ──────────────────────────────────────────── */
 .vg-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  height: 40px;
-  padding: 0 20px;
-  font-size: 14px;
+  height: 52px;
+  padding: 0 28px;
+  font-size: 15px;
   font-weight: 500;
-  font-family: 'Inter', sans-serif;
-  border-radius: 9999px; /* Pill shape */
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: all 150ms ease;
+  border-radius: 99px;
+  transition: all 0.25s ease;
   white-space: nowrap;
-  user-select: none;
 }
 
-/* Primary — Black pill */
 .vg-btn-primary {
-  background: var(--black-btn);
-  color: #fff;
+  background: var(--text-1);
+  color: #FFF;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.15);
 }
-.vg-btn-primary:hover { 
-  background: var(--black-btn-hover); 
+.vg-btn-primary:hover {
+  background: #111;
   transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+.vg-btn-primary:active {
+  transform: translateY(0);
 }
 
-/* Ghost — transparent, subtle hover */
 .vg-btn-ghost {
   background: transparent;
-  color: var(--text-1);
-}
-.vg-btn-ghost:hover { background: var(--bg-2); }
-
-/* Accent — Blue pill */
-.vg-btn-accent {
-  background: var(--signal);
-  color: #fff;
-}
-.vg-btn-accent:hover { background: var(--signal-hover); }
-
-/* ─── Gradient Mesh Background ───────────────────── */
-.bg-mesh-gradient {
-  background-color: var(--bg-0);
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(220, 206, 255, 0.6) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(199, 237, 255, 0.5) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(255, 222, 230, 0.5) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, rgba(214, 250, 255, 0.4) 0px, transparent 50%);
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-}
-
-/* ─── Typography helpers ─────────────────────────── */
-.text-page-title {
-  font-size: 48px;
-  font-weight: 700;
-  color: var(--text-1);
-  line-height: 1.1;
-  letter-spacing: -0.03em;
-}
-@media (min-width: 768px) {
-  .text-page-title { font-size: 64px; }
-}
-
-.text-section-title {
-  font-size: 32px;
-  font-weight: 700;
-  color: var(--text-1);
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-}
-
-.text-card-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--text-1);
-  letter-spacing: -0.01em;
-}
-
-.text-desc {
-  font-size: 16px;
   color: var(--text-2);
-  line-height: 1.6;
 }
-
-.text-caption {
-  font-size: 12px;
-  color: var(--text-3);
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-/* ─── Inputs ─────────────────────────────────────── */
-.enterprise-input {
-  height: 44px;
-  border-radius: var(--radius-sm);
-  padding: 0 16px;
-  background: var(--bg-1);
-  border: 1px solid var(--border);
+.vg-btn-ghost:hover {
   color: var(--text-1);
-  font-size: 14px;
-  font-family: 'Inter', sans-serif;
-  transition: all 150ms ease;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.02);
-}
-.enterprise-input::placeholder { color: var(--text-3); }
-.enterprise-input:focus {
-  border-color: var(--signal);
-  box-shadow: 0 0 0 3px var(--signal-dim);
-  outline: none;
+  background: var(--bg-2);
 }
 
-/* ─── Scrollbar ──────────────────────────────────── */
-::-webkit-scrollbar { width: 6px; height: 6px; }
+/* ─── Animations & Utilities ───────────────────────────── */
+.hover-lift {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px -8px rgba(0,0,0,0.06), 0 4px 12px -4px rgba(0,0,0,0.04);
+}
+
+.perspective-wrapper {
+  perspective: 2000px;
+}
+.dashboard-float {
+  transform: rotateX(8deg) rotateY(-4deg) rotateZ(1deg);
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 
+    -20px 40px 60px -10px rgba(0,0,0,0.15),
+    0 0 0 1px rgba(255,255,255,0.5) inset;
+}
+.dashboard-float:hover {
+  transform: rotateX(2deg) rotateY(-1deg) rotateZ(0deg);
+}
+
+@keyframes float-subtle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.animate-float-subtle {
+  animation: float-subtle 6s ease-in-out infinite;
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 99px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
 
-/* ─── Keyframes ──────────────────────────────────── */
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}

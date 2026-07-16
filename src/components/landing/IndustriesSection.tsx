@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Factory, Car, Layers, Package, Flame, CircuitBoard, ArrowRight } from 'lucide-react';
 import { INDUSTRIES } from '@/constants';
 
@@ -9,54 +9,118 @@ const iconMap: Record<string, Icon> = {
   Package: Package as Icon, Flame: Flame as Icon, CircuitBoard: CircuitBoard as Icon,
 };
 
-export const IndustriesSection: React.FC = () => (
-  <section id="industries" className="bg-[var(--bg-0)] border-t border-[var(--border)]" aria-labelledby="ind-heading">
-    <div className="enterprise-container py-[80px] lg:py-[100px]">
+export const IndustrySolutionsSection: React.FC = () => {
+  const [activeTab, setActiveTab] = useState(0);
 
-      {/* Header — left aligned with right description */}
-      <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-14">
-        <div className="max-w-lg">
-          <motion.p initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} className="mono text-[var(--text-3)] text-[11px] mb-4 uppercase tracking-[0.18em]">
+  return (
+    <section id="industries" className="bg-[var(--bg-1)] py-24 lg:py-40 border-b border-[var(--border)]" aria-labelledby="ind-heading">
+      <div className="enterprise-container">
+        
+        <div className="max-w-2xl mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            className="text-[12px] font-semibold tracking-[0.1em] uppercase text-[var(--text-3)] mb-4"
+          >
             Industry Solutions
-          </motion.p>
-          <motion.h2 id="ind-heading"
-            initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ delay: 0.07 }}
-            className="text-[28px] md:text-[36px] font-[600] tracking-tight text-[var(--text-1)]"
-            style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-            Purpose-built for your industry
+          </motion.div>
+          <motion.h2 
+            id="ind-heading"
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ delay: 0.1 }}
+            className="text-section-title mb-6"
+          >
+            Purpose-built for your vertical.
           </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ delay: 0.2 }}
+            className="text-desc"
+          >
+            Pre-trained models mapped directly to the failure modes and safety regulations of major manufacturing sectors.
+          </motion.p>
         </div>
-        <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
-          viewport={{ once: true }} transition={{ delay: 0.14 }}
-          className="text-[15px] text-[var(--text-2)] max-w-sm lg:text-right leading-[1.6]">
-          Pre-trained AI models and industry-specific detection rules for six major manufacturing verticals.
-        </motion.p>
-      </div>
 
-      {/* 3-col grid */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {INDUSTRIES.map((ind, i) => {
-          const Icon = iconMap[ind.icon];
-          return (
-            <motion.article key={ind.id}
-              initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }} transition={{ delay: i * 0.06 }}
-              className="vg-panel group flex flex-col cursor-pointer hover:border-[var(--signal)] transition-colors duration-300">
-              <div className="w-10 h-10 rounded bg-[var(--bg-2)] border border-[var(--border)] flex items-center justify-center mb-5 group-hover:border-[var(--signal)] transition-colors">
-                {Icon && <Icon className="w-4.5 h-4.5 text-[var(--text-1)]" />}
-              </div>
-              <h3 className="text-[14px] font-[500] text-[var(--text-1)] mb-2">{ind.title}</h3>
-              <p className="text-[13px] text-[var(--text-2)] leading-[1.6] flex-1">{ind.description}</p>
-              <div className="mt-5 pt-4 border-t border-[var(--border)] flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                <span className="mono text-[10px] text-[var(--signal)] uppercase tracking-[0.05em]">View use cases</span>
-                <ArrowRight className="w-3.5 h-3.5 text-[var(--signal)] group-hover:translate-x-1 transition-transform" />
-              </div>
-            </motion.article>
-          );
-        })}
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-24">
+          
+          {/* Vertical Tabs */}
+          <div className="w-full lg:w-1/3 flex flex-col gap-2">
+            {INDUSTRIES.map((ind, i) => {
+              const Icon = iconMap[ind.icon] || Factory;
+              const isActive = activeTab === i;
+              return (
+                <button
+                  key={ind.id}
+                  onClick={() => setActiveTab(i)}
+                  className={`flex items-center justify-between px-6 py-4 rounded-xl border text-left transition-all ${
+                    isActive 
+                      ? 'bg-[var(--bg-0)] border-[var(--border-strong)] shadow-md' 
+                      : 'bg-transparent border-transparent hover:bg-[var(--bg-2)]/50'
+                  }`}
+                >
+                  <div className="flex items-center gap-4">
+                    <Icon className={`w-5 h-5 ${isActive ? 'text-[var(--text-1)]' : 'text-[var(--text-3)]'}`} />
+                    <span className={`text-[16px] font-bold ${isActive ? 'text-[var(--text-1)]' : 'text-[var(--text-2)]'}`}>
+                      {ind.title}
+                    </span>
+                  </div>
+                  {isActive && <ArrowRight className="w-4 h-4 text-[var(--text-2)]" />}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Dynamic Content Area */}
+          <div className="w-full lg:w-2/3">
+            <AnimatePresence mode="wait">
+              {INDUSTRIES.map((ind, i) => {
+                if (i !== activeTab) return null;
+                const Icon = iconMap[ind.icon] || Factory;
+                return (
+                  <motion.div
+                    key={ind.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3 }}
+                    className="bg-[var(--bg-0)] border border-[var(--border)] rounded-[32px] p-8 md:p-12 shadow-xl h-full flex flex-col"
+                  >
+                    <div className="flex-1 flex flex-col justify-center mb-12">
+                      <div className="w-16 h-16 rounded-2xl bg-[var(--bg-1)] border border-[var(--border)] flex items-center justify-center mb-6">
+                        <Icon className="w-8 h-8 text-[var(--text-1)]" />
+                      </div>
+                      <h3 className="text-[32px] font-bold mb-4">{ind.title}</h3>
+                      <p className="text-[18px] text-[var(--text-2)] leading-relaxed max-w-lg mb-8">
+                        {ind.description}
+                      </p>
+                      
+                      <button className="vg-btn vg-btn-primary self-start">
+                        View {ind.title} Case Study
+                      </button>
+                    </div>
+                    
+                    {/* Abstract Mock Image Area */}
+                    <div className="w-full h-48 bg-[var(--bg-1)] rounded-[16px] border border-[var(--border)] overflow-hidden relative">
+                      <div className="absolute inset-0 bg-mesh-gradient opacity-30"></div>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                         <span className="mono text-[12px] text-[var(--text-3)] uppercase tracking-widest">
+                           {ind.title} Vision Profile Active
+                         </span>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
+          </div>
+          
+        </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
