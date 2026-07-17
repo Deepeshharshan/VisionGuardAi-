@@ -139,7 +139,7 @@ export const ReportsView: React.FC = () => {
                           border: 'none',
                           color: 'var(--text-3)',
                           cursor: 'pointer',
-                          borderRadius: 2,
+                          borderRadius: 0,
                           transition: 'color 100ms',
                         }}
                         onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.color = 'var(--text-1)')}

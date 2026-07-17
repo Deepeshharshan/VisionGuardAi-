@@ -92,7 +92,7 @@ export const Header: React.FC<HeaderProps> = ({ activeView }) => {
                 color: 'var(--text-3)',
                 background: 'var(--bg-2)',
                 border: '1px solid var(--border)',
-                borderRadius: 2,
+                borderRadius: 0,
                 padding: '1px 4px',
               }}
             >
@@ -110,7 +110,7 @@ export const Header: React.FC<HeaderProps> = ({ activeView }) => {
             padding: '4px 10px',
             background: 'var(--green-dim)',
             border: '1px solid rgba(63,179,127,0.2)',
-            borderRadius: 4,
+            borderRadius: 0,
           }}
         >
           <span

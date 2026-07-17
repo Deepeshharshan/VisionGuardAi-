@@ -4,7 +4,7 @@ import { DashboardMockup } from './DashboardMockup';
 
 export const DashboardMockupSection: React.FC = () => {
   return (
-    <section className="relative pb-24 lg:pb-32 pt-12" aria-label="Dashboard Preview">
+    <section className="relative pt-16 lg:pt-20 pb-24 lg:pb-32" aria-label="Dashboard Preview">
       <div className="enterprise-container relative z-10">
         
         {/* Dashboard Mockup - Centered */}

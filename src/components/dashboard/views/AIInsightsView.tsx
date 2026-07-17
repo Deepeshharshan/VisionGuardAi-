@@ -65,7 +65,7 @@ export const AIInsightsView: React.FC = () => {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: 24, alignItems: 'start' }}>
 
         {/* ─── MAIN INSIGHTS FEED ─── */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 1, background: 'var(--border)', border: '1px solid var(--border)', borderRadius: 4, overflow: 'hidden' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 1, background: 'var(--border)', border: '1px solid var(--border)', borderRadius: 0, overflow: 'hidden' }}>
           {visible.map((insight) => (
             <div
               key={insight.id}
@@ -100,7 +100,7 @@ export const AIInsightsView: React.FC = () => {
                 </div>
 
                 {/* Root cause analysis block */}
-                <div style={{ marginBottom: 12, padding: '12px 14px', background: 'var(--bg-0)', border: '1px solid var(--border)', borderRadius: 2 }}>
+                <div style={{ marginBottom: 12, padding: '12px 14px', background: 'var(--bg-0)', border: '1px solid var(--border)', borderRadius: 0 }}>
                   <div className="mono" style={{ fontSize: 10, color: 'var(--text-3)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 6 }}>
                     Root cause analysis
                   </div>
@@ -108,7 +108,7 @@ export const AIInsightsView: React.FC = () => {
                 </div>
 
                 {/* Smart maintenance suggestion block */}
-                <div style={{ marginBottom: 16, padding: '12px 14px', background: 'var(--bg-0)', border: '1px solid var(--border)', borderRadius: 2 }}>
+                <div style={{ marginBottom: 16, padding: '12px 14px', background: 'var(--bg-0)', border: '1px solid var(--border)', borderRadius: 0 }}>
                   <div className="mono" style={{ fontSize: 10, color: 'var(--text-3)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 6 }}>
                     Smart maintenance suggestion
                   </div>
@@ -140,7 +140,7 @@ export const AIInsightsView: React.FC = () => {
         </div>
 
         {/* ─── RIGHT COLUMN ─── */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 1, background: 'var(--border)', border: '1px solid var(--border)', borderRadius: 4, overflow: 'hidden' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 1, background: 'var(--border)', border: '1px solid var(--border)', borderRadius: 0, overflow: 'hidden' }}>
 
           {/* Fleet Risk Forecast */}
           <div style={{ background: 'var(--bg-1)', padding: '16px 20px' }}>
@@ -164,7 +164,7 @@ export const AIInsightsView: React.FC = () => {
                 width: '100%',
                 height: 4,
                 background: 'var(--border-strong)',
-                borderRadius: 2,
+                borderRadius: 0,
                 overflow: 'hidden',
                 marginBottom: 20,
               }}
@@ -174,7 +174,7 @@ export const AIInsightsView: React.FC = () => {
                   width: '92%',
                   height: '100%',
                   background: 'var(--green)',
-                  borderRadius: 2,
+                  borderRadius: 0,
                 }}
               />
             </div>
@@ -204,7 +204,7 @@ export const AIInsightsView: React.FC = () => {
                     contentStyle={{
                       background: 'var(--bg-1)',
                       border: '1px solid var(--border)',
-                      borderRadius: 4,
+                      borderRadius: 0,
                       fontSize: 12,
                       fontFamily: 'JetBrains Mono, monospace',
                     }}

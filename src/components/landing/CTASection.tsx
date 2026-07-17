@@ -30,7 +30,7 @@ export const CTASection: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ delay: 0.1 }}
-          className="text-[20px] text-white/60 max-w-2xl mx-auto mb-12"
+          className="text-[20px] text-white/95 font-medium max-w-2xl mx-auto mb-12"
         >
           Join the top tier of manufacturing. Deploy VisionGuard to a single assembly line today and scale globally tomorrow.
         </motion.p>
@@ -46,7 +46,7 @@ export const CTASection: React.FC = () => {
             Request Enterprise Demo
           </button>
           
-          <button className="group flex items-center gap-2 h-14 px-8 rounded-full bg-white/10 text-white font-semibold text-[16px] border border-white/20 hover:bg-white/20 transition-all">
+          <button className="group flex items-center gap-2 h-14 px-8 rounded-full bg-transparent text-white font-semibold text-[16px] border-2 border-white hover:bg-white/10 transition-all">
             <span>Talk to an Engineer</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>

@@ -90,7 +90,7 @@ const MachineDetailDrawer: React.FC<DrawerProps> = ({ machine, onClose }) => {
               border: 'none',
               color: 'var(--text-3)',
               cursor: 'pointer',
-              borderRadius: 2,
+              borderRadius: 0,
             }}
           >
             <X size={16} />
@@ -134,7 +134,7 @@ const MachineDetailDrawer: React.FC<DrawerProps> = ({ machine, onClose }) => {
               position: 'relative',
               height: 4,
               background: 'var(--border-strong)',
-              borderRadius: 2,
+              borderRadius: 0,
               overflow: 'visible',
             }}
           >
@@ -143,7 +143,7 @@ const MachineDetailDrawer: React.FC<DrawerProps> = ({ machine, onClose }) => {
                 width: `${machine.score}%`,
                 height: '100%',
                 background: healthBarColor(machine.score),
-                borderRadius: 2,
+                borderRadius: 0,
               }}
             />
             {/* Marker */}
@@ -156,7 +156,7 @@ const MachineDetailDrawer: React.FC<DrawerProps> = ({ machine, onClose }) => {
                 width: 2,
                 height: 12,
                 background: healthBarColor(machine.score),
-                borderRadius: 1,
+                borderRadius: 0,
               }}
             />
           </div>
@@ -302,7 +302,7 @@ export const MachineManagementView: React.FC = () => {
               style={{
                 height: 32,
                 padding: '0 12px',
-                borderRadius: 4,
+                borderRadius: 0,
                 border: '1px solid',
                 borderColor: filterStatus === s ? 'var(--signal)' : 'var(--border-strong)',
                 background: filterStatus === s ? 'var(--signal-dim)' : 'transparent',
@@ -444,7 +444,7 @@ export const MachineManagementView: React.FC = () => {
                     borderColor: p === page ? 'var(--signal)' : 'var(--border-strong)',
                     background: p === page ? 'var(--signal-dim)' : 'transparent',
                     color: p === page ? 'var(--signal)' : 'var(--text-2)',
-                    borderRadius: 4,
+                    borderRadius: 0,
                     fontSize: 12,
                     fontFamily: "'JetBrains Mono', monospace",
                     cursor: 'pointer',

@@ -121,7 +121,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView }) =
                     color: 'var(--signal)',
                     background: 'var(--signal-dim)',
                     padding: '1px 6px',
-                    borderRadius: 2,
+                    borderRadius: 0,
                     lineHeight: '18px',
                   }}
                 >
@@ -140,7 +140,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView }) =
             style={{
               width: 28,
               height: 28,
-              borderRadius: 4,
+              borderRadius: 0,
               background: 'var(--signal)',
               display: 'flex',
               alignItems: 'center',
@@ -167,7 +167,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView }) =
               display: 'flex',
               alignItems: 'center',
               padding: 4,
-              borderRadius: 2,
+              borderRadius: 0,
               transition: 'color 100ms',
             }}
             title="Sign out"

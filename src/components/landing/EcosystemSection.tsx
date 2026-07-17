@@ -12,7 +12,7 @@ export const EcosystemSection: React.FC = () => {
   ];
 
   return (
-    <section className="py-24 lg:py-32 bg-[var(--bg-0)] border-b border-[var(--border)] overflow-hidden">
+    <section className="py-16 lg:py-24 bg-[var(--bg-0)] border-b border-[var(--border)] overflow-hidden">
       <div className="enterprise-container flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
         
         <div className="w-full lg:w-1/2">
@@ -34,8 +34,8 @@ export const EcosystemSection: React.FC = () => {
 
         <div className="w-full lg:w-1/2 relative min-h-[400px] flex items-center justify-center">
           {/* Central Node */}
-          <div className="absolute z-20 w-24 h-24 bg-black text-white rounded-2xl flex items-center justify-center font-bold text-[18px] shadow-2xl shadow-black/20">
-            VisionGuard
+          <div className="absolute z-20 w-24 h-24 bg-black text-white rounded-2xl flex items-center justify-center font-bold text-3xl shadow-2xl shadow-black/20">
+            VG
           </div>
           
           {/* Orbit rings */}

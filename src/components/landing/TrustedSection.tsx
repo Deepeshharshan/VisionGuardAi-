@@ -2,11 +2,11 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 const logos = [
-  { name: 'Tata Steel', svg: <svg viewBox="0 0 100 30" className="h-8 opacity-40 hover:opacity-100 transition-opacity duration-300"><text x="10" y="22" fontSize="18" fontWeight="800" fill="currentColor">TATA STEEL</text></svg> },
-  { name: 'Mahindra', svg: <svg viewBox="0 0 100 30" className="h-8 opacity-40 hover:opacity-100 transition-opacity duration-300"><text x="10" y="22" fontSize="18" fontWeight="800" fill="currentColor">MAHINDRA</text></svg> },
-  { name: 'L&T', svg: <svg viewBox="0 0 100 30" className="h-8 opacity-40 hover:opacity-100 transition-opacity duration-300"><text x="20" y="22" fontSize="18" fontWeight="800" fill="currentColor">L&T</text></svg> },
-  { name: 'Bosch', svg: <svg viewBox="0 0 100 30" className="h-8 opacity-40 hover:opacity-100 transition-opacity duration-300"><text x="15" y="22" fontSize="18" fontWeight="800" fill="currentColor">BOSCH</text></svg> },
-  { name: 'TVS', svg: <svg viewBox="0 0 100 30" className="h-8 opacity-40 hover:opacity-100 transition-opacity duration-300"><text x="25" y="22" fontSize="18" fontWeight="800" fill="currentColor">TVS</text></svg> },
+  { name: 'Tata Steel', svg: <svg viewBox="0 0 160 30" className="h-8 w-auto opacity-40 hover:opacity-100 transition-opacity duration-300"><text x="10" y="22" fontSize="18" fontWeight="800" fill="currentColor">TATA STEEL</text></svg> },
+  { name: 'Mahindra', svg: <svg viewBox="0 0 160 30" className="h-8 w-auto opacity-40 hover:opacity-100 transition-opacity duration-300"><text x="10" y="22" fontSize="18" fontWeight="800" fill="currentColor">MAHINDRA</text></svg> },
+  { name: 'L&T', svg: <svg viewBox="0 0 160 30" className="h-8 w-auto opacity-40 hover:opacity-100 transition-opacity duration-300"><text x="20" y="22" fontSize="18" fontWeight="800" fill="currentColor">L&T</text></svg> },
+  { name: 'Bosch', svg: <svg viewBox="0 0 160 30" className="h-8 w-auto opacity-40 hover:opacity-100 transition-opacity duration-300"><text x="15" y="22" fontSize="18" fontWeight="800" fill="currentColor">BOSCH</text></svg> },
+  { name: 'TVS', svg: <svg viewBox="0 0 160 30" className="h-8 w-auto opacity-40 hover:opacity-100 transition-opacity duration-300"><text x="25" y="22" fontSize="18" fontWeight="800" fill="currentColor">TVS</text></svg> },
 ];
 
 export const TrustedSection: React.FC = () => (

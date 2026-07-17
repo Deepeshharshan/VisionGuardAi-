@@ -46,11 +46,30 @@ export const KeyBenefitsSection: React.FC = () => {
                   <div className="w-3 h-3 rounded-full bg-amber-400"></div>
                   <div className="w-3 h-3 rounded-full bg-green-400"></div>
                 </div>
-                <div className="flex-1 relative flex items-center justify-center">
-                  {/* Abstract bounding box */}
-                  <div className="absolute inset-8 border border-blue-200 rounded-lg">
-                    <div className="absolute top-4 left-4 border border-blue-500 bg-blue-500/10 w-32 h-32 rounded">
-                      <div className="absolute -top-3 left-2 bg-blue-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">DEFECT 99%</div>
+                <div className="flex-1 relative flex items-center justify-center p-4">
+                  {/* Image feed mockup */}
+                  <div className="relative w-full h-full rounded-xl overflow-hidden bg-gray-900 border border-black/10 shadow-inner">
+                    {/* Valid CSS placeholder instead of broken image */}
+                    <div className="w-full h-full bg-slate-800 opacity-80 mix-blend-luminosity">
+                      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTQwIDBIMFY0MGg0MFYweiIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0wIDAuNWg0MCIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDUpIi8+PHBhdGggZD0iTTAuNSAwdi00MCIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDUpIi8+PC9zdmc+')]"></div>
+                    </div>
+                    
+                    {/* Abstract bounding box */}
+                    <div className="absolute top-[20%] left-[30%] border-[2px] border-red-500 bg-red-500/20 w-40 h-40 rounded shadow-[0_0_15px_rgba(239,68,68,0.5)] flex items-center justify-center">
+                      <div className="w-2 h-2 rounded-full bg-red-500 animate-ping"></div>
+                      <div className="absolute -top-6 left-0 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
+                        SURFACE_SCRATCH 99.8%
+                      </div>
+                    </div>
+                    
+                    {/* UI Overlay */}
+                    <div className="absolute bottom-4 left-4 bg-black/60 backdrop-blur-md rounded border border-white/10 px-3 py-2">
+                      <div className="text-[10px] text-gray-400 font-mono mb-1">CAM_04_ASSEMBLY</div>
+                      <div className="flex gap-4">
+                        <div className="text-white text-xs font-semibold">FPS: <span className="text-green-400">60</span></div>
+                        <div className="text-white text-xs font-semibold">LATENCY: <span className="text-green-400">12ms</span></div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -128,7 +147,7 @@ export const KeyBenefitsSection: React.FC = () => {
       </section>
 
       {/* Benefit 3: Workplace Safety (Offset Text over Image) */}
-      <section className="py-24 lg:py-32 bg-[var(--text-1)] text-white overflow-hidden relative">
+      <section className="pt-24 lg:pt-32 pb-16 lg:pb-24 bg-[var(--text-1)] text-white overflow-hidden relative">
         
         <div className="enterprise-container relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">

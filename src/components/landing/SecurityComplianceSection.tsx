@@ -4,7 +4,7 @@ import { ShieldCheck, Lock, FileCheck, CheckCircle } from 'lucide-react';
 
 export const SecurityComplianceSection: React.FC = () => {
   return (
-    <section id="security" className="py-24 lg:py-32 bg-[var(--bg-0)] border-b border-[var(--border)]">
+    <section id="security" className="pt-32 pb-24 lg:pt-40 lg:pb-32 scroll-mt-24 bg-[var(--bg-0)] border-b border-[var(--border)]">
       <div className="enterprise-container">
         
         <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
@@ -71,13 +71,13 @@ export const SecurityComplianceSection: React.FC = () => {
               className="grid grid-cols-2 gap-4"
             >
               {/* Trust Cards */}
-              <div className="bg-[var(--bg-1)] border border-[var(--border)] rounded-[24px] p-8 flex flex-col items-center text-center shadow-[0_4px_24px_rgba(0,0,0,0.04)]">
+              <div className="bg-[var(--bg-1)] border border-[var(--border)] rounded-[24px] p-8 flex flex-col items-center text-center shadow-[0_4px_24px_rgba(0,0,0,0.04)] h-full">
                 <Lock className="w-10 h-10 text-[var(--text-1)] mb-4" />
                 <h4 className="text-[16px] font-bold mb-2">On-Premises Privacy</h4>
                 <p className="text-[14px] text-[var(--text-2)]">Edge agents process streams entirely within your intranet.</p>
               </div>
               
-              <div className="bg-[var(--bg-1)] border border-[var(--border)] rounded-[24px] p-8 flex flex-col items-center text-center translate-y-8 shadow-[0_4px_24px_rgba(0,0,0,0.04)]">
+              <div className="bg-[var(--bg-1)] border border-[var(--border)] rounded-[24px] p-8 flex flex-col items-center text-center translate-y-8 shadow-[0_4px_24px_rgba(0,0,0,0.04)] h-full">
                 <FileCheck className="w-10 h-10 text-[var(--text-1)] mb-4" />
                 <h4 className="text-[16px] font-bold mb-2">Audit Logging</h4>
                 <p className="text-[14px] text-[var(--text-2)]">Immutable logs of every model deployment and configuration change.</p>

@@ -104,13 +104,28 @@ export const IndustrySolutionsSection: React.FC = () => {
                       </button>
                     </div>
                     
-                    {/* Abstract Mock Image Area */}
-                    <div className="w-full h-48 bg-[var(--bg-1)] rounded-[16px] border border-[var(--border)] overflow-hidden relative">
-                      <div className="absolute inset-0 bg-mesh-gradient opacity-30"></div>
-                      <div className="absolute inset-0 flex items-center justify-center">
-                         <span className="mono text-[12px] text-[var(--text-3)] uppercase tracking-widest">
-                           {ind.title} Vision Profile Active
-                         </span>
+                    {/* Industry Stats / Mock UI */}
+                    <div className="w-full h-auto bg-[var(--bg-1)] rounded-[16px] border border-[var(--border)] overflow-hidden p-6 grid grid-cols-1 sm:grid-cols-3 gap-6">
+                      <div className="flex flex-col">
+                        <span className="text-[12px] text-[var(--text-3)] font-medium mb-2 uppercase tracking-wide">Accuracy</span>
+                        <span className="text-[28px] font-bold text-[var(--text-1)] tracking-tight">99.8%</span>
+                        <div className="w-full h-1.5 bg-gray-200 rounded-full mt-2 overflow-hidden">
+                          <div className="h-full bg-green-500 rounded-full w-[99.8%]"></div>
+                        </div>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-[12px] text-[var(--text-3)] font-medium mb-2 uppercase tracking-wide">Latency</span>
+                        <span className="text-[28px] font-bold text-[var(--text-1)] tracking-tight">12ms</span>
+                        <div className="w-full h-1.5 bg-gray-200 rounded-full mt-2 overflow-hidden">
+                          <div className="h-full bg-blue-500 rounded-full w-[20%]"></div>
+                        </div>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-[12px] text-[var(--text-3)] font-medium mb-2 uppercase tracking-wide">ROI Time</span>
+                        <span className="text-[28px] font-bold text-[var(--text-1)] tracking-tight">3wks</span>
+                        <div className="w-full h-1.5 bg-gray-200 rounded-full mt-2 overflow-hidden">
+                          <div className="h-full bg-purple-500 rounded-full w-[80%]"></div>
+                        </div>
                       </div>
                     </div>
                   </motion.div>

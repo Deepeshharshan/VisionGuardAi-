@@ -43,7 +43,7 @@ export const LiveMonitoringView: React.FC = () => {
           padding: '10px 16px',
           background: 'var(--bg-1)',
           border: '1px solid var(--border)',
-          borderRadius: 4,
+          borderRadius: 0,
         }}
       >
         <span style={{ fontSize: 12, color: 'var(--text-3)', marginRight: 4 }}>Show:</span>
@@ -54,7 +54,7 @@ export const LiveMonitoringView: React.FC = () => {
             style={{
               height: 26,
               padding: '0 12px',
-              borderRadius: 4,
+              borderRadius: 0,
               border: '1px solid',
               borderColor: filter === f ? 'var(--signal)' : 'var(--border-strong)',
               background: filter === f ? 'var(--signal-dim)' : 'transparent',
@@ -95,7 +95,7 @@ export const LiveMonitoringView: React.FC = () => {
           gap: 1,
           background: 'var(--border)',
           border: '1px solid var(--border)',
-          borderRadius: 4,
+          borderRadius: 0,
           overflow: 'hidden',
         }}
       >
@@ -232,7 +232,7 @@ export const LiveMonitoringView: React.FC = () => {
                     color: 'var(--text-3)',
                     background: 'var(--bg-2)',
                     border: '1px solid var(--border)',
-                    borderRadius: 2,
+                    borderRadius: 0,
                     padding: '1px 6px',
                     fontFamily: "'JetBrains Mono', monospace",
                   }}

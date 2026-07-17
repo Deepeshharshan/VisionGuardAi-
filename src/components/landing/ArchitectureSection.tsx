@@ -55,16 +55,16 @@ export const ArchitectureSection: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            className="bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm relative z-10 hover:bg-white/10 transition-colors"
+            className="bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm relative z-10 hover:bg-white/10 transition-colors h-full flex flex-col"
           >
-            <div className="w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-8 shadow-[0_0_20px_rgba(59,130,246,0.1)]">
+            <div className="w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-8 shadow-[0_0_20px_rgba(59,130,246,0.1)] shrink-0">
               <Activity className="w-8 h-8 text-blue-400" />
             </div>
             <h3 className="text-[20px] font-bold text-white mb-3">1. Edge Nodes</h3>
             <p className="text-[15px] text-white/60 mb-8 leading-relaxed">
               Install our lightweight agent on local IPCs or NVIDIA Jetson devices directly on the factory floor.
             </p>
-            <div className="rounded-lg bg-black/60 border border-white/5 p-4 shadow-inner">
+            <div className="rounded-lg bg-black/60 border border-white/5 p-4 shadow-inner mt-auto">
               <div className="mono text-[13px] text-blue-400">~/edge</div>
               <div className="mono text-[12px] text-white/40 mt-2">$ vguard start --port 8080</div>
               <div className="mono text-[12px] text-green-400 mt-1">&gt; Agent running. Latency: 4ms</div>
@@ -77,16 +77,16 @@ export const ArchitectureSection: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ delay: 0.1 }}
-            className="bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm relative z-10 hover:bg-white/10 transition-colors"
+            className="bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm relative z-10 hover:bg-white/10 transition-colors h-full flex flex-col"
           >
-            <div className="w-16 h-16 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center mb-8 shadow-[0_0_20px_rgba(168,85,247,0.1)]">
+            <div className="w-16 h-16 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center mb-8 shadow-[0_0_20px_rgba(168,85,247,0.1)] shrink-0">
               <Server className="w-8 h-8 text-purple-400" />
             </div>
             <h3 className="text-[20px] font-bold text-white mb-3">2. Neural Engine</h3>
             <p className="text-[15px] text-white/60 mb-8 leading-relaxed">
               Frames are processed locally without internet dependency. Only metadata and critical alerts sync to the cloud.
             </p>
-            <div className="rounded-lg bg-black/60 border border-white/5 p-4 flex flex-col gap-3 shadow-inner">
+            <div className="rounded-lg bg-black/60 border border-white/5 p-4 flex flex-col gap-3 shadow-inner mt-auto">
               <div className="flex justify-between items-center text-[12px] mono">
                 <span className="text-white/60">TensorRT Pipeline</span>
                 <span className="text-purple-400 font-bold">Active</span>
@@ -107,16 +107,16 @@ export const ArchitectureSection: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ delay: 0.2 }}
-            className="bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm relative z-10 hover:bg-white/10 transition-colors"
+            className="bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm relative z-10 hover:bg-white/10 transition-colors h-full flex flex-col"
           >
-            <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-8 shadow-[0_0_20px_rgba(16,185,129,0.1)]">
+            <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-8 shadow-[0_0_20px_rgba(16,185,129,0.1)] shrink-0">
               <Database className="w-8 h-8 text-emerald-400" />
             </div>
             <h3 className="text-[20px] font-bold text-white mb-3">3. Central Cloud</h3>
             <p className="text-[15px] text-white/60 mb-8 leading-relaxed">
               Monitor thousands of edge devices, deploy new AI models OTA, and integrate via REST/GraphQL APIs.
             </p>
-            <div className="rounded-lg bg-black/60 border border-white/5 p-4 shadow-inner">
+            <div className="rounded-lg bg-black/60 border border-white/5 p-4 shadow-inner mt-auto">
               <div className="mono text-[12px] text-emerald-400 mb-2">POST /api/v2/models</div>
               <div className="mono text-[11px] text-white/60 leading-relaxed whitespace-pre">
 {`{

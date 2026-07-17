@@ -38,7 +38,7 @@ export const OverviewView: React.FC = () => {
           gap: 1,
           background: 'var(--border)',
           border: '1px solid var(--border)',
-          borderRadius: 4,
+          borderRadius: 0,
           overflow: 'hidden',
         }}
       >
@@ -82,7 +82,7 @@ export const OverviewView: React.FC = () => {
                   color: 'var(--signal)',
                   background: 'var(--signal-dim)',
                   padding: '1px 6px',
-                  borderRadius: 2,
+                  borderRadius: 0,
                   textTransform: 'uppercase',
                   letterSpacing: '0.05em',
                 }}
@@ -150,7 +150,7 @@ export const OverviewView: React.FC = () => {
                 color: 'var(--red)',
                 background: 'var(--red-dim)',
                 padding: '1px 6px',
-                borderRadius: 2,
+                borderRadius: 0,
               }}
             >
               {alerts.filter((a: any) => a.status === 'open').length} open

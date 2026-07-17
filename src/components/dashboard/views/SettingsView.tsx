@@ -68,7 +68,7 @@ const Toggle: React.FC<{ enabled: boolean; onChange: () => void }> = ({ enabled,
     style={{
       width: 36,
       height: 20,
-      borderRadius: 10,
+      borderRadius: 0,
       background: enabled ? 'var(--signal)' : 'var(--border-strong)',
       border: 'none',
       cursor: 'pointer',
@@ -123,7 +123,7 @@ export const SettingsView: React.FC = () => {
                   style={{
                     width: 40,
                     height: 40,
-                    borderRadius: 4,
+                    borderRadius: 0,
                     background: 'var(--signal)',
                     display: 'flex',
                     alignItems: 'center',
@@ -211,7 +211,7 @@ export const SettingsView: React.FC = () => {
             <div className="mono" style={{ fontSize: 10, color: 'var(--text-3)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 16 }}>
               API keys
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 1, background: 'var(--border)', border: '1px solid var(--border)', borderRadius: 2, overflow: 'hidden', marginBottom: 16 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 1, background: 'var(--border)', border: '1px solid var(--border)', borderRadius: 0, overflow: 'hidden', marginBottom: 16 }}>
               {apiKeys.map((k) => (
                 <div
                   key={k.id}
@@ -235,13 +235,13 @@ export const SettingsView: React.FC = () => {
                   <span className="mono" style={{ fontSize: 11, color: 'var(--text-3)' }}>Last used: {k.lastUsed}</span>
                   <div style={{ display: 'flex', gap: 4 }}>
                     <button onClick={() => setShowApiKey(showApiKey === k.id ? null : k.id)}
-                      style={{ padding: 5, background: 'none', border: 'none', color: 'var(--text-3)', cursor: 'pointer', borderRadius: 2 }}>
+                      style={{ padding: 5, background: 'none', border: 'none', color: 'var(--text-3)', cursor: 'pointer', borderRadius: 0 }}>
                       {showApiKey === k.id ? <EyeOff size={13} /> : <Eye size={13} />}
                     </button>
-                    <button style={{ padding: 5, background: 'none', border: 'none', color: 'var(--text-3)', cursor: 'pointer', borderRadius: 2 }}>
+                    <button style={{ padding: 5, background: 'none', border: 'none', color: 'var(--text-3)', cursor: 'pointer', borderRadius: 0 }}>
                       <Copy size={13} />
                     </button>
-                    <button style={{ padding: 5, background: 'none', border: 'none', color: 'var(--red)', cursor: 'pointer', borderRadius: 2 }}>
+                    <button style={{ padding: 5, background: 'none', border: 'none', color: 'var(--red)', cursor: 'pointer', borderRadius: 0 }}>
                       <Trash2 size={13} />
                     </button>
                   </div>
@@ -261,7 +261,7 @@ export const SettingsView: React.FC = () => {
             <div className="mono" style={{ fontSize: 10, color: 'var(--text-3)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 16 }}>
               Connected services
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 1, background: 'var(--border)', border: '1px solid var(--border)', borderRadius: 2, overflow: 'hidden' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 1, background: 'var(--border)', border: '1px solid var(--border)', borderRadius: 0, overflow: 'hidden' }}>
               {integrations.map((integ) => (
                 <div
                   key={integ.id}
@@ -336,7 +336,7 @@ export const SettingsView: React.FC = () => {
                     <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-1)', display: 'flex', alignItems: 'center', gap: 8 }}>
                       {session.device}
                       {session.current && (
-                        <span className="mono" style={{ fontSize: 10, color: 'var(--signal)', background: 'var(--signal-dim)', padding: '1px 5px', borderRadius: 2 }}>
+                        <span className="mono" style={{ fontSize: 10, color: 'var(--signal)', background: 'var(--signal-dim)', padding: '1px 5px', borderRadius: 0 }}>
                           Current
                         </span>
                       )}
@@ -389,7 +389,7 @@ export const SettingsView: React.FC = () => {
       <div style={{ display: 'flex', gap: 24, alignItems: 'flex-start' }}>
 
         {/* ─── LEFT NAV — same active-item treatment as sidebar ─── */}
-        <nav style={{ width: 180, flexShrink: 0, border: '1px solid var(--border)', borderRadius: 4, overflow: 'hidden' }}>
+        <nav style={{ width: 180, flexShrink: 0, border: '1px solid var(--border)', borderRadius: 0, overflow: 'hidden' }}>
           {settingsSections.map((s) => {
             const isActive = section === s.id;
             return (
@@ -431,7 +431,7 @@ export const SettingsView: React.FC = () => {
             minWidth: 0,
             background: 'var(--bg-1)',
             border: '1px solid var(--border)',
-            borderRadius: 4,
+            borderRadius: 0,
             padding: '24px',
           }}
         >
