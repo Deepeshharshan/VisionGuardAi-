@@ -182,7 +182,21 @@ export const KeyBenefitsSection: React.FC = () => {
               viewport={{ once: true, margin: "-100px" }}
               className="relative w-full aspect-[4/3] rounded-[32px] overflow-hidden border border-white/10"
             >
-              <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-40 mix-blend-luminosity" />
+              <motion.div 
+                animate={{ 
+                  backgroundPosition: ['0% 0%', '100% 100%', '0% 100%', '100% 0%', '0% 0%'],
+                }}
+                transition={{ 
+                  duration: 20,
+                  repeat: Infinity,
+                  ease: "linear"
+                }}
+                className="absolute inset-0 opacity-40 mix-blend-luminosity" 
+                style={{
+                  backgroundImage: 'radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.4) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.4) 0%, transparent 50%)',
+                  backgroundSize: '200% 200%'
+                }}
+              />
               
               {/* Natural embedded alert card */}
               <div className="absolute bottom-8 right-8 bg-black/60 backdrop-blur-xl border border-white/10 p-5 rounded-2xl max-w-sm shadow-2xl">

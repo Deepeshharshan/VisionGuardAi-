@@ -168,15 +168,18 @@ export const DashboardMockup: React.FC = () => {
                   <div className="flex-1 m-4 border border-[var(--border)] rounded-lg bg-[var(--bg-1)] relative overflow-hidden shadow-inner">
                     <motion.div 
                       animate={{ 
-                        x: [0, -10, 5, 0],
-                        y: [0, 5, -5, 0]
+                        backgroundPosition: ['0% 0%', '100% 100%', '0% 100%', '100% 0%', '0% 0%'],
                       }}
                       transition={{ 
-                        duration: 8,
+                        duration: 20,
                         repeat: Infinity,
                         ease: "linear"
                       }}
-                      className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-20 mix-blend-luminosity" 
+                      className="absolute inset-0 opacity-30 mix-blend-luminosity" 
+                      style={{
+                        backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.4) 0%, transparent 50%), radial-gradient(circle at 100% 0%, rgba(59, 130, 246, 0.4) 0%, transparent 50%), radial-gradient(circle at 0% 100%, rgba(99, 102, 241, 0.4) 0%, transparent 50%)',
+                        backgroundSize: '200% 200%'
+                      }}
                     />
                     
                     {/* Bounding Box Animation */}
