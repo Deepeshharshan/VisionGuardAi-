@@ -45,10 +45,10 @@ export const HeroSection: React.FC = () => {
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.3 }}
             className="flex flex-col sm:flex-row items-center gap-4"
           >
-            <button className="vg-btn vg-btn-primary">
+            <button className="vg-btn vg-btn-primary w-full sm:w-auto">
               Deploy to Production
             </button>
-            <button className="vg-btn vg-btn-ghost border border-[var(--border)] bg-white/50 hover:bg-white shadow-sm">
+            <button className="vg-btn vg-btn-ghost border border-[var(--border)] bg-white/50 hover:bg-white shadow-sm w-full sm:w-auto">
               Read the Docs <ChevronRight className="w-4 h-4 ml-1 opacity-50" />
             </button>
           </motion.div>

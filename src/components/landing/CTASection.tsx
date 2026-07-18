@@ -42,11 +42,11 @@ export const CTASection: React.FC = () => {
           transition={{ delay: 0.2 }}
           className="flex flex-col sm:flex-row items-center gap-4"
         >
-          <button className="h-14 px-8 rounded-full bg-white text-black font-semibold text-[16px] hover:bg-gray-100 hover:scale-105 transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)]">
+          <button className="h-14 px-8 rounded-full bg-white text-black font-semibold text-[16px] hover:bg-gray-100 hover:scale-105 transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)] w-full sm:w-auto">
             Request Enterprise Demo
           </button>
           
-          <button className="group flex items-center gap-2 h-14 px-8 rounded-full bg-transparent text-white font-semibold text-[16px] border-2 border-white hover:bg-white/10 transition-all">
+          <button className="group flex justify-center items-center gap-2 h-14 px-8 rounded-full bg-transparent text-white font-semibold text-[16px] border-2 border-white hover:bg-white/10 transition-all w-full sm:w-auto">
             <span>Talk to an Engineer</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
