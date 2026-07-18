@@ -302,7 +302,7 @@ export const MachineManagementView: React.FC = () => {
               style={{
                 height: 32,
                 padding: '0 12px',
-                borderRadius: 0,
+                borderRadius: 'var(--radius-sm)',
                 border: '1px solid',
                 borderColor: filterStatus === s ? 'var(--signal)' : 'var(--border-strong)',
                 background: filterStatus === s ? 'var(--signal-dim)' : 'transparent',
@@ -444,7 +444,7 @@ export const MachineManagementView: React.FC = () => {
                     borderColor: p === page ? 'var(--signal)' : 'var(--border-strong)',
                     background: p === page ? 'var(--signal-dim)' : 'transparent',
                     color: p === page ? 'var(--signal)' : 'var(--text-2)',
-                    borderRadius: 0,
+                    borderRadius: 'var(--radius-sm)',
                     fontSize: 12,
                     fontFamily: "'JetBrains Mono', monospace",
                     cursor: 'pointer',

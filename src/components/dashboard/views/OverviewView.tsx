@@ -31,15 +31,12 @@ export const OverviewView: React.FC = () => {
 
       {/* ─── KPI ROW ─── */}
       {/* 1px gap with --border bg = border creates the grid lines */}
-      <div
+      <div className="vg-panel"
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(4, 1fr)',
           gap: 1,
           background: 'var(--border)',
-          border: '1px solid var(--border)',
-          borderRadius: 0,
-          overflow: 'hidden',
         }}
       >
         {kpiData.map((kpi) => {

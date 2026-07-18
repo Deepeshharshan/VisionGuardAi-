@@ -43,7 +43,7 @@ export const LiveMonitoringView: React.FC = () => {
           padding: '10px 16px',
           background: 'var(--bg-1)',
           border: '1px solid var(--border)',
-          borderRadius: 0,
+          borderRadius: 'var(--radius-md)',
         }}
       >
         <span style={{ fontSize: 12, color: 'var(--text-3)', marginRight: 4 }}>Show:</span>
@@ -52,9 +52,9 @@ export const LiveMonitoringView: React.FC = () => {
             key={f}
             onClick={() => setFilter(f)}
             style={{
-              height: 26,
+              height: 28,
               padding: '0 12px',
-              borderRadius: 0,
+              borderRadius: 'var(--radius-sm)',
               border: '1px solid',
               borderColor: filter === f ? 'var(--signal)' : 'var(--border-strong)',
               background: filter === f ? 'var(--signal-dim)' : 'transparent',
@@ -88,15 +88,12 @@ export const LiveMonitoringView: React.FC = () => {
       </div>
 
       {/* ─── CAMERA GRID ─── */}
-      <div
+      <div className="vg-panel"
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(2, 1fr)',
           gap: 1,
           background: 'var(--border)',
-          border: '1px solid var(--border)',
-          borderRadius: 0,
-          overflow: 'hidden',
         }}
       >
         {visible.map((feed) => (
@@ -175,7 +172,7 @@ export const LiveMonitoringView: React.FC = () => {
                         gap: 4,
                         padding: '2px 6px',
                         background: 'var(--red)',
-                        borderRadius: 0,
+                        borderRadius: 'var(--radius-sm) 0 var(--radius-sm) 0',
                       }}
                     >
                       <span className="mono" style={{ fontSize: 10, color: '#fff' }}>Misalignment</span>
@@ -232,7 +229,7 @@ export const LiveMonitoringView: React.FC = () => {
                     color: 'var(--text-3)',
                     background: 'var(--bg-2)',
                     border: '1px solid var(--border)',
-                    borderRadius: 0,
+                    borderRadius: 'var(--radius-sm)',
                     padding: '1px 6px',
                     fontFamily: "'JetBrains Mono', monospace",
                   }}
