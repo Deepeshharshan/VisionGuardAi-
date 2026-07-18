@@ -88,13 +88,8 @@ export const LiveMonitoringView: React.FC = () => {
       </div>
 
       {/* ─── CAMERA GRID ─── */}
-      <div className="vg-panel"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(2, 1fr)',
-          gap: 1,
-          background: 'var(--border)',
-        }}
+      <div 
+        className="vg-panel grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[var(--border)]"
       >
         {visible.map((feed) => (
           <div key={feed.id} style={{ background: 'var(--bg-1)', display: 'flex', flexDirection: 'column' }}>

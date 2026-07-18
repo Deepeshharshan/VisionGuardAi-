@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search } from 'lucide-react';
+import { Search, Menu } from 'lucide-react';
 import type { DashboardViewType } from './Sidebar';
 
 const viewLabels: Record<DashboardViewType, string> = {
@@ -13,6 +13,7 @@ const viewLabels: Record<DashboardViewType, string> = {
 
 interface HeaderProps {
   activeView: DashboardViewType;
+  setMobileMenuOpen?: (open: boolean) => void;
 }
 
 /**
@@ -20,28 +21,22 @@ interface HeaderProps {
  * Left: breadcrumb (VisionGuard / Current page).
  * Right: ⌘K search + system-status pill.
  */
-export const Header: React.FC<HeaderProps> = ({ activeView }) => {
+export const Header: React.FC<HeaderProps> = ({ activeView, setMobileMenuOpen }) => {
   return (
-    <header
-      style={{
-        height: 52,
-        flexShrink: 0,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '0 24px',
-        background: 'var(--bg-0)',
-        borderBottom: '1px solid var(--border)',
-        position: 'sticky',
-        top: 0,
-        zIndex: 10,
-      }}
-    >
+    <header className="flex-shrink-0 flex items-center justify-between px-4 md:px-6 h-[52px] bg-[var(--bg-0)] border-b border-[var(--border)] sticky top-0 z-10">
       {/* Breadcrumb */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-        <span style={{ fontSize: 13, color: 'var(--text-3)' }}>VisionGuard</span>
-        <span style={{ fontSize: 13, color: 'var(--border-strong)' }}>/</span>
-        <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-1)' }}>
+      <div className="flex items-center gap-2">
+        {setMobileMenuOpen && (
+          <button 
+            className="md:hidden text-[var(--text-1)] p-1 mr-2"
+            onClick={() => setMobileMenuOpen(true)}
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+        )}
+        <span className="text-[13px] text-[var(--text-3)] hidden sm:inline">VisionGuard</span>
+        <span className="text-[13px] text-[var(--border-strong)] hidden sm:inline">/</span>
+        <span className="text-[13px] font-medium text-[var(--text-1)]">
           {viewLabels[activeView]}
         </span>
       </div>

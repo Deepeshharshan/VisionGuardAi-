@@ -26,7 +26,7 @@ export const ReportsView: React.FC = () => {
         </p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: 24, alignItems: 'start' }}>
+      <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6 items-start">
 
         {/* ─── LEFT COLUMN ─── */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>

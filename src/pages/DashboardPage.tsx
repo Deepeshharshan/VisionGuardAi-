@@ -11,22 +11,20 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 const DashboardPage: React.FC = () => {
   const [activeView, setActiveView] = useState<DashboardViewType>('overview');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        height: '100vh',
-        background: 'var(--bg-0)',
-        fontFamily: "'Inter', system-ui, sans-serif",
-        color: 'var(--text-1)',
-        overflow: 'hidden',
-      }}
-    >
-      <Sidebar activeView={activeView} setActiveView={setActiveView} />
+    <div className="flex h-screen bg-[var(--bg-0)] font-sans text-[var(--text-1)] overflow-hidden">
+      
+      <Sidebar 
+        activeView={activeView} 
+        setActiveView={setActiveView} 
+        mobileMenuOpen={mobileMenuOpen}
+        setMobileMenuOpen={setMobileMenuOpen}
+      />
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, overflow: 'hidden' }}>
-        <Header activeView={activeView} />
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <Header activeView={activeView} setMobileMenuOpen={setMobileMenuOpen} />
 
         <main style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden' }}>
           <div className="enterprise-container" style={{ paddingTop: 32, paddingBottom: 48 }}>

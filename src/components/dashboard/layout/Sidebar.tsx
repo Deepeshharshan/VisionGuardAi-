@@ -1,12 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { LogOut } from 'lucide-react';
+import { LogOut, X } from 'lucide-react';
 
 export type DashboardViewType = 'overview' | 'live' | 'machines' | 'insights' | 'reports' | 'settings';
 
 interface SidebarProps {
   activeView: DashboardViewType;
   setActiveView: (view: DashboardViewType) => void;
+  mobileMenuOpen?: boolean;
+  setMobileMenuOpen?: (open: boolean) => void;
 }
 
 const navItems: { id: DashboardViewType; label: string; badge?: number }[] = [
@@ -24,22 +26,22 @@ const navItems: { id: DashboardViewType; label: string; badge?: number }[] = [
  * Active nav: 2px --signal left edge + --bg-2 background.
  * Badge counts: JetBrains Mono pill in --signal at 15% opacity.
  */
-export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, mobileMenuOpen, setMobileMenuOpen }) => {
   return (
-    <aside
-      style={{
-        width: 220,
-        flexShrink: 0,
-        display: 'flex',
-        flexDirection: 'column',
-        background: 'var(--bg-1)',
-        borderRight: '1px solid var(--border)',
-        height: '100vh',
-        position: 'sticky',
-        top: 0,
-        zIndex: 20,
-      }}
-    >
+    <>
+      {/* Mobile Overlay */}
+      {mobileMenuOpen && (
+        <div 
+          className="md:hidden fixed inset-0 bg-black/50 z-40 backdrop-blur-sm"
+          onClick={() => setMobileMenuOpen && setMobileMenuOpen(false)}
+        />
+      )}
+      
+      <aside
+        className={`fixed md:relative top-0 bottom-0 left-0 w-[220px] shrink-0 flex flex-col bg-[var(--bg-1)] border-r border-[var(--border)] z-50 transition-transform duration-300 md:translate-x-0 ${
+          mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
       {/* Brand mark */}
       <div style={{ padding: '20px 20px 16px', borderBottom: '1px solid var(--border)' }}>
         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
@@ -77,7 +79,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView }) =
           return (
             <button
               key={item.id}
-              onClick={() => setActiveView(item.id)}
+              onClick={() => {
+                setActiveView(item.id);
+                if (setMobileMenuOpen) setMobileMenuOpen(false);
+              }}
               style={{
                 width: '100%',
                 display: 'flex',
@@ -176,6 +181,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView }) =
           </Link>
         </div>
       </div>
-    </aside>
+      </aside>
+    </>
   );
 };

@@ -31,13 +31,8 @@ export const OverviewView: React.FC = () => {
 
       {/* ─── KPI ROW ─── */}
       {/* 1px gap with --border bg = border creates the grid lines */}
-      <div className="vg-panel"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
-          gap: 1,
-          background: 'var(--border)',
-        }}
+      <div 
+        className="vg-panel grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[1px] bg-[var(--border)]"
       >
         {kpiData.map((kpi) => {
           const deltaColor =
@@ -64,7 +59,7 @@ export const OverviewView: React.FC = () => {
       </div>
 
       {/* ─── TWO-COLUMN ROW ─── */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
         {/* AI Predictive Insights */}
         <div className="vg-panel">
