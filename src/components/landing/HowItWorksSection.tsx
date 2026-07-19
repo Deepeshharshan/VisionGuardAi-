@@ -1,152 +1,116 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Video, Brain, ScanSearch, Bell } from 'lucide-react';
-import { HOW_IT_WORKS_STEPS } from '@/constants';
 
-const iconMap: Record<string, React.FC<{ className?: string }>> = {
-  Video,
-  Brain,
-  ScanSearch,
-  Bell
-};
+gsap.registerPlugin(ScrollTrigger);
+
+const pipelineSteps = [
+  {
+    id: 'raw-stream',
+    title: 'Raw Camera Stream',
+    desc: 'Ingesting 4K feeds directly from the factory floor.',
+    icon: <Video className="w-12 h-12 text-blue-400" />,
+    color: 'from-blue-500/20 to-blue-900/20',
+  },
+  {
+    id: 'ai-model',
+    title: 'AI Analysis Model',
+    desc: 'Processing spatial data through our proprietary neural engine.',
+    icon: <Brain className="w-12 h-12 text-purple-400" />,
+    color: 'from-purple-500/20 to-purple-900/20',
+  },
+  {
+    id: 'target-detection',
+    title: 'Target Detection Box',
+    desc: 'Identifying anomalies with 99.8% precision.',
+    icon: <ScanSearch className="w-12 h-12 text-cyan-400" />,
+    color: 'from-cyan-500/20 to-cyan-900/20',
+  },
+  {
+    id: 'threat-alert',
+    title: 'System Threat Alert',
+    desc: 'Dispatching critical telemetry to the enterprise command center.',
+    icon: <Bell className="w-12 h-12 text-red-400" />,
+    color: 'from-red-500/20 to-red-900/20',
+  }
+];
 
 export const HowItWorksSection: React.FC = () => {
-  const [activeStep, setActiveStep] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!containerRef.current || !trackRef.current) return;
+
+    const sections = gsap.utils.toArray('.pipeline-step') as HTMLElement[];
+    
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: containerRef.current,
+        pin: true,
+        scrub: 1,
+        start: "top top",
+        end: () => "+=" + trackRef.current!.offsetWidth,
+      }
+    });
+
+    tl.to(sections, {
+      xPercent: -100 * (sections.length - 1),
+      ease: "none",
+    });
+
+    return () => {
+      tl.kill();
+      ScrollTrigger.getAll().forEach(t => t.kill());
+    };
+  }, []);
 
   return (
-    <section id="how-it-works" className="py-24 lg:py-40 bg-[var(--bg-0)] border-b border-[var(--border)]" aria-labelledby="how-heading">
-      <div className="enterprise-container">
-        
-        <div className="text-center max-w-3xl mx-auto mb-20">
-          <motion.h2 
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            id="how-heading"
-            className="text-section-title mb-6"
+    <section ref={containerRef} className="h-screen w-full bg-black overflow-hidden relative" aria-label="Data Pipeline">
+      
+      {/* Absolute fixed intro for the pinned section */}
+      <div className="absolute top-12 left-12 md:top-24 md:left-24 z-20 pointer-events-none">
+        <h2 className="text-[24px] md:text-[40px] font-bold text-white tracking-tight uppercase">The Data Pipeline</h2>
+        <div className="w-12 h-1 bg-cyan-400 mt-2"></div>
+      </div>
+
+      <div ref={trackRef} className="flex h-full w-[400vw]">
+        {pipelineSteps.map((step, index) => (
+          <div 
+            key={step.id} 
+            className="pipeline-step w-screen h-full flex items-center justify-center relative overflow-hidden shrink-0"
           >
-            How VisionGuard Works
-          </motion.h2>
-          <motion.p 
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ delay: 0.1 }}
-            className="text-desc"
-          >
-            A powerful AI vision system that adapts to how your factory works. Connect once, detect everywhere.
-          </motion.p>
-        </div>
+            {/* Background gradient */}
+            <div className={`absolute inset-0 bg-gradient-to-br ${step.color} opacity-40 mix-blend-screen`}></div>
+            
+            {/* Geometric clipping mask element */}
+            <div className="absolute inset-0 flex items-center justify-center opacity-10">
+               <div className="w-[80vw] h-[80vw] md:w-[40vw] md:h-[40vw] border-[1px] border-white rounded-full animate-[spin_40s_linear_infinite]" style={{ clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)' }}></div>
+            </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-center">
-          
-          {/* Left: Interactive Timeline Steps */}
-          <div className="lg:col-span-5 flex flex-col gap-4">
-            {HOW_IT_WORKS_STEPS.map((step, index) => {
-              const Icon = iconMap[step.icon] || Video;
-              const isActive = activeStep === index;
+            <div className="relative z-10 flex flex-col items-center text-center max-w-2xl px-6">
+              <div className="w-24 h-24 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md flex items-center justify-center shadow-[0_0_60px_rgba(255,255,255,0.1)] mb-8">
+                {step.icon}
+              </div>
               
-              return (
-                <button
-                  key={step.title}
-                  onClick={() => setActiveStep(index)}
-                  className={`flex items-start gap-6 p-6 rounded-2xl transition-all text-left border ${
-                    isActive 
-                      ? 'bg-[var(--bg-1)] border-[var(--border-strong)] shadow-sm' 
-                      : 'bg-transparent border-transparent hover:bg-[var(--bg-1)]/50'
-                  }`}
-                >
-                  <div className={`w-12 h-12 shrink-0 rounded-full flex items-center justify-center transition-colors ${
-                    isActive ? 'bg-[var(--text-1)] text-white shadow-md' : 'bg-[var(--bg-2)] text-[var(--text-3)]'
-                  }`}>
-                    <Icon className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h4 className={`text-[18px] font-bold mb-2 transition-colors ${isActive ? 'text-[var(--text-1)]' : 'text-[var(--text-2)]'}`}>
-                      {step.title}
-                    </h4>
-                    <p className={`text-[15px] transition-colors ${isActive ? 'text-[var(--text-2)]' : 'text-[var(--text-3)]'}`}>
-                      {step.description}
-                    </p>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-          
-          {/* Right: Dynamic Visual representation */}
-          <div className="lg:col-span-7 relative h-[400px] md:h-[500px]">
-            <div className="absolute inset-0 bg-[var(--bg-1)] rounded-[32px] border border-[var(--border)] overflow-hidden shadow-2xl flex items-center justify-center">
+              <div className="text-[14px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-4">Phase {index + 1}</div>
               
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeStep}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 1.05 }}
-                  transition={{ duration: 0.4, ease: "easeInOut" }}
-                  className="w-full h-full p-8 flex flex-col items-center justify-center relative"
-                >
-                  {/* Dynamic Abstract Visual Based on Step */}
-                  <div className="absolute inset-0 bg-mesh-gradient opacity-50 z-0"></div>
-                  
-                  <div className="z-10 bg-white/80 backdrop-blur-md border border-[var(--border)] rounded-2xl p-8 shadow-lg max-w-sm w-full flex flex-col items-center text-center">
-                    
-                    {activeStep === 0 && (
-                       <>
-                         <Video className="w-16 h-16 text-blue-500 mb-6" />
-                         <h5 className="font-bold text-[18px] mb-2">Connecting Streams...</h5>
-                         <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                           <motion.div initial={{ width: 0 }} animate={{ width: "100%" }} transition={{ duration: 2, repeat: Infinity }} className="h-full bg-blue-500 rounded-full" />
-                         </div>
-                       </>
-                    )}
-                    
-                    {activeStep === 1 && (
-                       <>
-                         <Brain className="w-16 h-16 text-purple-500 mb-6" />
-                         <h5 className="font-bold text-[18px] mb-2">Processing via Edge AI</h5>
-                         <div className="flex gap-2 justify-center">
-                           {[1,2,3,4].map(i => (
-                             <motion.div key={i} animate={{ height: [10, 40, 10] }} transition={{ duration: 1, repeat: Infinity, delay: i * 0.1 }} className="w-2 bg-purple-500 rounded-full" />
-                           ))}
-                         </div>
-                       </>
-                    )}
+              <h3 className="text-[40px] md:text-[64px] font-extrabold text-white leading-tight tracking-tighter mb-6 drop-shadow-2xl">
+                {step.title}
+              </h3>
+              
+              <p className="text-xl text-gray-300">
+                {step.desc}
+              </p>
 
-                    {activeStep === 2 && (
-                       <>
-                         <ScanSearch className="w-16 h-16 text-emerald-500 mb-6" />
-                         <h5 className="font-bold text-[18px] mb-2">Analyzing Frames</h5>
-                         <div className="relative w-full h-32 bg-gray-50 border border-gray-100 rounded-lg flex items-center justify-center">
-                            <motion.div 
-                              animate={{ top: ['0%', '100%', '0%'] }} 
-                              transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                              className="absolute left-0 right-0 h-0.5 bg-emerald-500/50 shadow-[0_0_8px_rgba(16,185,129,0.8)]" 
-                            />
-                            <span className="text-[12px] font-bold text-emerald-600">99.8% CONFIDENCE</span>
-                         </div>
-                       </>
-                    )}
-
-                    {activeStep === 3 && (
-                       <>
-                         <Bell className="w-16 h-16 text-amber-500 mb-6" />
-                         <h5 className="font-bold text-[18px] mb-2">Alert Triggered</h5>
-                         <div className="bg-amber-50 border border-amber-200 text-amber-700 px-4 py-2 rounded-lg text-[14px] font-medium w-full shadow-sm">
-                           Slack: Defect detected on Line 4
-                         </div>
-                       </>
-                    )}
-                    
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-              
+              {/* Connecting line to next step (hide on last) */}
+              {index !== pipelineSteps.length - 1 && (
+                <div className="absolute right-[-20vw] top-1/2 -translate-y-1/2 w-[40vw] h-[2px] bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent pointer-events-none hidden md:block"></div>
+              )}
             </div>
           </div>
-          
-        </div>
+        ))}
       </div>
     </section>
   );

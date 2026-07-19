@@ -1,223 +1,122 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { ScanSearch, Activity, ShieldCheck, ArrowRight } from 'lucide-react';
+import React, { useRef, useEffect } from 'react';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 
 export const KeyBenefitsSection: React.FC = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Mouse coordinates for the X-Ray mask
+  const mouseX = useMotionValue(-1000);
+  const mouseY = useMotionValue(-1000);
+
+  // Smooth out the mask movement
+  const smoothX = useSpring(mouseX, { damping: 40, stiffness: 300 });
+  const smoothY = useSpring(mouseY, { damping: 40, stiffness: 300 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        mouseX.set(e.clientX - rect.left);
+        mouseY.set(e.clientY - rect.top);
+      }
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [mouseX, mouseY]);
+
   return (
-    <div id="benefits" className="bg-[var(--bg-0)] flex flex-col">
+    <section ref={containerRef} id="benefits" className="relative h-screen bg-[#050505] overflow-hidden flex items-center justify-center cursor-crosshair">
       
-      {/* Benefit 1: Real-time Inference (Heroic Left-Align + Right Abstract) */}
-      <section className="py-24 lg:py-32 border-b border-[var(--border)] overflow-hidden">
-        <div className="enterprise-container">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              className="max-w-xl"
-            >
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-12 h-12 rounded-xl bg-[var(--bg-1)] border border-[var(--border)] flex items-center justify-center">
-                  <ScanSearch className="w-6 h-6 text-[var(--text-1)]" />
-                </div>
-                <span className="text-caption text-[var(--text-2)]">Real-Time Inference</span>
-              </div>
-              
-              <h2 className="text-section-title mb-6">Spot micro-defects instantly.</h2>
-              <p className="text-desc mb-10">
-                Our neural networks process streams directly at the edge. Identify scratches, dimensional errors, and packaging faults down to 0.1mm before they leave the assembly line.
-              </p>
-              
-              <a href="#" className="inline-flex items-center text-[15px] font-semibold text-[var(--text-1)] group hover:text-[var(--text-2)] transition-colors">
-                Explore Vision Capabilities
-                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-              </a>
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, margin: "-100px" }}
-              className="relative w-full aspect-square md:aspect-[4/3] bg-gradient-to-br from-blue-50 to-indigo-50 rounded-[32px] border border-[var(--border)] shadow-xl overflow-hidden flex items-center justify-center p-8"
-            >
-              <div className="w-full h-full bg-white/50 backdrop-blur-sm rounded-[24px] border border-white flex flex-col">
-                <div className="h-12 border-b border-black/5 flex items-center px-6 gap-2">
-                  <div className="w-3 h-3 rounded-full bg-red-400"></div>
-                  <div className="w-3 h-3 rounded-full bg-amber-400"></div>
-                  <div className="w-3 h-3 rounded-full bg-green-400"></div>
-                </div>
-                <div className="flex-1 relative flex items-center justify-center p-4">
-                  {/* Image feed mockup */}
-                  <div className="relative w-full h-full rounded-xl overflow-hidden bg-gray-900 border border-black/10 shadow-inner">
-                    {/* Valid CSS placeholder instead of broken image */}
-                    <div className="w-full h-full bg-slate-800 opacity-80 mix-blend-luminosity">
-                      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTQwIDBIMFY0MGg0MFYweiIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0wIDAuNWg0MCIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDUpIi8+PHBhdGggZD0iTTAuNSAwdi00MCIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDUpIi8+PC9zdmc+')]"></div>
-                    </div>
-                    
-                    {/* Abstract bounding box */}
-                    <div className="absolute top-[20%] left-[30%] border-[2px] border-red-500 bg-red-500/20 w-40 h-40 rounded shadow-[0_0_15px_rgba(239,68,68,0.5)] flex items-center justify-center">
-                      <div className="w-2 h-2 rounded-full bg-red-500 animate-ping"></div>
-                      <div className="absolute -top-6 left-0 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
-                        SURFACE_SCRATCH 99.8%
-                      </div>
-                    </div>
-                    
-                    {/* UI Overlay */}
-                    <div className="absolute bottom-4 left-4 bg-black/60 backdrop-blur-md rounded border border-white/10 px-3 py-2">
-                      <div className="text-[10px] text-gray-400 font-mono mb-1">CAM_04_ASSEMBLY</div>
-                      <div className="flex gap-4">
-                        <div className="text-white text-xs font-semibold">FPS: <span className="text-green-400">60</span></div>
-                        <div className="text-white text-xs font-semibold">LATENCY: <span className="text-green-400">12ms</span></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+      {/* Intro Overlay Text */}
+      <div className="absolute top-24 left-8 md:left-24 z-30 pointer-events-none">
+        <h2 className="text-[32px] md:text-[56px] font-bold text-white tracking-tighter leading-tight drop-shadow-2xl">
+          Predictive <br/><span className="text-red-500">Anomaly Diagnostics</span>
+        </h2>
+        <p className="text-gray-400 text-lg max-w-sm mt-4">Move your cursor to X-ray the mechanical assembly and uncover micro-vibrations before catastrophic failure.</p>
+      </div>
 
-      {/* Benefit 2: Predictive Maintenance (Centered massive visual) */}
-      <section className="py-24 lg:py-32 bg-[var(--bg-1)] border-b border-[var(--border)] overflow-hidden">
-        <div className="enterprise-container text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            className="max-w-3xl mx-auto mb-16"
-          >
-            <div className="flex items-center justify-center gap-3 mb-8">
-              <div className="w-12 h-12 rounded-xl bg-white border border-[var(--border)] flex items-center justify-center shadow-sm">
-                <Activity className="w-6 h-6 text-[var(--text-1)]" />
-              </div>
-              <span className="text-caption text-[var(--text-2)]">Predictive Maintenance</span>
-            </div>
-            <h2 className="text-section-title mb-6">Predict failures before they happen.</h2>
-            <p className="text-desc max-w-2xl mx-auto">
-              VisionGuard constantly analyzes mechanical rhythms, thermal signatures, and vibrations. Receive intelligent alerts weeks before a machine halts production.
-            </p>
-          </motion.div>
+      {/* BASE LAYER: Normal Machine Assembly (Blueprint style) */}
+      <div className="absolute inset-0 flex items-center justify-center p-12">
+        <div className="relative w-full max-w-4xl aspect-[16/9] border border-white/10 rounded-[40px] bg-white/5 backdrop-blur-sm overflow-hidden flex items-center justify-center">
           
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            className="relative w-full max-w-5xl mx-auto aspect-[21/9] bg-white rounded-[32px] border border-[var(--border)] shadow-[0_4px_24px_rgba(0,0,0,0.04)] overflow-hidden"
-          >
-             {/* Abstract Grid */}
-             <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTQwIDBIMFY0MGg0MFYweiIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0wIDAuNWg0MCIgc3Ryb2tlPSJyZ2JhKDAsMCwwLDAuMDQpIi8+PHBhdGggZD0iTTAuNSAwdi00MCIgc3Ryb2tlPSJyZ2JhKDAsMCwwLDAuMDQpIi8+PC9zdmc+')] opacity-100" />
-             
-             {/* Modern Line Chart */}
-             <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 1000 300">
-               <defs>
-                 <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-                   <stop offset="0%" stopColor="var(--text-1)" stopOpacity="0.1" />
-                   <stop offset="100%" stopColor="var(--text-1)" stopOpacity="0" />
-                 </linearGradient>
-               </defs>
-               
-               {/* Threshold Line */}
-               <line x1="0" y1="80" x2="1000" y2="80" stroke="var(--red)" strokeWidth="2" strokeDasharray="6 6" opacity="0.4" />
-               <text x="16" y="70" fill="var(--red)" fontSize="12" fontWeight="bold" opacity="0.6">CRITICAL THRESHOLD</text>
-               
-               {/* Data Path Area */}
-               <path d="M 0 250 C 100 220, 200 240, 300 200 C 400 160, 500 210, 600 150 C 700 90, 800 120, 900 50 L 1000 40 L 1000 300 L 0 300 Z" fill="url(#chartGradient)" />
-               
-               {/* Data Path Line */}
-               <path d="M 0 250 C 100 220, 200 240, 300 200 C 400 160, 500 210, 600 150 C 700 90, 800 120, 900 50 L 1000 40" fill="none" stroke="var(--text-1)" strokeWidth="3" />
-               
-               {/* Anomaly Marker */}
-               <circle cx="900" cy="50" r="6" fill="var(--red)" className="origin-center animate-pulse" />
-               <circle cx="900" cy="50" r="16" fill="var(--red)" opacity="0.2" className="origin-center animate-ping" />
-             </svg>
-             
-             {/* Alert tooltip UI */}
-             <div className="absolute top-[20%] right-[15%] bg-white p-4 rounded-xl shadow-lg border border-[var(--border)] text-left z-10 min-w-[200px]">
-               <div className="flex justify-between items-center mb-2">
-                 <div className="text-[11px] font-bold text-red-600 bg-red-50 px-2 py-1 rounded">ANOMALY DETECTED</div>
-                 <span className="text-[11px] text-[var(--text-3)] font-mono">99%</span>
-               </div>
-               <div className="text-[14px] font-semibold text-[var(--text-1)]">Motor #4 Alignment</div>
-               <div className="text-[12px] text-[var(--text-2)] mt-1">Expected failure in 4h</div>
-             </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Benefit 3: Workplace Safety (Offset Text over Image) */}
-      <section className="pt-24 lg:pt-32 pb-16 lg:pb-24 bg-[var(--text-1)] text-white overflow-hidden relative">
-        
-        <div className="enterprise-container relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-            
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              className="max-w-xl"
-            >
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center border border-white/10">
-                  <ShieldCheck className="w-6 h-6 text-white" />
-                </div>
-                <span className="text-caption text-gray-400">Workplace Safety</span>
-              </div>
-              
-              <h2 className="text-section-title text-white mb-6">Automate compliance and safety.</h2>
-              <p className="text-desc text-gray-300 mb-10">
-                Instantly detect PPE violations, unauthorized access to restricted zones, and hazardous behavior without human monitoring. Protect your workforce autonomously.
-              </p>
-              
-              <a href="#" className="inline-flex items-center text-[15px] font-semibold text-white group hover:text-gray-300 transition-colors">
-                View Safety Controls
-                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-              </a>
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, margin: "-100px" }}
-              className="relative w-full aspect-[4/3] rounded-[32px] overflow-hidden border border-white/10"
-            >
-              <motion.div 
-                animate={{ 
-                  backgroundPosition: ['0% 0%', '100% 100%', '0% 100%', '100% 0%', '0% 0%'],
-                }}
-                transition={{ 
-                  duration: 20,
-                  repeat: Infinity,
-                  ease: "linear"
-                }}
-                className="absolute inset-0 opacity-40 mix-blend-luminosity" 
-                style={{
-                  backgroundImage: 'radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.4) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.4) 0%, transparent 50%)',
-                  backgroundSize: '200% 200%'
-                }}
+          <svg viewBox="0 0 800 400" className="w-full h-full opacity-60" stroke="#ffffff" strokeWidth="2" fill="none">
+            {/* Abstract Mechanical Gear / Motor base */}
+            <circle cx="400" cy="200" r="150" strokeDasharray="10 10" />
+            <circle cx="400" cy="200" r="100" />
+            <circle cx="400" cy="200" r="50" fill="rgba(255,255,255,0.1)" />
+            <rect x="250" y="180" width="300" height="40" rx="10" />
+            {Array.from({ length: 12 }).map((_, i) => (
+              <line 
+                key={i} 
+                x1="400" y1="50" x2="400" y2="100" 
+                transform={`rotate(${i * 30} 400 200)`}
               />
-              
-              {/* Natural embedded alert card */}
-              <div className="absolute bottom-8 right-8 bg-black/60 backdrop-blur-xl border border-white/10 p-5 rounded-2xl max-w-sm shadow-2xl">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-full bg-red-500/20 border border-red-500/50 flex items-center justify-center shrink-0">
-                    <ShieldCheck className="w-5 h-5 text-red-500" />
-                  </div>
-                  <div>
-                    <h4 className="text-[14px] font-semibold text-white mb-1">PPE Violation Detected</h4>
-                    <p className="text-[13px] text-gray-300 leading-relaxed">
-                      Missing safety helmet in Zone B restricted area. Automated alert dispatched to floor manager.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-            
+            ))}
+          </svg>
+
+          {/* Normal status UI */}
+          <div className="absolute bottom-8 right-8 bg-black/80 px-4 py-2 rounded-lg border border-white/20 text-white font-mono text-sm shadow-2xl">
+            <span className="text-green-400">●</span> SYSTEM_NOMINAL : 24°C
           </div>
         </div>
-      </section>
+      </div>
 
-    </div>
+      {/* X-RAY REVEAL LAYER: The Mechanical Anomaly (Heatmap + Vibrations) */}
+      <motion.div 
+        className="absolute inset-0 flex items-center justify-center p-12 pointer-events-none"
+        style={{
+          WebkitMaskImage: `radial-gradient(300px circle at calc(${smoothX}px) calc(${smoothY}px), black 40%, transparent 100%)`,
+          maskImage: `radial-gradient(300px circle at calc(${smoothX}px) calc(${smoothY}px), black 40%, transparent 100%)`,
+        }}
+      >
+        <div className="relative w-full max-w-4xl aspect-[16/9] border border-red-500/50 rounded-[40px] bg-red-950/40 backdrop-blur-md overflow-hidden flex items-center justify-center">
+          
+          <motion.svg 
+            viewBox="0 0 800 400" 
+            className="w-full h-full drop-shadow-[0_0_30px_rgba(239,68,68,0.8)]" 
+            stroke="#ef4444" 
+            strokeWidth="4" 
+            fill="none"
+            animate={{ x: [-2, 2, -1, 3, -2], y: [-1, 2, -2, 1, -1] }}
+            transition={{ repeat: Infinity, duration: 0.1, ease: "linear" }}
+          >
+            {/* The same shape, but styled as a critical heat map/anomaly */}
+            <circle cx="400" cy="200" r="150" strokeDasharray="2 10" opacity="0.5" />
+            <circle cx="400" cy="200" r="100" stroke="#f97316" strokeWidth="6" />
+            <circle cx="400" cy="200" r="50" fill="rgba(239,68,68,0.4)" className="animate-pulse" />
+            
+            {/* A crack / stress fracture SVG path */}
+            <path d="M400 150 L420 170 L410 190 L430 210 L390 230" stroke="#ffffff" strokeWidth="3" />
+            
+            <rect x="250" y="180" width="300" height="40" rx="10" stroke="#f97316" />
+            {Array.from({ length: 12 }).map((_, i) => (
+              <line 
+                key={i} 
+                x1="400" y1="50" x2="400" y2="100" 
+                transform={`rotate(${i * 30} 400 200)`}
+                stroke={i % 3 === 0 ? "#ffffff" : "#ef4444"}
+              />
+            ))}
+          </motion.svg>
+
+          {/* Critical alert UI */}
+          <motion.div 
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-500 text-black px-6 py-3 rounded-lg font-bold uppercase tracking-widest text-lg shadow-[0_0_50px_rgba(239,68,68,1)]"
+            animate={{ scale: [1, 1.1, 1] }}
+            transition={{ repeat: Infinity, duration: 0.5 }}
+          >
+            Micro-Fracture Detected
+          </motion.div>
+
+          {/* Telemetry data */}
+          <div className="absolute bottom-8 right-8 bg-red-950 px-4 py-2 rounded-lg border border-red-500 text-white font-mono text-sm shadow-2xl">
+            <span className="text-red-500 animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"></span>
+            <span className="text-red-500 relative">⚠</span> THERMAL OVERLOAD : 142°C
+          </div>
+
+        </div>
+      </motion.div>
+
+    </section>
   );
 };

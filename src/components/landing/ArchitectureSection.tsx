@@ -1,134 +1,145 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Server, Database, Activity, Code } from 'lucide-react';
+import React, { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export const ArchitectureSection: React.FC = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
+  const nodesRef = useRef<SVGCircleElement[]>([]);
+  const linesRef = useRef<SVGPathElement[]>([]);
+
+  useEffect(() => {
+    if (!sectionRef.current || !svgRef.current) return;
+
+    // Set initial states for SVG drawing
+    gsap.set(linesRef.current, { strokeDasharray: 1000, strokeDashoffset: 1000 });
+    gsap.set(nodesRef.current, { scale: 0, transformOrigin: "50% 50%", opacity: 0 });
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: 'top top',
+        end: '+=150%',
+        pin: true,
+        scrub: 1,
+      }
+    });
+
+    // 1. Draw the factory blueprint structure
+    tl.to(linesRef.current, {
+      strokeDashoffset: 0,
+      duration: 2,
+      ease: 'none',
+      stagger: 0.2
+    })
+    // 2. Pop in the AI nodes (cameras/sensors)
+    .to(nodesRef.current, {
+      scale: 1,
+      opacity: 1,
+      duration: 0.5,
+      ease: 'back.out(2)',
+      stagger: 0.1
+    }, "-=1")
+    // 3. Pulse the nodes to show data flow
+    .to(nodesRef.current, {
+      fill: '#22d3ee', // Cyan pulse
+      boxShadow: '0 0 20px #22d3ee',
+      duration: 0.3,
+      stagger: 0.05,
+      yoyo: true,
+      repeat: 1
+    });
+
+    return () => {
+      tl.kill();
+      ScrollTrigger.getAll().forEach(t => t.kill());
+    };
+  }, []);
+
   return (
-    <section id="architecture" className="py-24 lg:py-32 bg-[var(--text-1)] text-white relative overflow-hidden" aria-labelledby="arch-heading">
+    <section ref={sectionRef} className="relative h-screen bg-black overflow-hidden flex flex-col items-center justify-center" aria-label="Digital Twin Architecture">
+      {/* Background ambient lighting */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent opacity-50"></div>
       
-      {/* Background Grid Pattern */}
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDUpIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPjxwYXRoIGQ9Ik00MCAwSDBWMG0wIDQwaDQwdjQwIi8+PC9nPjwvc3ZnPg==')] opacity-50"></div>
-      
-      {/* Glowing Orbs */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-900/10 rounded-full blur-[150px] mix-blend-screen pointer-events-none"></div>
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-900/10 rounded-full blur-[150px] mix-blend-screen pointer-events-none"></div>
+      {/* Text Overlay */}
+      <div className="absolute top-16 left-8 md:top-24 md:left-24 z-20 pointer-events-none">
+        <h2 className="text-[32px] md:text-[56px] font-bold text-white tracking-tighter leading-tight drop-shadow-2xl">
+          The Factory <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Digital Twin</span>
+        </h2>
+        <p className="text-gray-400 text-lg md:text-xl max-w-md mt-4">Scroll to map out the spatial architecture. Every camera becomes an active AI node.</p>
+      </div>
 
-      <div className="enterprise-container relative z-10">
-        
-        <div className="text-center max-w-3xl mx-auto mb-20">
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 mb-6"
-          >
-            <Code className="w-4 h-4 text-purple-400" />
-            <span className="text-[12px] font-semibold tracking-[0.1em] uppercase text-white/80">Developer Ready</span>
-          </motion.div>
-          <motion.h2 
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            id="arch-heading"
-            className="text-section-title text-white mb-6"
-          >
-            Edge architecture designed for zero latency.
-          </motion.h2>
-          <motion.p 
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ delay: 0.1 }}
-            className="text-desc text-white/60 max-w-2xl mx-auto"
-          >
-            Deploy models locally on the factory floor while managing your entire fleet from the cloud. Data stays secure, inferences happen in milliseconds.
-          </motion.p>
-        </div>
+      {/* Massive SVG Blueprint */}
+      <div className="relative w-full h-full max-w-7xl mx-auto flex items-center justify-center p-4 pt-32">
+        <svg 
+          ref={svgRef}
+          viewBox="0 0 1000 600" 
+          className="w-full h-auto max-h-[80vh] drop-shadow-[0_0_15px_rgba(34,211,238,0.2)]"
+          fill="none" 
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          {/* Blueprint Grid Lines (Static) */}
+          <g opacity="0.1" stroke="#ffffff" strokeWidth="1">
+            {Array.from({ length: 20 }).map((_, i) => (
+              <line key={`v-${i}`} x1={i * 50} y1="0" x2={i * 50} y2="600" />
+            ))}
+            {Array.from({ length: 12 }).map((_, i) => (
+              <line key={`h-${i}`} x1="0" y1={i * 50} x2="1000" y2={i * 50} />
+            ))}
+          </g>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative">
-          
-          {/* Horizontal connection line for desktop */}
-          <div className="hidden lg:block absolute top-16 left-[16%] right-[16%] h-px bg-white/20 border-t border-dashed border-white/20 z-0"></div>
+          {/* Dynamic Factory Structure Paths */}
+          <g stroke="#3b82f6" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" opacity="0.8">
+            <path ref={el => el && linesRef.current.push(el)} d="M100 100 H900 V500 H100 Z" />
+            <path ref={el => el && linesRef.current.push(el)} d="M300 100 V500" />
+            <path ref={el => el && linesRef.current.push(el)} d="M700 100 V500" />
+            <path ref={el => el && linesRef.current.push(el)} d="M100 300 H900" />
+            <path ref={el => el && linesRef.current.push(el)} d="M400 200 H600 V400 H400 Z" stroke="#8b5cf6" />
+            <path ref={el => el && linesRef.current.push(el)} d="M500 200 V400" stroke="#8b5cf6" />
+          </g>
 
-          {/* Edge Layer */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            className="bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm relative z-10 hover:bg-white/10 transition-colors h-full flex flex-col"
-          >
-            <div className="w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-8 shadow-[0_0_20px_rgba(59,130,246,0.1)] shrink-0">
-              <Activity className="w-8 h-8 text-blue-400" />
-            </div>
-            <h3 className="text-[20px] font-bold text-white mb-3">1. Edge Nodes</h3>
-            <p className="text-[15px] text-white/60 mb-8 leading-relaxed">
-              Install our lightweight agent on local IPCs or NVIDIA Jetson devices directly on the factory floor.
-            </p>
-            <div className="rounded-lg bg-black/60 border border-white/5 p-4 shadow-inner mt-auto">
-              <div className="mono text-[13px] text-blue-400">~/edge</div>
-              <div className="mono text-[12px] text-white/40 mt-2">$ vguard start --port 8080</div>
-              <div className="mono text-[12px] text-green-400 mt-1">&gt; Agent running. Latency: 4ms</div>
-            </div>
-          </motion.div>
+          {/* Dynamic Connecting Data Lines */}
+          <g stroke="#22d3ee" strokeWidth="2" strokeDasharray="5,5" opacity="0.6">
+             <path ref={el => el && linesRef.current.push(el)} d="M200 200 L400 200 L450 250" />
+             <path ref={el => el && linesRef.current.push(el)} d="M800 400 L600 400 L550 350" />
+             <path ref={el => el && linesRef.current.push(el)} d="M200 400 L300 300 L400 300" />
+             <path ref={el => el && linesRef.current.push(el)} d="M800 200 L700 300 L600 300" />
+          </g>
 
-          {/* Connect Layer */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ delay: 0.1 }}
-            className="bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm relative z-10 hover:bg-white/10 transition-colors h-full flex flex-col"
-          >
-            <div className="w-16 h-16 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center mb-8 shadow-[0_0_20px_rgba(168,85,247,0.1)] shrink-0">
-              <Server className="w-8 h-8 text-purple-400" />
-            </div>
-            <h3 className="text-[20px] font-bold text-white mb-3">2. Neural Engine</h3>
-            <p className="text-[15px] text-white/60 mb-8 leading-relaxed">
-              Frames are processed locally without internet dependency. Only metadata and critical alerts sync to the cloud.
-            </p>
-            <div className="rounded-lg bg-black/60 border border-white/5 p-4 flex flex-col gap-3 shadow-inner mt-auto">
-              <div className="flex justify-between items-center text-[12px] mono">
-                <span className="text-white/60">TensorRT Pipeline</span>
-                <span className="text-purple-400 font-bold">Active</span>
-              </div>
-              <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-                <div className="w-[85%] h-full bg-purple-500 shadow-[0_0_10px_rgba(168,85,247,0.5)]"></div>
-              </div>
-              <div className="flex justify-between items-center text-[12px] mono mt-1">
-                <span className="text-white/60">GPU Utilization</span>
-                <span className="text-white">85%</span>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Cloud Layer */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ delay: 0.2 }}
-            className="bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm relative z-10 hover:bg-white/10 transition-colors h-full flex flex-col"
-          >
-            <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-8 shadow-[0_0_20px_rgba(16,185,129,0.1)] shrink-0">
-              <Database className="w-8 h-8 text-emerald-400" />
-            </div>
-            <h3 className="text-[20px] font-bold text-white mb-3">3. Central Cloud</h3>
-            <p className="text-[15px] text-white/60 mb-8 leading-relaxed">
-              Monitor thousands of edge devices, deploy new AI models OTA, and integrate via REST/GraphQL APIs.
-            </p>
-            <div className="rounded-lg bg-black/60 border border-white/5 p-4 shadow-inner mt-auto">
-              <div className="mono text-[12px] text-emerald-400 mb-2">POST /api/v2/models</div>
-              <div className="mono text-[11px] text-white/60 leading-relaxed whitespace-pre">
-{`{
-  "fleet": "assembly_b",
-  "version": "v3.1.4-rc"
-}`}
-              </div>
-            </div>
-          </motion.div>
-          
-        </div>
-
+          {/* AI Nodes (Cameras / Sensors) */}
+          {[
+            [100,100], [300,100], [700,100], [900,100],
+            [100,300], [300,300], [700,300], [900,300],
+            [100,500], [300,500], [700,500], [900,500],
+            [200,200], [800,200], [200,400], [800,400],
+            [400,200], [600,200], [400,400], [600,400],
+            [500,200], [500,400], [450,250], [550,350]
+          ].map(([cx, cy], i) => (
+            <g key={`node-${i}`}>
+              <circle 
+                ref={el => el && nodesRef.current.push(el)} 
+                cx={cx} 
+                cy={cy} 
+                r="8" 
+                fill="#ffffff" 
+                className="drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]"
+              />
+              <circle 
+                cx={cx} 
+                cy={cy} 
+                r="16" 
+                fill="none" 
+                stroke="#22d3ee" 
+                strokeWidth="1" 
+                opacity="0.3"
+                className="animate-ping"
+                style={{ animationDuration: `${2 + (i % 3)}s`, animationDelay: `${i * 0.1}s` }}
+              />
+            </g>
+          ))}
+        </svg>
       </div>
     </section>
   );

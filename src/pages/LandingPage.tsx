@@ -2,6 +2,7 @@
 // LandingPage — Enterprise SaaS Landing Page
 // ============================================================
 import React from 'react';
+import { ReactLenis } from 'lenis/react';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { HeroSection } from '@/components/landing/HeroSection';
@@ -21,7 +22,7 @@ import { CTASection } from '@/components/landing/CTASection';
 
 const LandingPage: React.FC = () => {
   return (
-    <>
+    <ReactLenis root>
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50
@@ -76,9 +77,9 @@ const LandingPage: React.FC = () => {
         <CTASection />
       </main>
 
-      {/* 13. Footer */}
+      {/* 15. Footer */}
       <Footer />
-    </>
+    </ReactLenis>
   );
 };
 
