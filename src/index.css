@@ -2,14 +2,23 @@
 
 @layer base {
   :root {
+    /* Legacy Variable Fallbacks for older sections */
+    --bg-0: #000000;
+    --bg-1: #050505;
+    --bg-2: #0a0a0a;
+    --text-1: #ffffff;
+    --text-2: #a1a1aa; /* zinc-400 */
+    --text-3: #52525b; /* zinc-600 */
+    --border: rgba(255,255,255,0.05);
+
     /* Ultra-Premium Minimalist Palette */
     --bg-base: #000000;
     --bg-surface: #0a0a0a;
     --bg-elevated: #111111;
     
     --text-primary: #ffffff;
-    --text-secondary: #a1a1aa; /* zinc-400 */
-    --text-tertiary: #52525b; /* zinc-600 */
+    --text-secondary: #a1a1aa;
+    --text-tertiary: #52525b;
     
     --border-light: rgba(255,255,255,0.05);
     --border-strong: rgba(255,255,255,0.1);

@@ -3,11 +3,11 @@ import { motion } from 'framer-motion';
 
 export const ROISection: React.FC = () => {
   return (
-    <section id="roi" className="pt-32 pb-24 lg:pt-40 lg:pb-32 scroll-mt-24 bg-[var(--text-1)] text-white border-b border-[var(--border)] overflow-hidden">
-      <div className="enterprise-container relative">
+    <section id="roi" className="enterprise-section bg-black text-white overflow-hidden relative">
+      <div className="enterprise-container relative z-10">
         
         {/* Background gradient blob */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-[400px] bg-indigo-600/10 blur-[150px] rounded-full pointer-events-none"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-[400px] bg-emerald-900/20 blur-[150px] rounded-full pointer-events-none"></div>
         
         <div className="relative z-10 flex flex-col items-center text-center">
           
