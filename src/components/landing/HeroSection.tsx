@@ -1,7 +1,6 @@
-import React, { useState, useEffect, Suspense, lazy } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-
-const Spline = lazy(() => import('@splinetool/react-spline'));
+import { AnimatedGradient } from '@/components/ui/animated-gradient';
 
 export const HeroSection: React.FC = () => {
   const [timestamp, setTimestamp] = useState('');
@@ -36,21 +35,19 @@ export const HeroSection: React.FC = () => {
   return (
     <section id="hero" className="relative min-h-screen bg-black overflow-hidden flex items-center pt-24 pb-20" aria-label="Command Center">
       
-      {/* 3D Interactive Spline Background */}
-      <div className="absolute inset-0 z-0 pointer-events-auto overflow-hidden">
-        <Suspense fallback={<div className="w-full h-full bg-black"></div>}>
-          <Spline
-            style={{ width: '100%', height: '100vh' }}
-            scene="https://prod.spline.design/us3ALejTXl6usHZ7/scene.splinecode"
-          />
-        </Suspense>
-        {/* Gradients to fade out edges of Spline scene so it blends with our dark mode UI */}
+      {/* Animated WebGL Gradient Background */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        <AnimatedGradient 
+          config={{ preset: "Toxic", speed: 12 }} 
+          noise={{ opacity: 0.1, scale: 0.5 }} 
+        />
+        {/* Gradients to fade out edges so it blends with our dark mode UI */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
             background: `
-              linear-gradient(to right, rgba(0, 0, 0, 0.9), transparent 40%, transparent 60%, rgba(0, 0, 0, 0.9)),
-              linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, transparent 20%, transparent 80%, rgba(0, 0, 0, 0.9) 100%)
+              linear-gradient(to right, rgba(0, 0, 0, 0.95), transparent 40%, transparent 60%, rgba(0, 0, 0, 0.95)),
+              linear-gradient(to bottom, rgba(0,0,0,0.95) 0%, transparent 20%, transparent 80%, rgba(0, 0, 0, 0.99) 100%)
             `
           }}
         />
