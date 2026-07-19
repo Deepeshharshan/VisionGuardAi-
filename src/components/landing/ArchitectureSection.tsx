@@ -9,6 +9,7 @@ export const ArchitectureSection: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const linesRef = useRef<SVGPathElement[]>([]);
+  const nodesRef = useRef<SVGCircleElement[]>([]);
 
   useEffect(() => {
     if (!sectionRef.current || !svgRef.current) return;
@@ -30,13 +31,29 @@ export const ArchitectureSection: React.FC = () => {
       stagger: 0.05
     });
 
+    // Continuous pulse for nodes to simulate live circuit activity
+    gsap.to(nodesRef.current, {
+      opacity: 0.2,
+      scale: 1.5,
+      duration: 1,
+      yoyo: true,
+      repeat: -1,
+      stagger: {
+        amount: 2,
+        from: "random"
+      },
+      transformOrigin: "center center",
+      ease: "sine.inOut"
+    });
+
     return () => {
       tl.kill();
+      gsap.killTweensOf(nodesRef.current);
     };
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen bg-[#050505] flex flex-col items-center justify-center border-b border-white/5 py-32" aria-label="Edge Architecture">
+    <section id="architecture" ref={sectionRef} className="relative min-h-screen bg-[#050505] flex flex-col items-center justify-center border-b border-white/5 py-32" aria-label="Edge Architecture">
       
       {/* Text Overlay */}
       <div className="absolute top-12 left-6 md:top-24 md:left-24 z-20 pointer-events-none">
@@ -120,7 +137,7 @@ export const ArchitectureSection: React.FC = () => {
                 stroke={i === 0 ? "#10b981" : "#ffffff"} 
                 strokeWidth={i === 0 ? "2" : "1"}
               />
-              <circle cx={cx} cy={cy} r="2" fill={i === 0 ? "#10b981" : "#ffffff"} />
+              <circle ref={el => { if (el) nodesRef.current.push(el); }} cx={cx} cy={cy} r="2" fill={i === 0 ? "#10b981" : "#ffffff"} />
             </g>
           ))}
         </svg>

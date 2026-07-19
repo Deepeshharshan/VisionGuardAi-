@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react';
 
 export const CTASection: React.FC = () => {
   return (
-    <section className="relative bg-black text-white py-24 lg:py-40 overflow-hidden" aria-labelledby="cta-heading">
+    <section id="contact" className="relative bg-black text-white py-24 lg:py-40 overflow-hidden" aria-labelledby="cta-heading">
       
       {/* Immersive Background */}
       <div className="absolute inset-0 z-0">

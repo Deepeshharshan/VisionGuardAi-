@@ -38,7 +38,7 @@ export const KeyBenefitsSection: React.FC = () => {
   }, [mouseX, mouseY]);
 
   return (
-    <section ref={containerRef} id="benefits" className="relative h-screen bg-[#0a0a0a] overflow-hidden flex items-center justify-center cursor-crosshair border-b border-white/5">
+    <section ref={containerRef} id="features" className="relative h-screen bg-[#0a0a0a] overflow-hidden flex items-center justify-center cursor-crosshair border-b border-white/5">
       
       {/* Intro Overlay Text */}
       <div className="absolute top-12 left-6 md:top-24 md:left-24 z-30 pointer-events-none">
