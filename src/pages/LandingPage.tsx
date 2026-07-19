@@ -22,7 +22,7 @@ import { CTASection } from '@/components/landing/CTASection';
 
 const LandingPage: React.FC = () => {
   return (
-    <ReactLenis root>
+    <>
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50
@@ -48,9 +48,6 @@ const LandingPage: React.FC = () => {
         
         {/* 5. Integration Ecosystem */}
         <EcosystemSection />
-
-        {/* 6. How It Works (Timeline) */}
-        <HowItWorksSection />
 
         {/* 7. Architecture (Schematic) */}
         <ArchitectureSection />
@@ -79,7 +76,7 @@ const LandingPage: React.FC = () => {
 
       {/* 15. Footer */}
       <Footer />
-    </ReactLenis>
+    </>
   );
 };
 
