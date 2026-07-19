@@ -18,10 +18,7 @@ export const ArchitectureSection: React.FC = () => {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: sectionRef.current,
-        start: 'top top',
-        end: '+=150%',
-        pin: true,
-        scrub: 1,
+        start: 'top 60%',
       }
     });
 
@@ -29,8 +26,8 @@ export const ArchitectureSection: React.FC = () => {
     tl.to(linesRef.current, {
       strokeDashoffset: 0,
       duration: 2,
-      ease: 'none',
-      stagger: 0.1
+      ease: 'power2.out',
+      stagger: 0.05
     });
 
     return () => {
@@ -39,7 +36,7 @@ export const ArchitectureSection: React.FC = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative h-screen bg-[#050505] overflow-hidden flex flex-col items-center justify-center border-b border-white/5" aria-label="Edge Architecture">
+    <section ref={sectionRef} className="relative min-h-screen bg-[#050505] flex flex-col items-center justify-center border-b border-white/5 py-32" aria-label="Edge Architecture">
       
       {/* Text Overlay */}
       <div className="absolute top-12 left-6 md:top-24 md:left-24 z-20 pointer-events-none">
