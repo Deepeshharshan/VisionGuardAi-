@@ -1,5 +1,20 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useRef } from 'react';
+import { motion, useMotionValue, useTransform, animate, useInView } from 'framer-motion';
+
+const AnimatedCounter = ({ from = 0, to, duration = 2, decimals = 0 }: { from?: number, to: number, duration?: number, decimals?: number }) => {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-100px" });
+  const count = useMotionValue(from);
+  const rounded = useTransform(count, (latest) => latest.toFixed(decimals));
+
+  useEffect(() => {
+    if (inView) {
+      animate(count, to, { duration, ease: "easeOut" });
+    }
+  }, [inView, count, to, duration]);
+
+  return <motion.span ref={ref}>{rounded}</motion.span>;
+};
 
 export const ROISection: React.FC = () => {
   return (
@@ -39,7 +54,10 @@ export const ROISection: React.FC = () => {
               transition={{ delay: 0.2 }}
               className="flex flex-col items-center border-b md:border-b-0 md:border-r border-white/10 pb-8 md:pb-0 md:pr-8"
             >
-              <div className="text-[64px] font-extrabold text-white mb-2 leading-none">60<span className="text-indigo-400">%</span></div>
+              <div className="text-[64px] font-extrabold text-white mb-2 leading-none flex items-center">
+                <AnimatedCounter to={60} />
+                <span className="text-indigo-400">%</span>
+              </div>
               <div className="text-[16px] font-bold text-white mb-2">Reduction in downtime</div>
               <p className="text-[14px] text-white text-center max-w-[200px]">By predicting mechanical failures weeks in advance.</p>
             </motion.div>
@@ -51,7 +69,10 @@ export const ROISection: React.FC = () => {
               transition={{ delay: 0.3 }}
               className="flex flex-col items-center border-b md:border-b-0 md:border-r border-white/10 pb-8 md:pb-0 md:pr-8"
             >
-              <div className="text-[64px] font-extrabold text-white mb-2 leading-none">99.8<span className="text-emerald-400">%</span></div>
+              <div className="text-[64px] font-extrabold text-white mb-2 leading-none flex items-center">
+                <AnimatedCounter to={99.8} decimals={1} />
+                <span className="text-emerald-400">%</span>
+              </div>
               <div className="text-[16px] font-bold text-white mb-2">Defect capture rate</div>
               <p className="text-[14px] text-white text-center max-w-[200px]">Achieved on high-speed automotive assembly lines.</p>
             </motion.div>
@@ -63,7 +84,10 @@ export const ROISection: React.FC = () => {
               transition={{ delay: 0.4 }}
               className="flex flex-col items-center"
             >
-              <div className="text-[64px] font-extrabold text-white mb-2 leading-none">10<span className="text-amber-400">x</span></div>
+              <div className="text-[64px] font-extrabold text-white mb-2 leading-none flex items-center">
+                <AnimatedCounter to={10} />
+                <span className="text-amber-400">x</span>
+              </div>
               <div className="text-[16px] font-bold text-white mb-2">Faster deployment</div>
               <p className="text-[14px] text-white text-center max-w-[200px]">No new cameras or sensor arrays required.</p>
             </motion.div>
