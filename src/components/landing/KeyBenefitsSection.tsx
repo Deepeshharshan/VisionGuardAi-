@@ -1,8 +1,11 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { Activity, Thermometer, Wind } from 'lucide-react';
 
 export const KeyBenefitsSection: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [hz, setHz] = useState(1450);
+  const [temp, setTemp] = useState(62.4);
 
   // Mouse coordinates for the X-Ray mask
   const mouseX = useMotionValue(-1000);
@@ -21,101 +24,136 @@ export const KeyBenefitsSection: React.FC = () => {
       }
     };
     window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    
+    // Simulate data fluctuations
+    const dataInterval = setInterval(() => {
+      setHz(prev => prev + (Math.random() > 0.5 ? 5 : -5));
+      setTemp(prev => Number((prev + (Math.random() > 0.5 ? 0.2 : -0.2)).toFixed(1)));
+    }, 800);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      clearInterval(dataInterval);
+    };
   }, [mouseX, mouseY]);
 
   return (
-    <section ref={containerRef} id="benefits" className="relative h-screen bg-[#050505] overflow-hidden flex items-center justify-center cursor-crosshair">
+    <section ref={containerRef} id="benefits" className="relative h-screen bg-[#0a0a0a] overflow-hidden flex items-center justify-center cursor-crosshair border-b border-white/5">
       
       {/* Intro Overlay Text */}
-      <div className="absolute top-24 left-8 md:left-24 z-30 pointer-events-none">
-        <h2 className="text-[32px] md:text-[56px] font-bold text-white tracking-tighter leading-tight drop-shadow-2xl">
-          Predictive <br/><span className="text-red-500">Anomaly Diagnostics</span>
-        </h2>
-        <p className="text-gray-400 text-lg max-w-sm mt-4">Move your cursor to X-ray the mechanical assembly and uncover micro-vibrations before catastrophic failure.</p>
+      <div className="absolute top-12 left-6 md:top-24 md:left-24 z-30 pointer-events-none">
+        <h2 className="text-[20px] md:text-[24px] font-bold text-zinc-500 tracking-tight uppercase">Predictive Diagnostics</h2>
+        <p className="text-white text-[32px] md:text-[56px] font-bold mt-2 tracking-tighter leading-none max-w-xl">
+          Micro-Defect Detection. <br/> Down to 0.1mm.
+        </p>
       </div>
 
-      {/* BASE LAYER: Normal Machine Assembly (Blueprint style) */}
-      <div className="absolute inset-0 flex items-center justify-center p-12">
-        <div className="relative w-full max-w-4xl aspect-[16/9] border border-white/10 rounded-[40px] bg-white/5 backdrop-blur-sm overflow-hidden flex items-center justify-center">
+      {/* BASE LAYER: Standard Camera View (Grayscale/Monochrome) */}
+      <div className="absolute inset-0 flex items-center justify-center p-6 pt-32">
+        <div className="relative w-full max-w-5xl aspect-[16/9] border border-white/5 rounded-2xl bg-[#111] overflow-hidden flex items-center justify-center shadow-2xl">
           
-          <svg viewBox="0 0 800 400" className="w-full h-full opacity-60" stroke="#ffffff" strokeWidth="2" fill="none">
-            {/* Abstract Mechanical Gear / Motor base */}
-            <circle cx="400" cy="200" r="150" strokeDasharray="10 10" />
+          <svg viewBox="0 0 800 400" className="w-full h-full opacity-40" stroke="#a1a1aa" strokeWidth="1" fill="none">
+            {/* Analytical Mechanical Blueprint */}
+            <circle cx="400" cy="200" r="150" strokeDasharray="4 8" />
             <circle cx="400" cy="200" r="100" />
-            <circle cx="400" cy="200" r="50" fill="rgba(255,255,255,0.1)" />
-            <rect x="250" y="180" width="300" height="40" rx="10" />
-            {Array.from({ length: 12 }).map((_, i) => (
+            <circle cx="400" cy="200" r="50" fill="rgba(255,255,255,0.05)" />
+            <rect x="250" y="180" width="300" height="40" rx="4" />
+            {Array.from({ length: 24 }).map((_, i) => (
               <line 
                 key={i} 
-                x1="400" y1="50" x2="400" y2="100" 
-                transform={`rotate(${i * 30} 400 200)`}
+                x1="400" y1="50" x2="400" y2="70" 
+                transform={`rotate(${i * 15} 400 200)`}
               />
             ))}
           </svg>
 
-          {/* Normal status UI */}
-          <div className="absolute bottom-8 right-8 bg-black/80 px-4 py-2 rounded-lg border border-white/20 text-white font-mono text-sm shadow-2xl">
-            <span className="text-green-400">●</span> SYSTEM_NOMINAL : 24°C
+          {/* Normal status UI overlay */}
+          <div className="absolute top-6 right-6 bg-black/80 px-4 py-3 rounded-md border border-white/10 text-zinc-400 font-mono text-[11px] shadow-2xl flex flex-col gap-2">
+            <div className="flex justify-between gap-8"><span>STATUS</span><span className="text-white">NOMINAL</span></div>
+            <div className="flex justify-between gap-8"><span>RPM</span><span className="text-white">3600</span></div>
+            <div className="flex justify-between gap-8"><span>VIBRATION</span><span className="text-white">{hz} Hz</span></div>
           </div>
         </div>
       </div>
 
-      {/* X-RAY REVEAL LAYER: The Mechanical Anomaly (Heatmap + Vibrations) */}
+      {/* X-RAY REVEAL LAYER: The Thermal & Frequency Anomaly */}
       <motion.div 
-        className="absolute inset-0 flex items-center justify-center p-12 pointer-events-none"
+        className="absolute inset-0 flex items-center justify-center p-6 pt-32 pointer-events-none"
         style={{
-          WebkitMaskImage: `radial-gradient(300px circle at calc(${smoothX}px) calc(${smoothY}px), black 40%, transparent 100%)`,
-          maskImage: `radial-gradient(300px circle at calc(${smoothX}px) calc(${smoothY}px), black 40%, transparent 100%)`,
+          WebkitMaskImage: `radial-gradient(350px circle at calc(${smoothX}px) calc(${smoothY}px), black 40%, transparent 100%)`,
+          maskImage: `radial-gradient(350px circle at calc(${smoothX}px) calc(${smoothY}px), black 40%, transparent 100%)`,
         }}
       >
-        <div className="relative w-full max-w-4xl aspect-[16/9] border border-red-500/50 rounded-[40px] bg-red-950/40 backdrop-blur-md overflow-hidden flex items-center justify-center">
+        <div className="relative w-full max-w-5xl aspect-[16/9] border border-amber-500/30 rounded-2xl bg-black overflow-hidden flex items-center justify-center">
           
+          {/* Thermal heat map background inside the mask */}
+          <div className="absolute inset-0 opacity-20 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-500 via-red-900 to-black"></div>
+
           <motion.svg 
             viewBox="0 0 800 400" 
-            className="w-full h-full drop-shadow-[0_0_30px_rgba(239,68,68,0.8)]" 
-            stroke="#ef4444" 
-            strokeWidth="4" 
+            className="w-full h-full relative z-10" 
+            stroke="#f59e0b" 
+            strokeWidth="2" 
             fill="none"
-            animate={{ x: [-2, 2, -1, 3, -2], y: [-1, 2, -2, 1, -1] }}
-            transition={{ repeat: Infinity, duration: 0.1, ease: "linear" }}
           >
-            {/* The same shape, but styled as a critical heat map/anomaly */}
-            <circle cx="400" cy="200" r="150" strokeDasharray="2 10" opacity="0.5" />
-            <circle cx="400" cy="200" r="100" stroke="#f97316" strokeWidth="6" />
-            <circle cx="400" cy="200" r="50" fill="rgba(239,68,68,0.4)" className="animate-pulse" />
+            {/* Thermal / Frequency representation of the same machine */}
+            <circle cx="400" cy="200" r="150" strokeDasharray="2 4" opacity="0.6" stroke="#ef4444" />
+            <circle cx="400" cy="200" r="100" stroke="#f59e0b" strokeWidth="4" />
             
-            {/* A crack / stress fracture SVG path */}
-            <path d="M400 150 L420 170 L410 190 L430 210 L390 230" stroke="#ffffff" strokeWidth="3" />
+            {/* AI Highlighted Anomaly Ring */}
+            <circle cx="400" cy="200" r="50" fill="rgba(245,158,11,0.2)" className="animate-pulse" />
+            <circle cx="400" cy="200" r="56" stroke="#ef4444" strokeWidth="1" strokeDasharray="2 4" className="animate-[spin_4s_linear_infinite]" />
             
-            <rect x="250" y="180" width="300" height="40" rx="10" stroke="#f97316" />
-            {Array.from({ length: 12 }).map((_, i) => (
+            {/* Stress fracture / Thermal hotspot line */}
+            <path d="M400 150 L410 170 L405 185 L420 200 L395 210" stroke="#ffffff" strokeWidth="2" />
+            
+            <rect x="250" y="180" width="300" height="40" rx="4" stroke="#ef4444" opacity="0.5" />
+            {Array.from({ length: 24 }).map((_, i) => (
               <line 
                 key={i} 
-                x1="400" y1="50" x2="400" y2="100" 
-                transform={`rotate(${i * 30} 400 200)`}
-                stroke={i % 3 === 0 ? "#ffffff" : "#ef4444"}
+                x1="400" y1="50" x2="400" y2="70" 
+                transform={`rotate(${i * 15} 400 200)`}
+                stroke={i >= 5 && i <= 8 ? "#ef4444" : "#f59e0b"}
+                strokeWidth={i >= 5 && i <= 8 ? "3" : "1"}
               />
             ))}
           </motion.svg>
 
-          {/* Critical alert UI */}
-          <motion.div 
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-500 text-black px-6 py-3 rounded-lg font-bold uppercase tracking-widest text-lg shadow-[0_0_50px_rgba(239,68,68,1)]"
-            animate={{ scale: [1, 1.1, 1] }}
-            transition={{ repeat: Infinity, duration: 0.5 }}
-          >
-            Micro-Fracture Detected
-          </motion.div>
+          {/* Critical analytical UI revealed in mask */}
+          <div className="absolute top-6 left-6 flex flex-col gap-3">
+             <div className="bg-amber-500/10 border border-amber-500/30 text-amber-500 px-3 py-1.5 rounded text-[11px] font-bold uppercase tracking-widest backdrop-blur-md inline-block w-max">
+               Thermal Signature Mismatch
+             </div>
+             
+             {/* Realistic Line Chart for Temperature trend */}
+             <div className="w-48 h-24 bg-black/80 border border-white/10 rounded p-2 flex flex-col">
+               <div className="text-[9px] text-zinc-500 font-mono mb-1 flex justify-between">
+                 <span>T-1 (Bearing)</span>
+                 <span className="text-amber-500">{temp}°C</span>
+               </div>
+               <div className="flex-1 w-full border-b border-l border-white/10 relative">
+                 <svg viewBox="0 0 100 40" className="w-full h-full overflow-visible" preserveAspectRatio="none">
+                   <path d="M0,30 L20,28 L40,29 L60,20 L80,10 L100,5" fill="none" stroke="#f59e0b" strokeWidth="2" />
+                   <circle cx="100" cy="5" r="2" fill="#ef4444" className="animate-pulse" />
+                 </svg>
+               </div>
+             </div>
+          </div>
 
-          {/* Telemetry data */}
-          <div className="absolute bottom-8 right-8 bg-red-950 px-4 py-2 rounded-lg border border-red-500 text-white font-mono text-sm shadow-2xl">
-            <span className="text-red-500 animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"></span>
-            <span className="text-red-500 relative">⚠</span> THERMAL OVERLOAD : 142°C
+          {/* Telemetry data overlay */}
+          <div className="absolute bottom-6 right-6 bg-black/90 px-4 py-3 rounded-md border border-amber-500/30 text-white font-mono text-[11px] shadow-2xl flex flex-col gap-2 min-w-[200px]">
+            <div className="flex justify-between gap-8 text-zinc-500"><span>CONFIDENCE</span><span className="text-white">99.1%</span></div>
+            <div className="flex justify-between gap-8 text-zinc-500"><span>IMPACT_PROB</span><span className="text-red-500">HIGH</span></div>
+            <div className="flex justify-between gap-8 text-zinc-500"><span>MTBF_EST</span><span className="text-amber-500">14 hrs</span></div>
           </div>
 
         </div>
       </motion.div>
+      
+      {/* Scroll indicator text */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-widest text-zinc-600 font-mono">
+        Hover to Analyze Spatial Data
+      </div>
 
     </section>
   );
