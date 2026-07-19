@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { motion, useMotionValue, useTransform, animate, useInView } from 'framer-motion';
 
-const AnimatedCounter = ({ from = 0, to, duration = 4, decimals = 0 }: { from?: number, to: number, duration?: number, decimals?: number }) => {
+const AnimatedCounter = ({ from = 0, to, duration = 1.5, decimals = 0 }: { from?: number, to: number, duration?: number, decimals?: number }) => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "0px" });
   const count = useMotionValue(from);
