@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+
+const Spline = lazy(() => import('@splinetool/react-spline'));
 
 export const HeroSection: React.FC = () => {
   const [timestamp, setTimestamp] = useState('');
@@ -34,17 +36,30 @@ export const HeroSection: React.FC = () => {
   return (
     <section id="hero" className="relative min-h-screen bg-black overflow-hidden flex items-center pt-24 pb-20" aria-label="Command Center">
       
-      {/* Background Architectural Mesh (Monochrome) */}
-      <div className="absolute inset-0 pointer-events-none opacity-20 z-0">
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:100px_100px]" />
-        {/* Very subtle center spotlight */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white/5 rounded-full blur-[120px]" />
+      {/* 3D Interactive Spline Background */}
+      <div className="absolute inset-0 z-0 pointer-events-auto overflow-hidden">
+        <Suspense fallback={<div className="w-full h-full bg-black"></div>}>
+          <Spline
+            style={{ width: '100%', height: '100vh' }}
+            scene="https://prod.spline.design/us3ALejTXl6usHZ7/scene.splinecode"
+          />
+        </Suspense>
+        {/* Gradients to fade out edges of Spline scene so it blends with our dark mode UI */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: `
+              linear-gradient(to right, rgba(0, 0, 0, 0.9), transparent 40%, transparent 60%, rgba(0, 0, 0, 0.9)),
+              linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, transparent 20%, transparent 80%, rgba(0, 0, 0, 0.9) 100%)
+            `
+          }}
+        />
       </div>
 
-      <div className="enterprise-container relative z-10 w-full flex flex-col md:flex-row items-center gap-12 lg:gap-24">
+      <div className="enterprise-container relative z-10 w-full flex flex-col md:flex-row items-center gap-12 lg:gap-24 pointer-events-none">
         
         {/* Left Typography Block */}
-        <div className="w-full md:w-1/2 lg:w-5/12 flex flex-col z-20 mt-12 md:mt-0">
+        <div className="w-full md:w-1/2 lg:w-5/12 flex flex-col z-20 mt-12 md:mt-0 pointer-events-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -62,15 +77,15 @@ export const HeroSection: React.FC = () => {
               Predict. <br/> Prevent. <br/> Produce.
             </h1>
             
-            <p className="text-desc text-[var(--text-secondary)] mb-12 max-w-lg">
+            <p className="text-desc text-[var(--text-secondary)] mb-12 max-w-lg drop-shadow-md">
               The autonomous AI nervous system for industrial manufacturing. Eliminate downtime before it occurs with millimeter-precision spatial tracking.
             </p>
             
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-              <button className="enterprise-btn-primary w-full sm:w-auto">
+              <button className="enterprise-btn-primary w-full sm:w-auto hover:scale-105 active:scale-95 transition-transform cursor-pointer pointer-events-auto">
                 Deploy Agent
               </button>
-              <button className="text-[15px] font-semibold text-[var(--text-secondary)] hover:text-white transition-colors focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-sm">
+              <button className="text-[15px] font-semibold text-[var(--text-secondary)] hover:text-white transition-colors focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-sm cursor-pointer pointer-events-auto">
                 Read Whitepaper →
               </button>
             </div>
@@ -78,10 +93,10 @@ export const HeroSection: React.FC = () => {
         </div>
 
         {/* Right Command Center UI */}
-        <div className="w-full md:w-1/2 lg:w-7/12 relative perspective-[2000px] z-10 hidden md:block h-[400px] lg:h-[600px]">
+        <div className="w-full md:w-1/2 lg:w-7/12 relative perspective-[2000px] z-10 hidden md:block h-[400px] lg:h-[600px] pointer-events-none">
           <motion.div 
             style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-            className="w-full h-full relative flex items-center justify-center"
+            className="w-full h-full relative flex items-center justify-center pointer-events-auto cursor-default hover:scale-[1.02] transition-transform duration-700"
           >
             {/* Main Central Viewport */}
             <motion.div 
@@ -89,11 +104,11 @@ export const HeroSection: React.FC = () => {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
               style={{ translateZ: 50 }}
-              className="absolute w-[85%] aspect-[16/9] enterprise-glass rounded-2xl overflow-hidden shadow-2xl bg-black"
+              className="absolute w-[85%] aspect-[16/9] enterprise-glass rounded-2xl overflow-hidden shadow-2xl bg-black/80 backdrop-blur-md"
             >
               {/* Simulated Grayscale Camera Feed (Industrial vibe) */}
               <div className="absolute inset-0 opacity-40 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay z-20"></div>
-              <div className="absolute inset-0 bg-[#111] flex items-center justify-center">
+              <div className="absolute inset-0 bg-[#111]/80 flex items-center justify-center">
                  {/* Abstract geometric representation of a machine part */}
                  <div className="w-64 h-64 border border-white/20 rounded-full flex items-center justify-center relative">
                     <div className="w-48 h-48 border border-white/10 rounded-full absolute"></div>
@@ -135,7 +150,7 @@ export const HeroSection: React.FC = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.6 }}
               style={{ translateZ: 100 }}
-              className="absolute top-[10%] right-[-5%] w-64 enterprise-card p-5"
+              className="absolute top-[10%] right-[-5%] w-64 enterprise-card p-5 bg-[var(--bg-surface)]/90 backdrop-blur-xl"
             >
               <div className="text-[10px] text-[var(--text-secondary)] uppercase tracking-widest font-bold mb-3">Live Telemetry</div>
               <div className="flex flex-col gap-3">
@@ -166,7 +181,7 @@ export const HeroSection: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.8 }}
               style={{ translateZ: 120 }}
-              className="absolute bottom-[15%] left-[-10%] enterprise-glass p-4 rounded-xl flex items-start gap-4 border border-amber-500/30 bg-amber-950/20"
+              className="absolute bottom-[15%] left-[-10%] enterprise-glass p-4 rounded-xl flex items-start gap-4 border border-amber-500/30 bg-amber-950/40 backdrop-blur-xl"
             >
               <div className="w-2 h-2 rounded-full bg-amber-500 mt-1.5 animate-pulse shrink-0"></div>
               <div>
