@@ -1,9 +1,6 @@
-import React, { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Network, Cpu, ShieldAlert, ArrowRight } from 'lucide-react';
-
-gsap.registerPlugin(ScrollTrigger);
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Network, Cpu, ShieldAlert } from 'lucide-react';
 
 const pipelineSteps = [
   {
@@ -23,7 +20,7 @@ const pipelineSteps = [
           <div className="flex justify-between"><span>Stream_C</span><span className="text-white">30 FPS / 1080p</span></div>
           <div className="mt-auto pt-4 border-t border-white/5">
             <div className="flex justify-between text-zinc-500 mb-1"><span>Total Bandwidth</span><span>2.4 Gbps</span></div>
-            <div className="w-full h-1 bg-white/10 rounded"><div className="w-[80%] h-full bg-white"></div></div>
+            <div className="w-full h-1 bg-white/10 rounded overflow-hidden"><div className="w-[80%] h-full bg-white"></div></div>
           </div>
         </div>
       </div>
@@ -49,7 +46,7 @@ const pipelineSteps = [
                </div>
              ))}
            </div>
-           <div className="text-center text-emerald-500">99.98% CONFIDENCE</div>
+           <div className="text-center text-emerald-500 font-bold">99.98% CONFIDENCE</div>
         </div>
       </div>
     )
@@ -66,7 +63,7 @@ const pipelineSteps = [
           <span className="animate-pulse">ACTION_REQUIRED</span>
         </div>
         <div className="p-4 flex-1 text-red-400">
-          <div className="mb-2 text-white">Axis B Vibration Anomaly</div>
+          <div className="mb-2 text-white font-bold">Axis B Vibration Anomaly</div>
           <div className="opacity-70 mb-4">Deviation from nominal harmonics detected. Estimated failure in 4h.</div>
           <div className="bg-red-500/10 border border-red-500/20 p-2 rounded text-center text-red-500 font-bold">
             LINE_HALT_INITIATED
@@ -78,57 +75,35 @@ const pipelineSteps = [
 ];
 
 export const HowItWorksSection: React.FC = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!containerRef.current || !trackRef.current) return;
-
-    const sections = gsap.utils.toArray('.pipeline-step') as HTMLElement[];
-    
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: containerRef.current,
-        pin: true,
-        scrub: 1,
-        start: "top top",
-        end: () => "+=" + trackRef.current!.offsetWidth,
-      }
-    });
-
-    tl.to(sections, {
-      xPercent: -100 * (sections.length - 1),
-      ease: "none",
-    });
-
-    return () => {
-      tl.kill();
-    };
-  }, []);
-
   return (
-    <section ref={containerRef} className="h-screen w-full bg-[#050505] overflow-hidden relative border-y border-white/5" aria-label="Architecture Pipeline">
+    <section className="bg-[#050505] overflow-hidden border-y border-white/5 relative" aria-label="Architecture Pipeline">
       
-      {/* Absolute fixed intro for the pinned section */}
-      <div className="absolute top-12 left-6 md:top-24 md:left-24 z-20 pointer-events-none">
+      {/* Intro Header */}
+      <div className="enterprise-container pt-24 lg:pt-32 pb-12 relative z-20">
         <h2 className="text-[20px] md:text-[24px] font-bold text-zinc-500 tracking-tight uppercase">System Architecture</h2>
       </div>
 
-      <div ref={trackRef} className="flex h-full w-[300vw]">
+      <div className="flex flex-col relative z-10">
         {pipelineSteps.map((step, index) => (
           <div 
             key={step.id} 
-            className="pipeline-step w-screen h-full flex items-center relative overflow-hidden shrink-0 px-6 md:px-24"
+            className="enterprise-container py-16 lg:py-24 relative"
           >
-            <div className="w-full max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+            <div className={`w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center ${index % 2 === 1 ? 'lg:grid-flow-col-dense' : ''}`}>
               
-              {/* Left Content */}
-              <div className="flex flex-col z-10">
+              {/* Text Content */}
+              <motion.div 
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                className={`flex flex-col z-10 ${index % 2 === 1 ? 'lg:col-start-2' : ''}`}
+              >
                 <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center mb-8 border border-white/5">
                   {step.icon}
                 </div>
                 
-                <div className="text-[12px] font-bold text-zinc-600 uppercase tracking-widest mb-4">Phase 0{index + 1}</div>
+                <div className="text-[12px] font-bold text-zinc-500 uppercase tracking-widest mb-4">Phase 0{index + 1}</div>
                 
                 <h3 className="text-[32px] md:text-[48px] font-bold text-white leading-tight tracking-tighter mb-6">
                   {step.title}
@@ -138,27 +113,30 @@ export const HowItWorksSection: React.FC = () => {
                   {step.desc}
                 </p>
 
-                {index < pipelineSteps.length - 1 && (
-                  <div className="mt-12 flex items-center text-zinc-500 text-[12px] font-mono tracking-widest uppercase">
-                    Scroll to trace data <ArrowRight className="w-4 h-4 ml-4" />
-                  </div>
-                )}
-              </div>
+              </motion.div>
 
-              {/* Right UI Mockup */}
-              <div className="w-full aspect-[4/3] relative z-10">
-                {/* Connecting wire from left to right */}
-                <div className="absolute top-1/2 -left-24 w-24 h-px bg-white/10 hidden lg:block"></div>
+              {/* UI Mockup */}
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+                className={`w-full aspect-[4/3] relative z-10 ${index % 2 === 1 ? 'lg:col-start-1' : ''}`}
+              >
                 {step.mockup}
-              </div>
+              </motion.div>
 
             </div>
             
             {/* Massive background number */}
-            <div className="absolute bottom-[-10%] right-[5%] text-[400px] font-bold text-white/[0.02] leading-none pointer-events-none select-none font-mono">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[200px] lg:text-[400px] font-bold text-white/[0.02] leading-none pointer-events-none select-none font-mono">
               0{index + 1}
             </div>
 
+            {/* Connecting Vertical Line to next section */}
+            {index < pipelineSteps.length - 1 && (
+              <div className="absolute bottom-0 left-12 lg:left-1/2 lg:-translate-x-1/2 h-16 lg:h-32 w-px bg-gradient-to-b from-white/10 to-transparent"></div>
+            )}
           </div>
         ))}
       </div>
