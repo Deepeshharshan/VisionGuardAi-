@@ -35,7 +35,6 @@ export const ArchitectureSection: React.FC = () => {
 
     return () => {
       tl.kill();
-      ScrollTrigger.getAll().forEach(t => t.kill());
     };
   }, []);
 

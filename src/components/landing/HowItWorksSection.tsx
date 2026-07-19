@@ -103,7 +103,6 @@ export const HowItWorksSection: React.FC = () => {
 
     return () => {
       tl.kill();
-      ScrollTrigger.getAll().forEach(t => t.kill());
     };
   }, []);
 
