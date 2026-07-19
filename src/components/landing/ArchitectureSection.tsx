@@ -1,21 +1,19 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Server, Zap, CloudOff } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export const ArchitectureSection: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
-  const nodesRef = useRef<SVGCircleElement[]>([]);
   const linesRef = useRef<SVGPathElement[]>([]);
 
   useEffect(() => {
     if (!sectionRef.current || !svgRef.current) return;
 
-    // Set initial states for SVG drawing
     gsap.set(linesRef.current, { strokeDasharray: 1000, strokeDashoffset: 1000 });
-    gsap.set(nodesRef.current, { scale: 0, transformOrigin: "50% 50%", opacity: 0 });
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -27,29 +25,12 @@ export const ArchitectureSection: React.FC = () => {
       }
     });
 
-    // 1. Draw the factory blueprint structure
+    // Draw the network topology
     tl.to(linesRef.current, {
       strokeDashoffset: 0,
       duration: 2,
       ease: 'none',
-      stagger: 0.2
-    })
-    // 2. Pop in the AI nodes (cameras/sensors)
-    .to(nodesRef.current, {
-      scale: 1,
-      opacity: 1,
-      duration: 0.5,
-      ease: 'back.out(2)',
       stagger: 0.1
-    }, "-=1")
-    // 3. Pulse the nodes to show data flow
-    .to(nodesRef.current, {
-      fill: '#22d3ee', // Cyan pulse
-      boxShadow: '0 0 20px #22d3ee',
-      duration: 0.3,
-      stagger: 0.05,
-      yoyo: true,
-      repeat: 1
     });
 
     return () => {
@@ -59,29 +40,49 @@ export const ArchitectureSection: React.FC = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative h-screen bg-black overflow-hidden flex flex-col items-center justify-center" aria-label="Digital Twin Architecture">
-      {/* Background ambient lighting */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent opacity-50"></div>
+    <section ref={sectionRef} className="relative h-screen bg-[#050505] overflow-hidden flex flex-col items-center justify-center border-b border-white/5" aria-label="Edge Architecture">
       
       {/* Text Overlay */}
-      <div className="absolute top-16 left-8 md:top-24 md:left-24 z-20 pointer-events-none">
-        <h2 className="text-[32px] md:text-[56px] font-bold text-white tracking-tighter leading-tight drop-shadow-2xl">
-          The Factory <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Digital Twin</span>
-        </h2>
-        <p className="text-gray-400 text-lg md:text-xl max-w-md mt-4">Scroll to map out the spatial architecture. Every camera becomes an active AI node.</p>
+      <div className="absolute top-12 left-6 md:top-24 md:left-24 z-20 pointer-events-none">
+        <h2 className="text-[20px] md:text-[24px] font-bold text-zinc-500 tracking-tight uppercase">Network Topology</h2>
+        <p className="text-white text-[32px] md:text-[56px] font-bold mt-2 tracking-tighter leading-none max-w-xl">
+          Zero Cloud Dependency. <br/> Pure Edge Velocity.
+        </p>
       </div>
 
-      {/* Massive SVG Blueprint */}
-      <div className="relative w-full h-full max-w-7xl mx-auto flex items-center justify-center p-4 pt-32">
+      {/* Massive SVG Blueprint - Sterile Network Topology */}
+      <div className="relative w-full h-full max-w-[1400px] mx-auto flex items-center justify-center p-4 pt-48">
+        
+        {/* Data comparison overlays */}
+        <div className="absolute top-1/2 left-[10%] -translate-y-1/2 bg-black border border-white/10 p-6 rounded-lg w-72 z-10 hidden lg:block">
+           <div className="flex items-center gap-3 mb-4 text-zinc-400">
+             <CloudOff className="w-5 h-5 text-red-500" />
+             <span className="font-bold text-[12px] uppercase tracking-widest">Standard Cloud AI</span>
+           </div>
+           <div className="flex justify-between font-mono text-[11px] mb-2 text-zinc-500"><span>Roundtrip Latency</span><span className="text-red-500">1200ms</span></div>
+           <div className="flex justify-between font-mono text-[11px] mb-2 text-zinc-500"><span>Bandwidth Cost</span><span className="text-red-500">High</span></div>
+           <div className="flex justify-between font-mono text-[11px] text-zinc-500"><span>Data Security</span><span className="text-amber-500">Vulnerable</span></div>
+        </div>
+
+        <div className="absolute top-1/2 right-[10%] -translate-y-1/2 bg-[#0a0a0a] border border-emerald-500/20 shadow-[0_0_50px_rgba(16,185,129,0.05)] p-6 rounded-lg w-72 z-10 hidden lg:block">
+           <div className="flex items-center gap-3 mb-4 text-emerald-500">
+             <Zap className="w-5 h-5" />
+             <span className="font-bold text-[12px] uppercase tracking-widest">VisionGuard Edge</span>
+           </div>
+           <div className="flex justify-between font-mono text-[11px] mb-2 text-white"><span>Inference Latency</span><span className="text-emerald-500">12ms</span></div>
+           <div className="flex justify-between font-mono text-[11px] mb-2 text-white"><span>Bandwidth Cost</span><span className="text-emerald-500">Zero</span></div>
+           <div className="flex justify-between font-mono text-[11px] text-white"><span>Data Security</span><span className="text-emerald-500">Air-gapped</span></div>
+        </div>
+
         <svg 
           ref={svgRef}
           viewBox="0 0 1000 600" 
-          className="w-full h-auto max-h-[80vh] drop-shadow-[0_0_15px_rgba(34,211,238,0.2)]"
+          className="w-full h-auto max-h-[70vh] opacity-80"
           fill="none" 
           xmlns="http://www.w3.org/2000/svg"
         >
-          {/* Blueprint Grid Lines (Static) */}
-          <g opacity="0.1" stroke="#ffffff" strokeWidth="1">
+          {/* Base Grid */}
+          <g opacity="0.05" stroke="#ffffff" strokeWidth="1">
             {Array.from({ length: 20 }).map((_, i) => (
               <line key={`v-${i}`} x1={i * 50} y1="0" x2={i * 50} y2="600" />
             ))}
@@ -90,53 +91,40 @@ export const ArchitectureSection: React.FC = () => {
             ))}
           </g>
 
-          {/* Dynamic Factory Structure Paths */}
-          <g stroke="#3b82f6" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" opacity="0.8">
-            <path ref={el => el && linesRef.current.push(el)} d="M100 100 H900 V500 H100 Z" />
-            <path ref={el => el && linesRef.current.push(el)} d="M300 100 V500" />
-            <path ref={el => el && linesRef.current.push(el)} d="M700 100 V500" />
-            <path ref={el => el && linesRef.current.push(el)} d="M100 300 H900" />
-            <path ref={el => el && linesRef.current.push(el)} d="M400 200 H600 V400 H400 Z" stroke="#8b5cf6" />
-            <path ref={el => el && linesRef.current.push(el)} d="M500 200 V400" stroke="#8b5cf6" />
+          {/* Core Edge Backbone */}
+          <g stroke="#ffffff" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter" opacity="0.3">
+            <path ref={el => el && linesRef.current.push(el)} d="M 500 100 V 500" />
+            <path ref={el => el && linesRef.current.push(el)} d="M 300 300 H 700" />
+            
+            {/* Branching paths to nodes */}
+            <path ref={el => el && linesRef.current.push(el)} d="M 500 200 H 650 V 150" />
+            <path ref={el => el && linesRef.current.push(el)} d="M 500 400 H 350 V 450" />
+            <path ref={el => el && linesRef.current.push(el)} d="M 400 300 V 150 H 350" />
+            <path ref={el => el && linesRef.current.push(el)} d="M 600 300 V 450 H 650" />
           </g>
 
-          {/* Dynamic Connecting Data Lines */}
-          <g stroke="#22d3ee" strokeWidth="2" strokeDasharray="5,5" opacity="0.6">
-             <path ref={el => el && linesRef.current.push(el)} d="M200 200 L400 200 L450 250" />
-             <path ref={el => el && linesRef.current.push(el)} d="M800 400 L600 400 L550 350" />
-             <path ref={el => el && linesRef.current.push(el)} d="M200 400 L300 300 L400 300" />
-             <path ref={el => el && linesRef.current.push(el)} d="M800 200 L700 300 L600 300" />
-          </g>
+          {/* Secure Edge Perimeter Boundary */}
+          <rect x="250" y="100" width="500" height="400" stroke="#10b981" strokeWidth="1" strokeDasharray="4 4" opacity="0.3" fill="rgba(16,185,129,0.02)" />
+          
+          <text x="260" y="120" fill="#10b981" fontSize="10" fontFamily="monospace" opacity="0.5">LOCAL FACTORY INTRANET // AIR-GAPPED</text>
 
-          {/* AI Nodes (Cameras / Sensors) */}
+          {/* Hardware Nodes */}
           {[
-            [100,100], [300,100], [700,100], [900,100],
-            [100,300], [300,300], [700,300], [900,300],
-            [100,500], [300,500], [700,500], [900,500],
-            [200,200], [800,200], [200,400], [800,400],
-            [400,200], [600,200], [400,400], [600,400],
-            [500,200], [500,400], [450,250], [550,350]
+            [500,300], // Central Hub
+            [500,100], [500,500], [300,300], [700,300],
+            [650,150], [350,450], [350,150], [650,450]
           ].map(([cx, cy], i) => (
             <g key={`node-${i}`}>
-              <circle 
-                ref={el => el && nodesRef.current.push(el)} 
-                cx={cx} 
-                cy={cy} 
-                r="8" 
-                fill="#ffffff" 
-                className="drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]"
+              <rect 
+                x={cx - 12} 
+                y={cy - 12} 
+                width="24" 
+                height="24" 
+                fill="#000000" 
+                stroke={i === 0 ? "#10b981" : "#ffffff"} 
+                strokeWidth={i === 0 ? "2" : "1"}
               />
-              <circle 
-                cx={cx} 
-                cy={cy} 
-                r="16" 
-                fill="none" 
-                stroke="#22d3ee" 
-                strokeWidth="1" 
-                opacity="0.3"
-                className="animate-ping"
-                style={{ animationDuration: `${2 + (i % 3)}s`, animationDelay: `${i * 0.1}s` }}
-              />
+              <circle cx={cx} cy={cy} r="2" fill={i === 0 ? "#10b981" : "#ffffff"} />
             </g>
           ))}
         </svg>
@@ -144,4 +132,3 @@ export const ArchitectureSection: React.FC = () => {
     </section>
   );
 };
-
