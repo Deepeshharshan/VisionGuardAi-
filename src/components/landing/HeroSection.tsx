@@ -41,10 +41,10 @@ export const HeroSection: React.FC = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white/5 rounded-full blur-[120px]" />
       </div>
 
-      <div className="enterprise-container relative z-10 w-full flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
+      <div className="enterprise-container relative z-10 w-full flex flex-col md:flex-row items-center gap-12 lg:gap-24">
         
         {/* Left Typography Block */}
-        <div className="w-full lg:w-5/12 flex flex-col z-20">
+        <div className="w-full md:w-1/2 lg:w-5/12 flex flex-col z-20 mt-12 md:mt-0">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -66,11 +66,11 @@ export const HeroSection: React.FC = () => {
               The autonomous AI nervous system for industrial manufacturing. Eliminate downtime before it occurs with millimeter-precision spatial tracking.
             </p>
             
-            <div className="flex items-center gap-6">
-              <button className="enterprise-btn-primary">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+              <button className="enterprise-btn-primary w-full sm:w-auto">
                 Deploy Agent
               </button>
-              <button className="text-[15px] font-semibold text-[var(--text-secondary)] hover:text-white transition-colors">
+              <button className="text-[15px] font-semibold text-[var(--text-secondary)] hover:text-white transition-colors focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-sm">
                 Read Whitepaper →
               </button>
             </div>
@@ -78,7 +78,7 @@ export const HeroSection: React.FC = () => {
         </div>
 
         {/* Right Command Center UI */}
-        <div className="w-full lg:w-7/12 relative perspective-[2000px] z-10 hidden md:block h-[600px]">
+        <div className="w-full md:w-1/2 lg:w-7/12 relative perspective-[2000px] z-10 hidden md:block h-[400px] lg:h-[600px]">
           <motion.div 
             style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
             className="w-full h-full relative flex items-center justify-center"
