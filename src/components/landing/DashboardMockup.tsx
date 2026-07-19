@@ -1,81 +1,45 @@
 import React, { useState, useEffect } from 'react';
-import { Camera, Shield, Search, Bell, Settings } from 'lucide-react';
+import { Camera, Shield, Search, Bell, Settings, Activity, Database, Cpu } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-interface MachineCardProps {
-  name: string;
-  status: 'healthy' | 'warning' | 'critical';
-  score: number;
-  location: string;
-}
-
-const MachineCard: React.FC<MachineCardProps> = ({ name, status, score, location }) => {
-  const isDanger = status === 'critical';
-  const isWarn = status === 'warning';
-  
-  const statusColor = isDanger ? 'bg-[var(--red)]' : isWarn ? 'bg-[var(--amber)]' : 'bg-[var(--green)]';
-  
-  return (
-    <div className="flex items-center justify-between p-3 border-b border-[var(--border)] hover:bg-[var(--bg-2)] transition-colors last:border-b-0 cursor-pointer">
-      <div className="flex items-center gap-3">
-        <div className={`w-2 h-2 rounded-full ${statusColor}`} />
-        <div>
-          <div className="text-[13px] font-medium text-[var(--text-1)]">{name}</div>
-          <div className="text-[11px] text-[var(--text-3)]">{location}</div>
-        </div>
-      </div>
-      <div className="flex items-center gap-4">
-        <div className="w-16 h-1.5 bg-[var(--border)] rounded-full overflow-hidden">
-          <div 
-            className={`h-full ${statusColor}`} 
-            style={{ width: `${score}%` }} 
-          />
-        </div>
-        <span className="mono text-[12px] font-medium text-[var(--text-1)] w-8 text-right">{score}%</span>
-      </div>
-    </div>
-  );
-};
-
 export const DashboardMockup: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'cameras' | 'settings'>('overview');
-  const [frameRate, setFrameRate] = useState(27);
+  const [frameRate, setFrameRate] = useState(60);
   
   useEffect(() => {
     const interval = setInterval(() => {
-      setFrameRate(prev => prev === 27 ? 28 : prev === 28 ? 26 : 27);
-    }, 2000);
+      setFrameRate(prev => (prev === 60 ? 59 : prev === 59 ? 61 : 60));
+    }, 1500);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="vg-panel bg-white/90 backdrop-blur-md border-[var(--border)] shadow-2xl rounded-2xl overflow-hidden flex flex-col w-full h-[600px]">
+    <div className="w-full h-full bg-[#0a0a0a] border border-white/10 rounded-2xl overflow-hidden flex flex-col font-sans shadow-2xl">
       
-      {/* Top Header Area */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--border)] bg-white/50">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-[var(--bg-2)] flex items-center justify-center">
-            <Shield className="w-4 h-4 text-[var(--text-1)]" />
+      {/* Top Header Area (Minimalist Enterprise) */}
+      <div className="flex items-center justify-between px-6 py-4 border-b border-white/5 bg-black/50">
+        <div className="flex items-center gap-4">
+          <div className="w-8 h-8 bg-white text-black flex items-center justify-center rounded-sm">
+            <Shield className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="font-semibold text-[15px] text-[var(--text-1)]">VisionGuard Workspace</h3>
-            <p className="text-[12px] text-[var(--text-3)]">Factory A • 12 Active Cameras</p>
+            <h3 className="font-semibold text-[14px] text-white tracking-tight">VisionGuard OS</h3>
+            <p className="text-[11px] text-zinc-500 font-mono uppercase tracking-wider">Node: EU-Central-1</p>
           </div>
         </div>
         
         {/* Mock Search Bar */}
-        <div className="hidden md:flex items-center gap-2 bg-[var(--bg-2)] border border-[var(--border)] rounded-full px-4 py-2 w-64">
-          <Search className="w-4 h-4 text-[var(--text-3)]" />
-          <span className="text-[12px] text-[var(--text-3)]">Search cameras...</span>
-          <span className="ml-auto text-[10px] text-[var(--text-3)] border border-[var(--border-strong)] rounded px-1.5 py-0.5 font-medium">⌘ K</span>
+        <div className="hidden md:flex items-center gap-3 bg-white/5 border border-white/10 rounded-md px-4 py-1.5 w-72">
+          <Search className="w-4 h-4 text-zinc-500" />
+          <span className="text-[12px] text-zinc-500">Query telemetry data...</span>
+          <span className="ml-auto text-[10px] text-zinc-600 border border-zinc-700 rounded px-1.5 font-mono">⌘K</span>
         </div>
         
-        <div className="flex items-center gap-3">
-          <button className="p-2 text-[var(--text-3)] hover:text-[var(--text-1)] transition-colors">
+        <div className="flex items-center gap-4">
+          <button className="text-zinc-500 hover:text-white transition-colors">
             <Bell className="w-4 h-4" />
           </button>
-          <div className="w-8 h-8 rounded-full bg-[var(--signal)] text-white flex items-center justify-center text-[12px] font-semibold">
-            JS
+          <div className="w-8 h-8 rounded-full border border-white/20 overflow-hidden">
+             <img src="https://i.pravatar.cc/100?img=33" alt="Admin" className="w-full h-full object-cover grayscale opacity-80" />
           </div>
         </div>
       </div>
@@ -84,140 +48,100 @@ export const DashboardMockup: React.FC = () => {
       <div className="flex flex-1 overflow-hidden">
         
         {/* Left Sidebar */}
-        <div className="w-56 border-r border-[var(--border)] bg-[var(--bg-2)]/30 p-4 flex flex-col gap-1 hidden md:flex">
-          <div className="text-[11px] font-semibold text-[var(--text-3)] uppercase tracking-wider mb-2 px-2">Menu</div>
-          
-          <button 
-            onClick={() => setActiveTab('overview')}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-[13px] font-medium transition-colors ${
-              activeTab === 'overview' ? 'bg-white shadow-sm text-[var(--signal)]' : 'text-[var(--text-2)] hover:bg-[var(--bg-2)] hover:text-[var(--text-1)]'
-            }`}
-          >
-            <Shield className="w-4 h-4" /> Overview
-          </button>
-          <button 
-            onClick={() => setActiveTab('cameras')}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-[13px] font-medium transition-colors ${
-              activeTab === 'cameras' ? 'bg-white shadow-sm text-[var(--signal)]' : 'text-[var(--text-2)] hover:bg-[var(--bg-2)] hover:text-[var(--text-1)]'
-            }`}
-          >
-            <Camera className="w-4 h-4" /> Cameras
-          </button>
-          
-          <div className="mt-auto">
-            <button 
-              onClick={() => setActiveTab('settings')}
-              className={`flex items-center gap-2 px-3 py-2 rounded-lg text-[13px] font-medium transition-colors w-full ${
-                activeTab === 'settings' ? 'bg-white shadow-sm text-[var(--signal)]' : 'text-[var(--text-2)] hover:bg-[var(--bg-2)] hover:text-[var(--text-1)]'
-              }`}
-            >
-              <Settings className="w-4 h-4" /> Settings
-            </button>
-          </div>
+        <div className="w-16 border-r border-white/5 bg-black/20 flex flex-col items-center py-6 gap-6 hidden md:flex">
+          <button className="text-white bg-white/10 p-2.5 rounded-md"><Activity className="w-5 h-5" /></button>
+          <button className="text-zinc-600 hover:text-white transition-colors p-2.5"><Camera className="w-5 h-5" /></button>
+          <button className="text-zinc-600 hover:text-white transition-colors p-2.5"><Database className="w-5 h-5" /></button>
+          <button className="text-zinc-600 hover:text-white transition-colors p-2.5 mt-auto"><Settings className="w-5 h-5" /></button>
         </div>
 
         {/* Dashboard Workspace */}
-        <div className="flex-1 p-6 bg-white overflow-y-auto">
+        <div className="flex-1 p-6 md:p-8 bg-[#0a0a0a] overflow-y-auto">
           
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-[20px] font-semibold text-[var(--text-1)]">Live Monitoring</h2>
-            <div className="flex items-center gap-2">
-              <span className="flex items-center gap-1.5 text-[12px] font-medium text-[var(--green)] bg-[var(--green-dim)] px-2.5 py-1 rounded-full">
-                <span className="w-1.5 h-1.5 rounded-full bg-[var(--green)] animate-pulse" /> Live
-              </span>
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-[24px] font-semibold text-white tracking-tight">Global Telemetry</h2>
+            <div className="flex items-center gap-2 border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 rounded-md">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> 
+              <span className="text-[11px] font-bold text-emerald-500 uppercase tracking-widest">Live Sync</span>
             </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
-            {/* KPI Cards */}
-            <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-white border border-[var(--border)] rounded-xl p-4 shadow-sm">
-                <div className="text-[12px] font-medium text-[var(--text-2)] mb-1">Total Detections</div>
-                <div className="mono text-[24px] font-semibold text-[var(--text-1)]">1,254</div>
+            {/* KPI Cards (Minimal Monochrome) */}
+            <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="bg-[#111] border border-white/5 p-5 rounded-lg flex justify-between items-end">
+                <div>
+                  <div className="text-[12px] font-medium text-zinc-500 mb-1">Active Streams</div>
+                  <div className="font-mono text-[32px] font-semibold text-white leading-none">1,402</div>
+                </div>
+                <Cpu className="w-8 h-8 text-zinc-700" />
               </div>
-              <div className="bg-white border border-[var(--border)] rounded-xl p-4 shadow-sm">
-                <div className="text-[12px] font-medium text-[var(--text-2)] mb-1">Average FPS</div>
-                <div className="mono text-[24px] font-semibold text-[var(--text-1)]">{frameRate} <span className="text-[14px] text-[var(--text-3)] font-normal">fps</span></div>
+              <div className="bg-[#111] border border-white/5 p-5 rounded-lg flex justify-between items-end">
+                <div>
+                  <div className="text-[12px] font-medium text-zinc-500 mb-1">Inference Latency</div>
+                  <div className="font-mono text-[32px] font-semibold text-white leading-none">12.4<span className="text-[16px] text-zinc-500 ml-1">ms</span></div>
+                </div>
+                <Activity className="w-8 h-8 text-zinc-700" />
               </div>
-              <div className="bg-white border border-[var(--border)] rounded-xl p-4 shadow-sm">
-                <div className="text-[12px] font-medium text-[var(--text-2)] mb-1">System Accuracy</div>
-                <div className="mono text-[24px] font-semibold text-[var(--text-1)]">99.2%</div>
+              <div className="bg-[#111] border border-white/5 p-5 rounded-lg flex justify-between items-end relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 blur-[40px] rounded-full"></div>
+                <div className="relative z-10">
+                  <div className="text-[12px] font-medium text-zinc-500 mb-1">System Accuracy</div>
+                  <div className="font-mono text-[32px] font-semibold text-emerald-500 leading-none">99.98%</div>
+                </div>
               </div>
             </div>
 
-            {/* Video Feed & Analytics Placeholder */}
+            {/* Video Feed (Sterile / Professional) */}
             <div className="lg:col-span-2">
-              <div className="bg-white border border-[var(--border)] rounded-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] overflow-hidden flex flex-col h-full min-h-[300px]">
-                <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border)] bg-[var(--bg-1)]">
-                  <div className="flex items-center gap-2">
-                    <Camera className="w-4 h-4 text-[var(--text-2)]" />
-                    <span className="text-[13px] font-semibold text-[var(--text-1)]">Assembly Line A</span>
-                  </div>
-                  <div className="flex gap-1">
-                    <span className="w-2 h-2 rounded-full bg-[var(--border-strong)]"></span>
-                    <span className="w-2 h-2 rounded-full bg-[var(--border-strong)]"></span>
-                    <span className="w-2 h-2 rounded-full bg-[var(--border-strong)]"></span>
-                  </div>
+              <div className="bg-[#111] border border-white/5 rounded-lg h-full min-h-[300px] flex flex-col">
+                <div className="flex items-center justify-between px-4 py-3 border-b border-white/5">
+                  <div className="text-[12px] font-medium text-white">Stream: CAM_A_004</div>
+                  <div className="text-[10px] text-zinc-500 font-mono">FPS: {frameRate}</div>
                 </div>
-                <div className="flex-1 bg-[var(--bg-0)] relative overflow-hidden flex flex-col">
-                  {/* Subtle Grid Background */}
-                  <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTQwIDBIMFY0MGg0MFYweiIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0wIDAuNWg0MCIgc3Ryb2tlPSJyZ2JhKDAsMCwwLDAuMDQpIi8+PHBhdGggZD0iTTAuNSAwdi00MCIgc3Ryb2tlPSJyZ2JhKDAsMCwwLDAuMDQpIi8+PC9zdmc+')] opacity-50" />
-                  
-                  {/* Live Feed Simulator */}
-                  <div className="flex-1 m-4 border border-[var(--border)] rounded-lg bg-[var(--bg-1)] relative overflow-hidden shadow-inner">
-                    <motion.div 
-                      animate={{ 
-                        backgroundPosition: ['0% 0%', '100% 100%', '0% 100%', '100% 0%', '0% 0%'],
-                      }}
-                      transition={{ 
-                        duration: 20,
-                        repeat: Infinity,
-                        ease: "linear"
-                      }}
-                      className="absolute inset-0 opacity-30 mix-blend-luminosity" 
-                      style={{
-                        backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.4) 0%, transparent 50%), radial-gradient(circle at 100% 0%, rgba(59, 130, 246, 0.4) 0%, transparent 50%), radial-gradient(circle at 0% 100%, rgba(99, 102, 241, 0.4) 0%, transparent 50%)',
-                        backgroundSize: '200% 200%'
-                      }}
-                    />
+                
+                <div className="flex-1 bg-black relative overflow-hidden p-2">
+                  <div className="w-full h-full bg-[#111] border border-white/10 relative overflow-hidden">
+                    {/* Grayscale static / noise */}
+                    <div className="absolute inset-0 opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay"></div>
                     
-                    {/* Bounding Box Animation */}
+                    {/* Architectural bounding box analysis */}
                     <motion.div 
                       animate={{ 
-                        x: ['0%', '20%', '-10%', '0%'],
-                        y: ['0%', '10%', '-5%', '0%'],
-                        scale: [1, 1.05, 0.95, 1]
+                        x: ['0%', '10%', '-5%', '0%'],
+                        scale: [1, 1.02, 0.98, 1]
                       }}
-                      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-32 border-[1.5px] border-emerald-500 rounded-md bg-emerald-500/10 backdrop-blur-[1px]" 
+                      transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                      className="absolute top-[30%] left-[30%] w-[40%] h-[40%] border border-emerald-500/50 bg-emerald-500/5"
                     >
-                      <div className="absolute top-0 left-0 -translate-y-[calc(100%+4px)] bg-emerald-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded shadow-sm flex items-center gap-1">
-                        PART_OK <span className="font-mono text-[9px] opacity-80">99.8%</span>
+                      <div className="absolute -top-5 left-0 text-emerald-500 text-[9px] font-mono border border-emerald-500/30 px-1 bg-black/50">
+                        NOMINAL_TOLERANCE
                       </div>
                       
-                      {/* Corner Accents */}
-                      <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-emerald-500"></div>
-                      <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-emerald-500"></div>
-                      <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-emerald-500"></div>
-                      <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-emerald-500"></div>
+                      {/* Grid analysis overlay inside box */}
+                      <div className="w-full h-full border border-emerald-500/20 grid grid-cols-3 grid-rows-3">
+                        {Array.from({length:9}).map((_, i) => <div key={i} className="border border-emerald-500/10"></div>)}
+                      </div>
                     </motion.div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Machine List */}
+            {/* Diagnostic Logs */}
             <div className="lg:col-span-1">
-              <div className="bg-white border border-[var(--border)] rounded-xl shadow-sm overflow-hidden h-full flex flex-col">
-                <div className="px-4 py-3 border-b border-[var(--border)]">
-                  <h3 className="text-[13px] font-semibold text-[var(--text-1)]">Machine Health</h3>
+              <div className="bg-[#111] border border-white/5 rounded-lg h-full flex flex-col">
+                <div className="px-4 py-3 border-b border-white/5">
+                  <h3 className="text-[12px] font-medium text-white">Diagnostic Logs</h3>
                 </div>
-                <div className="flex-1 overflow-y-auto p-2">
-                  <MachineCard name="CNC Lathe #3" location="Floor A" status="healthy" score={96} />
-                  <MachineCard name="Press Unit #7" location="Floor B" status="warning" score={71} />
-                  <MachineCard name="Conveyor #2" location="Packaging" status="critical" score={42} />
-                  <MachineCard name="Robotic Arm #1" location="Assembly" status="healthy" score={99} />
+                <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3 font-mono text-[10px]">
+                  <div className="text-zinc-400"><span className="text-emerald-500">[OK]</span> Syncing telemetry...</div>
+                  <div className="text-zinc-400"><span className="text-emerald-500">[OK]</span> Model weight updated.</div>
+                  <div className="text-zinc-400"><span className="text-amber-500">[WARN]</span> Latency spike on node 4.</div>
+                  <div className="text-zinc-400"><span className="text-emerald-500">[OK]</span> Vision stream stable.</div>
+                  <div className="text-zinc-400"><span className="text-emerald-500">[OK]</span> Calibration matrix zeroed.</div>
+                  <div className="text-zinc-400"><span className="text-emerald-500">[OK]</span> 1402 streams verified.</div>
                 </div>
               </div>
             </div>
