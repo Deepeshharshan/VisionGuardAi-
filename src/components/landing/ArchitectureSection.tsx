@@ -93,14 +93,14 @@ export const ArchitectureSection: React.FC = () => {
 
           {/* Core Edge Backbone */}
           <g stroke="#ffffff" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter" opacity="0.3">
-            <path ref={el => el && linesRef.current.push(el)} d="M 500 100 V 500" />
-            <path ref={el => el && linesRef.current.push(el)} d="M 300 300 H 700" />
+            <path ref={el => { if (el) linesRef.current.push(el); }} d="M 500 100 V 500" />
+            <path ref={el => { if (el) linesRef.current.push(el); }} d="M 300 300 H 700" />
             
             {/* Branching paths to nodes */}
-            <path ref={el => el && linesRef.current.push(el)} d="M 500 200 H 650 V 150" />
-            <path ref={el => el && linesRef.current.push(el)} d="M 500 400 H 350 V 450" />
-            <path ref={el => el && linesRef.current.push(el)} d="M 400 300 V 150 H 350" />
-            <path ref={el => el && linesRef.current.push(el)} d="M 600 300 V 450 H 650" />
+            <path ref={el => { if (el) linesRef.current.push(el); }} d="M 500 200 H 650 V 150" />
+            <path ref={el => { if (el) linesRef.current.push(el); }} d="M 500 400 H 350 V 450" />
+            <path ref={el => { if (el) linesRef.current.push(el); }} d="M 400 300 V 150 H 350" />
+            <path ref={el => { if (el) linesRef.current.push(el); }} d="M 600 300 V 450 H 650" />
           </g>
 
           {/* Secure Edge Perimeter Boundary */}
