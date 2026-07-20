@@ -45,6 +45,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       children,
       className,
       disabled,
+      type = 'button',
       ...props
     },
     ref
@@ -54,6 +55,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         ref={ref}
+        type={type}
         disabled={isDisabled}
         className={cn(
           'inline-flex items-center justify-center font-semibold rounded-md',
