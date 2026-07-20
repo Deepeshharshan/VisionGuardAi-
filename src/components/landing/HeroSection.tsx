@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { AnimatedGradient } from '@/components/ui/animated-gradient';
+
+const AnimatedGradient = lazy(() => import('@/components/ui/animated-gradient'));
 
 export const HeroSection: React.FC = () => {
   const [timestamp, setTimestamp] = useState('');
@@ -37,10 +38,12 @@ export const HeroSection: React.FC = () => {
       
       {/* Animated WebGL Gradient Background */}
       <div className="absolute inset-0 z-0 overflow-hidden">
-        <AnimatedGradient 
-          config={{ preset: "Toxic", speed: 12 }} 
-          noise={{ opacity: 0.1, scale: 0.5 }} 
-        />
+        <Suspense fallback={<div className="absolute inset-0 bg-[#050816]" />}>
+          <AnimatedGradient 
+            config={{ preset: "Toxic", speed: 12 }} 
+            noise={{ opacity: 0.1, scale: 0.5 }} 
+          />
+        </Suspense>
         {/* Gradients to fade out edges so it blends with our dark mode UI */}
         <div
           className="absolute inset-0 pointer-events-none"
