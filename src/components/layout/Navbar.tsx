@@ -6,6 +6,7 @@ import { NAV_LINKS } from '@/constants';
 export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>('');
   const location = useLocation();
   const isLanding = location.pathname === '/';
 
@@ -16,6 +17,37 @@ export const Navbar: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (!isLanding) return;
+    
+    const observers = new Map();
+    const handleIntersect = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setActiveSection(`#${entry.target.id}`);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(handleIntersect, {
+      rootMargin: '-20% 0px -60% 0px',
+      threshold: 0
+    });
+
+    NAV_LINKS.forEach(link => {
+      if (link.href.startsWith('#')) {
+        const id = link.href.substring(1);
+        const element = document.getElementById(id);
+        if (element) {
+          observer.observe(element);
+          observers.set(id, element);
+        }
+      }
+    });
+
+    return () => observer.disconnect();
+  }, [isLanding]);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (isLanding && href.startsWith('#')) {
@@ -49,17 +81,21 @@ export const Navbar: React.FC = () => {
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-8" aria-label="Desktop Navigation">
-          {NAV_LINKS.map(link => (
-            <a
-              key={link.label}
-              href={link.href}
-              onClick={(e) => handleNavClick(e, link.href)}
-              className="text-[13px] font-bold text-zinc-400 uppercase tracking-widest hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-sm"
-              aria-label={`Navigate to ${link.label}`}
-            >
-              {link.label}
-            </a>
-          ))}
+          {NAV_LINKS.map(link => {
+            const isActive = activeSection === link.href;
+            return (
+              <a
+                key={link.label}
+                href={link.href}
+                onClick={(e) => handleNavClick(e, link.href)}
+                aria-current={isActive ? 'true' : undefined}
+                className={`text-[13px] font-bold uppercase tracking-widest transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-sm ${isActive ? 'text-white' : 'text-zinc-400 hover:text-white'}`}
+                aria-label={`Navigate to ${link.label}`}
+              >
+                {link.label}
+              </a>
+            );
+          })}
         </nav>
 
         {/* Actions */}
@@ -101,16 +137,20 @@ export const Navbar: React.FC = () => {
           className="md:hidden bg-[#0a0a0a] border-b border-white/10 shadow-2xl px-6 py-6 space-y-6"
         >
           <nav aria-label="Mobile Navigation" className="flex flex-col gap-4">
-            {NAV_LINKS.map(link => (
-              <a
-                key={link.label}
-                href={link.href}
-                onClick={(e) => handleNavClick(e, link.href)}
-                className="block text-[16px] font-bold text-zinc-400 uppercase tracking-widest hover:text-white py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-sm"
-              >
-                {link.label}
-              </a>
-            ))}
+            {NAV_LINKS.map(link => {
+              const isActive = activeSection === link.href;
+              return (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  onClick={(e) => handleNavClick(e, link.href)}
+                  aria-current={isActive ? 'true' : undefined}
+                  className={`block text-[16px] font-bold uppercase tracking-widest py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-sm ${isActive ? 'text-white' : 'text-zinc-400 hover:text-white'}`}
+                >
+                  {link.label}
+                </a>
+              );
+            })}
           </nav>
           <div className="pt-6 border-t border-white/10 flex flex-col gap-4">
             <Link 
