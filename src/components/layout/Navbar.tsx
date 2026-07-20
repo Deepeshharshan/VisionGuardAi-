@@ -1,22 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { useScrollPosition } from '@/hooks/useScrollPosition';
 import { Link, useLocation } from 'react-router-dom';
 import { ScanSearch, Menu, X, ArrowRight } from 'lucide-react';
 import { NAV_LINKS } from '@/constants';
 
 export const Navbar: React.FC = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const { isScrolled } = useScrollPosition(20);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('');
   const location = useLocation();
   const isLanding = location.pathname === '/';
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   useEffect(() => {
     if (!isLanding) return;
