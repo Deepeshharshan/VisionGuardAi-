@@ -33,7 +33,7 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center bg-zinc-950 p-4 sm:p-8 overflow-hidden">
+    <main id="main-content" className="relative min-h-screen flex items-center justify-center bg-zinc-950 p-4 sm:p-8 overflow-hidden">
       {/* Background ambient glow behind the main card */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.05),transparent_50%)] pointer-events-none" />
 
@@ -190,7 +190,7 @@ const LoginPage: React.FC = () => {
         </div>
 
       </motion.div>
-    </div>
+    </main>
   );
 };
 

@@ -26,7 +26,7 @@ const DashboardPage: React.FC = () => {
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <Header activeView={activeView} setMobileMenuOpen={setMobileMenuOpen} />
 
-        <main style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden' }}>
+        <main id="main-content" style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden' }}>
           <div className="enterprise-container" style={{ paddingTop: 32, paddingBottom: 48 }}>
             <AnimatePresence mode="wait">
               <motion.div
